@@ -7,6 +7,7 @@
 - Hovering the first tab no longer draws its corner over a selected second tab
 - A tab under the pointer shows more clearly on light themes
 - The navigation bar casts a soft shadow onto the tabs behind it
+- Background tabs overlap like cards stacked toward the selected tab, each with a curved foot on its outer side and, on light themes, a soft shadow; hovering only recolors a tab
 
 ## 158.2 — 2026-10-09
 
