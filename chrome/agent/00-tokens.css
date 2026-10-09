@@ -42,6 +42,9 @@
     /* The color of the soft shadow a background tab casts on its neighbor
        on a light theme (../user/50-tab-ears.css). */
     --myfox-tab-card-shadow: rgba(0, 0, 0, 0.15);
+    /* The faint line between vertical tabs in the background
+       (../user/70-vertical-tabs-close.css). */
+    --myfox-tab-edge-color: light-dark(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.25));
     /* A tab in the background under the pointer: this much of the text
        color over the selected tab's color. */
     --myfox-tab-hover: 17%;
