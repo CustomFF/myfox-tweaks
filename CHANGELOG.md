@@ -10,6 +10,7 @@
 - Background tabs overlap like cards stacked toward the selected tab, each with a curved foot on its outer side and, on light themes, a soft shadow; hovering only recolors a tab
 - The container line on horizontal tabs no longer bleeds down a tab's side
 - Vertical tabs span the whole tab column, with a faint line between the tabs in the background
+- The vertical tab column is a little darker on light themes, the window casts a soft shadow onto it, and the selected vertical tab has a soft shadow on light themes
 
 ## 158.2 — 2026-10-09
 
