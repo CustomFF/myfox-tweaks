@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "MyFox Dark",
     "author": "MyFox",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "browser_specific_settings": {
         "gecko": {
             "id": "myfox-dark-theme@daydve.github.io"
@@ -10,7 +10,7 @@
     },
     "theme": {
         "colors": {
-            "frame": "rgba(32, 33, 36, 1)",
+            "frame": "rgba(43, 44, 47, 1)",
             "frame_inactive": "rgba(60, 64, 67, 1)",
             "tab_background_text": "rgba(189, 193, 198, 1)",
             "tab_background_separator": "rgba(134, 137, 142, 1)",
