@@ -44,6 +44,10 @@
     /* The color of the soft shadow a background tab casts on its neighbor
        on a light theme (../user/50-tab-ears.css). */
     --myfox-tab-card-shadow: rgba(0, 0, 0, 0.15);
+    /* A background tab darkens toward the edge tucked under the next card,
+       this much black at that edge; the tab strip behind the tabs is the
+       tab color darkened as much (../user/50-tab-ears.css). */
+    --myfox-tab-shade: 5%;
     /* The faint line between vertical tabs in the background
        (../user/70-vertical-tabs-close.css). */
     --myfox-tab-edge-color: light-dark(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.25));
@@ -69,5 +73,12 @@
         /* A thin line reads on a dark strip, not on a light one. */
         --myfox-container-line: 3px;
         --myfox-tab-hover: 25%;
+    }
+}
+
+/* The tabs of a dark theme are close to black: a stronger shade shows. */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --myfox-tab-shade: 10%;
     }
 }

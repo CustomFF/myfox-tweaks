@@ -11,6 +11,7 @@
 - The container line on horizontal tabs no longer bleeds down a tab's side
 - Vertical tabs span the whole tab column, with a faint line between the tabs in the background
 - The vertical tab column is a little darker on light themes, the window casts a soft shadow onto it, and the selected vertical tab has a soft shadow on light themes
+- Background tabs darken toward the edge tucked under the next card, and the strip behind the tabs is a shade darker
 
 ## 158.2 — 2026-10-09
 

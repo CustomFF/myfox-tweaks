@@ -185,3 +185,29 @@
         clip-path: inset(0 -16px -2px 0);
     }
 }
+
+/* Over its title, a background tab darkens toward the edge tucked under the
+   next card (--myfox-tab-shade at that edge, gone 40% of the way across);
+   the tab strip behind the tabs is the tab color darkened as much. */
+#tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack {
+    position: relative !important;
+}
+#tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1;
+    pointer-events: none !important;
+    border-start-start-radius: var(--user-tab-rounding);
+}
+#tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack::after {
+    background: linear-gradient(to left, rgb(0 0 0 / var(--myfox-tab-shade)), transparent 40%) !important;
+}
+#tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack::after {
+    background: linear-gradient(to right, rgb(0 0 0 / var(--myfox-tab-shade)), transparent 40%) !important;
+    border-start-start-radius: 0;
+    border-start-end-radius: var(--user-tab-rounding);
+}
+#TabsToolbar {
+    background-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-tab-shade)) !important;
+}
