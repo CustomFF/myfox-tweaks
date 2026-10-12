@@ -33,6 +33,9 @@
        of a tab pair, and how faint the title of the half not shown in focus is. */
     --myfox-split-divider: color-mix(in srgb, currentColor 30%, transparent);
     --myfox-split-dim: 0.6;
+    /* Hovering a pair in the background lights up its other half this much
+       (the half under the pointer as any hovered tab, --myfox-tab-hover). */
+    --myfox-split-hover: calc(var(--myfox-tab-hover) / 2);
     /* The height of each half of a pair with vertical tabs. */
     --myfox-split-vtab-height: 24px;
 
@@ -91,6 +94,9 @@
         /* A thin line reads on a dark strip, not on a light one. */
         --myfox-container-line: 3px;
         --myfox-tab-hover: 25%;
+        /* The background card is darker than the selected-tab color the hover
+           mixes into, so half the hover barely differs from it. */
+        --myfox-split-hover: calc(var(--myfox-tab-hover) * 0.75);
     }
 }
 

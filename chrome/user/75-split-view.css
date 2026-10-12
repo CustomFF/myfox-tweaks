@@ -343,3 +343,40 @@
         mask: var(--myfox-vear-bottom-start) !important;
     }
 }
+
+/* Hovering either half of a pair in the background lights up the whole pair:
+   the half under the pointer as a hovered tab (50-tab-ears.css), the other
+   one fainter (--myfox-split-hover). The pair's tucked corner rounds and its
+   ears reach the window, as a hovered tab's do. #main-window outweighs the
+   background-card rules of 50-tab-ears.css and 70-vertical-tabs-close.css. */
+:root#main-window[theme-effective-id^="myfox-"] #tabbrowser-tabs tab-split-view-wrapper:not([hasactivetab]):hover > .tabbrowser-tab {
+    & > .tab-stack > .tab-background {
+        background-color: color-mix(in srgb, currentColor var(--myfox-split-hover), var(--tab-background-color-selected)) !important;
+    }
+    &:hover > .tab-stack > .tab-background {
+        background-color: color-mix(in srgb, currentColor var(--myfox-tab-hover), var(--tab-background-color-selected)) !important;
+    }
+}
+:root#main-window[theme-effective-id^="myfox-"] #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper:not([hasactivetab]):hover {
+    & > .tabbrowser-tab > .tab-stack > .tab-background::before,
+    & > .tabbrowser-tab > .tab-stack > .tab-background::after {
+        bottom: -1px !important;
+    }
+    &:not(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tabbrowser-tab:last-child > .tab-stack > .tab-background {
+        border-start-end-radius: var(--user-tab-rounding) !important;
+    }
+    &:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tabbrowser-tab:first-child > .tab-stack > .tab-background {
+        border-start-start-radius: var(--user-tab-rounding) !important;
+    }
+}
+:root#main-window[theme-effective-id^="myfox-"] #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper:not([hasactivetab]):hover > .tabbrowser-tab > .tab-stack > .tab-background {
+    &::before,
+    &::after {
+        inset-inline-end: -1px !important;
+    }
+    :root:has(#sidebar-container[sidebar-positionend]) &::before,
+    :root:has(#sidebar-container[sidebar-positionend]) &::after {
+        inset-inline-end: auto !important;
+        inset-inline-start: -1px !important;
+    }
+}
