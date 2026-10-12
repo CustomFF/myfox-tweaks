@@ -187,8 +187,8 @@
 
     /* Over its title, a background tab darkens toward the edge tucked under the
        next card (--myfox-tab-shade at that edge, gone 40% of the way across).
-       The tab strip behind the tabs is the tab color under a neighbor's shadow
-       (--myfox-tab-backdrop), so the outermost tab blends into it. */
+       The tab strip behind the tabs is the tab color darkened by
+       --myfox-tab-backdrop. */
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack {
         position: relative !important;
     }

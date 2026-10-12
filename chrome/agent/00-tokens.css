@@ -47,10 +47,12 @@
     /* A background tab darkens toward the edge tucked under the next card,
        this much black at that edge (../user/50-tab-ears.css). */
     --myfox-tab-shade: 5%;
-    /* Behind the tabs (the tab strip, the vertical tab column): the tab color
-       with this much black, the color of a tab's edge under its neighbor's
+    /* Behind the tabs, the tab color with this much black: the tab strip as
+       much as the shade at a tab's tucked edge (a dark theme sets its own
+       below); the vertical tab column like a tab's edge under its neighbor's
        shadow, so the outermost tab blends into it. */
-    --myfox-tab-backdrop: 15%;
+    --myfox-tab-backdrop: var(--myfox-tab-shade);
+    --myfox-vtab-backdrop: 15%;
     /* A vertical tab in the background darkens diagonally toward the corner
        tucked under the next card, this much black at that corner
        (../user/70-vertical-tabs-close.css). */
@@ -86,5 +88,6 @@
         --myfox-tab-shade: 10%;
         --myfox-vtab-shade: 10%;
         --myfox-tab-backdrop: 19%;
+        --myfox-vtab-backdrop: 19%;
     }
 }

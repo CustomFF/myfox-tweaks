@@ -17,9 +17,9 @@
         color: var(--toolbar-text-color) !important;
     }
     &:has(#tabbrowser-tabs[orient="vertical"]) #sidebar-container {
-        /* The tab color under a neighbor's shadow, as the tab strip
-           (--myfox-tab-backdrop), so the outermost tab blends into it. */
-        background-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-tab-backdrop)) !important;
+        /* The tab color under a neighbor's shadow (--myfox-vtab-backdrop),
+           so the outermost tab blends into it. */
+        background-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-vtab-backdrop)) !important;
         /* The window beyond the column casts a soft shadow onto it, under the
            tabs: the tabs in the background show it, the selected tab, joined to
            the window, covers it (as the navigation bar does on the tab strip). */
