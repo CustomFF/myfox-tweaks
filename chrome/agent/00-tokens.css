@@ -48,9 +48,10 @@
        this much black at that edge; the tab strip behind the tabs is the
        tab color darkened as much (../user/50-tab-ears.css). */
     --myfox-tab-shade: 5%;
-    /* The faint line between vertical tabs in the background
+    /* A vertical tab in the background darkens diagonally toward the corner
+       tucked under the next card, this much black at that corner
        (../user/70-vertical-tabs-close.css). */
-    --myfox-tab-edge-color: light-dark(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.25));
+    --myfox-vtab-shade: 6%;
     /* A tab in the background under the pointer: this much of the text
        color over the selected tab's color. */
     --myfox-tab-hover: 17%;
@@ -80,5 +81,6 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --myfox-tab-shade: 10%;
+        --myfox-vtab-shade: 10%;
     }
 }

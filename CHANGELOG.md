@@ -9,7 +9,7 @@
 - The navigation bar casts a soft shadow onto the tabs behind it
 - Background tabs overlap like cards stacked toward the selected tab, each with a curved foot on its outer side and, on light themes, a soft shadow; hovering only recolors a tab
 - The container line on horizontal tabs no longer bleeds down a tab's side
-- Vertical tabs span the whole tab column, with a faint line between the tabs in the background
+- Vertical tabs span the whole tab column and stack like cards toward the selected tab, as horizontal ones do
 - The vertical tab column is a little darker on light themes, the window casts a soft shadow onto it, and the selected vertical tab has a soft shadow on light themes
 - Background tabs darken toward the edge tucked under the next card, and the strip behind the tabs is a shade darker
 - On dark themes too the selected tab and the stacked background tabs cast soft shadows
