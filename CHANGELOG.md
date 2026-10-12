@@ -17,6 +17,7 @@
 - Background tabs take the toolbar's shadow along their bottom edge too, half as deep, which gives them thickness
 - In split view the two pages are cards with a narrow gap between them, and the active one has a thin accent frame
 - A split view's two tabs are one tab card with a thin divider, and the selected half has a bold title; tabs next to a split view or a tab group stack toward the selected tab correctly
+- With vertical tabs a split view's two tabs are one card as well, one above the other with a thin line between them
 
 ## 158.2 — 2026-10-09
 

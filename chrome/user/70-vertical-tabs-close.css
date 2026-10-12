@@ -67,10 +67,10 @@
        casts a soft shadow that way (--myfox-tab-card-shadow) and, over its title,
        darkens diagonally toward the corner tucked under the next card
        (--myfox-vtab-shade). */
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) {
         z-index: sibling-index() !important;
     }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) {
         z-index: calc(1000 - sibling-index()) !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]),
@@ -91,18 +91,18 @@
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):not(:hover) > .tab-stack > .tab-background {
         background-color: var(--toolbox-background-color) !important;
     }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
         filter: drop-shadow(0 -1px 1px var(--myfox-tab-card-shadow));
         clip-path: inset(-16px -2px 0 0);
     }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background {
         filter: drop-shadow(0 1px 1px var(--myfox-tab-card-shadow));
         clip-path: inset(0 -2px -16px 0);
     }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background {
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
         clip-path: inset(-16px 0 0 -2px);
     }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background {
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background {
         clip-path: inset(0 0 -16px -2px);
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack {
@@ -115,16 +115,16 @@
         z-index: 1;
         pointer-events: none !important;
     }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack::after {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack::after {
         background: linear-gradient(to top left, rgb(0 0 0 / var(--myfox-vtab-shade)), transparent) !important;
     }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack::after {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack::after {
         background: linear-gradient(to bottom left, rgb(0 0 0 / var(--myfox-vtab-shade)), transparent) !important;
     }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack::after {
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack::after {
         background: linear-gradient(to top right, rgb(0 0 0 / var(--myfox-vtab-shade)), transparent) !important;
     }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack::after {
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack::after {
         background: linear-gradient(to bottom right, rgb(0 0 0 / var(--myfox-vtab-shade)), transparent) !important;
     }
 
@@ -149,8 +149,8 @@
     }
     #tabbrowser-tabs[orient="vertical"] .tab-background:is([selected], [multiselected])::before,
     #tabbrowser-tabs[orient="vertical"] .tab-background:is([selected], [multiselected])::after,
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background::before,
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before,
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         content: "" !important;
         display: block !important;
         position: absolute !important;
@@ -164,28 +164,28 @@
         background-image: none !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tab-background:is([selected], [multiselected])::before,
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background::before {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before {
         top: calc(0px - var(--myfox-vtab-ear)) !important;
         mask: var(--myfox-vear-top) !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tab-background:is([selected], [multiselected])::after,
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         bottom: calc(0px - var(--myfox-vtab-ear)) !important;
         mask: var(--myfox-vear-bottom) !important;
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tab-background:is([selected], [multiselected])::before,
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tab-background:is([selected], [multiselected])::after,
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background::before,
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before,
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         inset-inline-end: auto !important;
         inset-inline-start: -1px !important;
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tab-background:is([selected], [multiselected])::before,
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background::before {
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before {
         mask: var(--myfox-vear-top-start) !important;
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tab-background:is([selected], [multiselected])::after,
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         mask: var(--myfox-vear-bottom-start) !important;
     }
 
@@ -193,14 +193,14 @@
        tab's ears reach 1px past it) and takes the card's half-deep shadow
        along it. It stands at a corner the card's diagonal shade reaches at
        half strength, so it is shaded as much. */
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background::before,
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before,
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         inset-inline-end: 0 !important;
         box-shadow: var(--myfox-column-shadow-tab) !important;
         background-image: linear-gradient(rgb(0 0 0 / calc(var(--myfox-vtab-shade) / 2)), rgb(0 0 0 / calc(var(--myfox-vtab-shade) / 2))) !important;
     }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background::before,
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before,
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         inset-inline-start: 0 !important;
         box-shadow: var(--myfox-column-shadow-tab-end) !important;
     }

@@ -33,6 +33,8 @@
        of a tab pair, and how faint the title of the half not shown in focus is. */
     --myfox-split-divider: color-mix(in srgb, currentColor 30%, transparent);
     --myfox-split-dim: 0.6;
+    /* The height of each half of a pair with vertical tabs. */
+    --myfox-split-vtab-height: 24px;
 
     /* Text size of menus, panels, sidebars and the browser's own pages. */
     --myfox-font-size: 12px;

@@ -197,3 +197,149 @@
         }
     }
 }
+
+/* With vertical tabs the pair is one card the width of the tab column, its
+   halves one above the other (Firefox puts them side by side), each a little
+   lower than a single tab, with a thin line between them. Firefox's frame
+   around the pair goes, as in the tab strip. */
+:root[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    outline: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+
+    &:not([hasactivetab]) {
+        z-index: sibling-index() !important;
+    }
+    &:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([hasactivetab]) {
+        z-index: calc(1000 - sibling-index()) !important;
+    }
+    &[hasactivetab] {
+        z-index: 2000 !important;
+    }
+
+    & > .tabbrowser-tab {
+        margin: 0 !important;
+        padding: 0 !important;
+
+        & > .tab-stack {
+            padding-inline: 0 !important;
+            border: none !important;
+        }
+        & .tab-background {
+            margin: 0 !important;
+        }
+        /* Each half lower than a single tab: the pair reads as one tab. */
+        &,
+        & .tab-background,
+        & .tab-content {
+            min-height: var(--myfox-split-vtab-height) !important;
+            height: var(--myfox-split-vtab-height) !important;
+        }
+        /* Titles in line with the single tabs'. */
+        & .tab-content {
+            padding-inline: var(--tab-padding-inline) !important;
+        }
+    }
+
+    /* The seam: no ear and no shadow across it, a thin divider over the
+       width of the title. */
+    & > .tabbrowser-tab:first-child > .tab-stack > .tab-background::after,
+    & > .tabbrowser-tab:last-child > .tab-stack > .tab-background::before {
+        display: none !important;
+    }
+    & > .tabbrowser-tab:first-child > .tab-stack > .tab-background {
+        clip-path: inset(-16px -2px 0 -2px) !important;
+    }
+    & > .tabbrowser-tab:last-child > .tab-stack > .tab-background {
+        clip-path: inset(0 -2px -16px -2px) !important;
+    }
+    & > .tabbrowser-tab:last-child .tab-content:not([attention]) {
+        background: linear-gradient(var(--myfox-split-divider), var(--myfox-split-divider)) center top / 100% 1px no-repeat content-box !important;
+    }
+
+    /* One diagonal shade across the whole card. */
+    &:not([hasactivetab]) > .tabbrowser-tab > .tab-stack::after {
+        background-size: 100% 200% !important;
+    }
+    &:not([hasactivetab]) > .tabbrowser-tab:first-child > .tab-stack::after {
+        background-position: top !important;
+    }
+    &:not([hasactivetab]) > .tabbrowser-tab:last-child > .tab-stack::after {
+        background-position: bottom !important;
+    }
+
+    /* The selected pair: both halves are the selected card, with its ears
+       above and below. */
+    &[hasactivetab] > .tabbrowser-tab {
+        & > .tab-stack > .tab-background {
+            background-color: var(--tab-background-color-selected) !important;
+            box-shadow: var(--myfox-vtab-shadow) !important;
+            filter: none !important;
+        }
+        &:first-child > .tab-stack > .tab-background {
+            clip-path: inset(-16px -2px 0 -12px) !important;
+        }
+        &:last-child > .tab-stack > .tab-background {
+            clip-path: inset(0 -2px -16px -12px) !important;
+        }
+        & > .tab-stack::after {
+            display: none !important;
+        }
+        &:first-child > .tab-stack > .tab-background::before,
+        &:last-child > .tab-stack > .tab-background::after {
+            content: "" !important;
+            display: block !important;
+            position: absolute !important;
+            inset-inline-end: -1px !important;
+            inset-inline-start: auto !important;
+            width: var(--myfox-vtab-ear) !important;
+            height: var(--myfox-vtab-ear) !important;
+            pointer-events: none !important;
+            box-shadow: none !important;
+            background: inherit !important;
+            background-image: none !important;
+        }
+        &:first-child > .tab-stack > .tab-background::before {
+            top: calc(0px - var(--myfox-vtab-ear)) !important;
+            bottom: auto !important;
+            mask: var(--myfox-vear-top) !important;
+        }
+        &:last-child > .tab-stack > .tab-background::after {
+            bottom: calc(0px - var(--myfox-vtab-ear)) !important;
+            top: auto !important;
+            mask: var(--myfox-vear-bottom) !important;
+        }
+        &[selected] .tab-label {
+            font-weight: bold !important;
+        }
+        &:not([selected]) .tab-content {
+            opacity: var(--myfox-split-dim) !important;
+        }
+    }
+}
+
+/* With the tab column on the right, the selected pair joins the page on its left. */
+:root[theme-effective-id^="myfox-"]:has(#sidebar-container[sidebar-positionend]) #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab {
+    &:first-child > .tab-stack > .tab-background {
+        clip-path: inset(-16px -12px 0 -2px) !important;
+    }
+    &:last-child > .tab-stack > .tab-background {
+        clip-path: inset(0 -12px -16px -2px) !important;
+    }
+    &:first-child > .tab-stack > .tab-background::before,
+    &:last-child > .tab-stack > .tab-background::after {
+        inset-inline-end: auto !important;
+        inset-inline-start: -1px !important;
+    }
+    &:first-child > .tab-stack > .tab-background::before {
+        mask: var(--myfox-vear-top-start) !important;
+    }
+    &:last-child > .tab-stack > .tab-background::after {
+        mask: var(--myfox-vear-bottom-start) !important;
+    }
+}
