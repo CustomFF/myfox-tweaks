@@ -205,6 +205,19 @@
         box-shadow: var(--myfox-column-shadow-tab-end) !important;
     }
 
+    /* Hovered, the card is lighter than the window beside it, and the 1px
+       between the ear and the column's edge shows; the ear reaches the edge
+       then, as a selected tab's does. */
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::before,
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::after {
+        inset-inline-end: -1px !important;
+    }
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::before,
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::after {
+        inset-inline-end: auto !important;
+        inset-inline-start: -1px !important;
+    }
+
     /* No gap between the tab cards: Firefox pads each vertical tab 3px above /
        2px below and our card adds a 1px top margin, a 6px gutter in all. */
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab {

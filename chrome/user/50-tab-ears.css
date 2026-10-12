@@ -164,6 +164,13 @@
         background: inherit !important;
         background-image: none !important;
     }
+    /* Hovered, the card is lighter than the window under it, and the 1px
+       between the raised ear and the window shows; the ear reaches down to
+       the window then, as a selected tab's does. */
+    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::before,
+    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::after {
+        bottom: -1px !important;
+    }
     #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background::before {
         left: calc(0px - var(--user-tab-ear-rounding)) !important;
         mask: var(--myfox-ear-start) !important;
