@@ -182,8 +182,9 @@
 }
 
 /* Over its title, a background tab darkens toward the edge tucked under the
-   next card (--myfox-tab-shade at that edge, gone 40% of the way across);
-   the tab strip behind the tabs is the tab color darkened as much. */
+   next card (--myfox-tab-shade at that edge, gone 40% of the way across).
+   The tab strip behind the tabs is the tab color under a neighbor's shadow
+   (--myfox-tab-backdrop), so the outermost tab blends into it. */
 #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack {
     position: relative !important;
 }
@@ -204,5 +205,5 @@
     border-start-end-radius: var(--user-tab-rounding);
 }
 #TabsToolbar {
-    background-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-tab-shade)) !important;
+    background-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-tab-backdrop)) !important;
 }
