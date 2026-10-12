@@ -29,6 +29,11 @@
     --myfox-container-inactive: 30%;
     --myfox-container-join: 5%;
 
+    /* Split view (../user/75-split-view.css): the line between the two halves
+       of a tab pair, and how faint the title of the half not shown in focus is. */
+    --myfox-split-divider: color-mix(in srgb, currentColor 30%, transparent);
+    --myfox-split-dim: 0.6;
+
     /* Text size of menus, panels, sidebars and the browser's own pages. */
     --myfox-font-size: 12px;
 

@@ -42,3 +42,158 @@
 #sidebar-box[sidebar-positionend]:not([hidden]) ~ #tabbrowser-tabbox #tabbrowser-tabpanels[splitview] > .split-view-panel[column="1"] > .browserContainer {
     margin-inline-end: 0 !important;
 }
+
+/* The two tabs of a split view in the horizontal tab strip are one tab card
+   with a thin divider inside: Firefox's own frame around the pair (padding,
+   rounded outline, hover fill) goes, and the pair takes the height of a
+   single tab. Like the rest of the tab look (50-tab-ears.css), only on the
+   MyFox themes. */
+:root[theme-effective-id^="myfox-"] #navigator-toolbox #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper {
+    --split-view-padding-block: 0px !important;
+    --split-view-tab-padding-inline: 0px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    outline: none !important;
+    border-radius: 0 !important;
+    align-items: stretch !important;
+    overflow: visible !important;
+
+    /* Room for the ear of the first card, as for a first tab. */
+    &:first-child {
+        margin-inline-start: var(--user-tab-ear-rounding) !important;
+    }
+
+    /* Stacked among the other cards as one of them: see 50-tab-ears.css. */
+    &:not([hasactivetab]) {
+        z-index: sibling-index() !important;
+    }
+    &:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([hasactivetab]) {
+        z-index: calc(1000 - sibling-index()) !important;
+    }
+    &[hasactivetab] {
+        z-index: 2000 !important;
+    }
+
+    & > .tabbrowser-tab {
+        margin: 0 !important;
+        padding-block: 0 !important;
+
+        & > .tab-stack {
+            padding-inline: 0 !important;
+            border-inline-start: none !important;
+        }
+        & .tab-background {
+            min-height: var(--tab-min-height) !important;
+        }
+        & .tab-label-container {
+            height: auto !important;
+        }
+    }
+
+    /* The seam between the halves: square corners, no ears, a thin divider. */
+    & > .tabbrowser-tab:first-child > .tab-stack > .tab-background {
+        border-start-end-radius: 0 !important;
+        border-end-end-radius: 0 !important;
+    }
+    & > .tabbrowser-tab:last-child > .tab-stack > .tab-background {
+        border-start-start-radius: 0 !important;
+        border-end-start-radius: 0 !important;
+    }
+    & > .tabbrowser-tab:first-child > .tab-stack > .tab-background::after,
+    & > .tabbrowser-tab:last-child > .tab-stack > .tab-background::before {
+        display: none !important;
+    }
+    & > .tabbrowser-tab:last-child .tab-content:not([attention]) {
+        background: linear-gradient(var(--myfox-split-divider), var(--myfox-split-divider)) left center / 1px 50% no-repeat !important;
+    }
+
+    /* A pair in the background is one card stacked toward the selected tab:
+       the shadow and the shade only on its outer side, none across the seam. */
+    &:not([hasactivetab]) {
+        & > .tabbrowser-tab:first-child > .tab-stack > .tab-background {
+            clip-path: inset(0 0 -2px -16px) !important;
+        }
+        & > .tabbrowser-tab:last-child > .tab-stack > .tab-background {
+            filter: none !important;
+            clip-path: inset(0 -16px -2px 0) !important;
+        }
+        & > .tabbrowser-tab:first-child > .tab-stack::after {
+            background: none !important;
+        }
+    }
+    &:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([hasactivetab]) {
+        & > .tabbrowser-tab:first-child > .tab-stack > .tab-background {
+            filter: none !important;
+            clip-path: inset(0 0 -2px 0) !important;
+        }
+        & > .tabbrowser-tab:last-child > .tab-stack > .tab-background {
+            filter: drop-shadow(1px 0 1px var(--myfox-tab-card-shadow)) !important;
+        }
+        & > .tabbrowser-tab:first-child > .tab-stack::after {
+            background: linear-gradient(to right, rgb(0 0 0 / var(--myfox-tab-shade)), transparent 40%) !important;
+        }
+        & > .tabbrowser-tab:last-child > .tab-stack::after {
+            background: none !important;
+        }
+        & > .tabbrowser-tab:first-child > .tab-stack > .tab-background::before {
+            display: none !important;
+        }
+        & > .tabbrowser-tab:last-child > .tab-stack > .tab-background::after {
+            display: block !important;
+        }
+        & > .tabbrowser-tab:first-child:not(:hover) > .tab-stack > .tab-background {
+            border-start-start-radius: 0 !important;
+        }
+        & > .tabbrowser-tab:last-child > .tab-stack > .tab-background {
+            border-start-end-radius: var(--user-tab-rounding) !important;
+        }
+    }
+
+    /* The selected pair: both halves are the selected card, with its shadow
+       and its ears on the outer sides; the selected half has a bold title,
+       the other a faint one. */
+    &[hasactivetab] > .tabbrowser-tab {
+        & > .tab-stack > .tab-background {
+            background-color: var(--tab-background-color-selected) !important;
+            box-shadow: var(--myfox-tab-shadow) !important;
+            filter: none !important;
+        }
+        &:first-child > .tab-stack > .tab-background {
+            clip-path: inset(-12px 0 -2px -16px) !important;
+            border-start-start-radius: var(--user-tab-rounding) !important;
+        }
+        &:last-child > .tab-stack > .tab-background {
+            clip-path: inset(-12px -16px -2px 0) !important;
+            border-start-end-radius: var(--user-tab-rounding) !important;
+        }
+        & > .tab-stack::after {
+            display: none !important;
+        }
+        &:first-child > .tab-stack > .tab-background::before,
+        &:last-child > .tab-stack > .tab-background::after {
+            content: "" !important;
+            display: block !important;
+            position: absolute !important;
+            bottom: -1px !important;
+            width: var(--user-tab-ear-rounding) !important;
+            height: var(--user-tab-ear-rounding) !important;
+            box-shadow: none !important;
+            background: inherit !important;
+        }
+        &:first-child > .tab-stack > .tab-background::before {
+            left: calc(0px - var(--user-tab-ear-rounding)) !important;
+            mask: var(--myfox-ear-start) !important;
+        }
+        &:last-child > .tab-stack > .tab-background::after {
+            right: calc(0px - var(--user-tab-ear-rounding)) !important;
+            mask: var(--myfox-ear-end) !important;
+        }
+        &[selected] .tab-label {
+            font-weight: bold !important;
+        }
+        &:not([selected]) .tab-content {
+            opacity: var(--myfox-split-dim) !important;
+        }
+    }
+}
