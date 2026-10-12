@@ -6,17 +6,19 @@
    mode chip, message-bar/notification closes, icon buttons using the close
    glyph. Generic class names, so scoped to internal documents. */
 @-moz-document url-prefix("about:"), url-prefix("chrome://") {
-    .close-icon,
-    .tab-close-button,
+    .close-icon:not(.tab-close-button),
     .close-button,
     .searchmode-switcher-close {
         border-radius: 50% !important;
     }
     /* Less air around the glyph inside the circle. */
-    .close-icon {
+    .close-icon:not(.tab-close-button) {
         padding: 1px !important;
     }
-    .tab-close-button {
+    /* A tab's own close button: only with a MyFox theme, as the rest of the
+       tabs' look (../user/20-tabs.css). */
+    :root[theme-effective-id^="myfox-"] .tab-close-button {
+        border-radius: 50% !important;
         padding: 3px !important;
     }
     /* The sync promo card in the main menu: Firefox enlarges its close

@@ -24,6 +24,19 @@
     --input-text-border-radius: var(--myfox-radius) !important;
 }
 
+/* Tabs take their radius from the toolbar buttons', and so from the button
+   radius above. The tabs' look belongs to the MyFox themes only
+   (../user/20-tabs.css), so under any other theme they get Firefox's own
+   radius back. */
+:root:not([theme-effective-id^="myfox-"]) #tabbrowser-tabs {
+    --tab-border-radius: var(--border-radius-medium) !important;
+}
+@media -moz-pref("browser.nova.enabled") {
+    :root:not([theme-effective-id^="myfox-"]) #tabbrowser-tabs {
+        --tab-border-radius: var(--border-radius-xlarge) !important;
+    }
+}
+
 /* --panel-border-radius only reads the token above when the panel wrapper
    is type="arrow" (hamburger menu, extensions panel, downloads panel, etc.);
    plain context menus already have a normal small radius and are untouched.
