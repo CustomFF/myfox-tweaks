@@ -15,6 +15,7 @@
 - On dark themes too the selected tab and the stacked background tabs cast soft shadows
 - The tabs' whole look (shape, size, cards, shadows, container colors, vertical tabs) applies only with the MyFox themes; under any other theme tabs look as Firefox draws them
 - Background tabs take the toolbar's shadow along their bottom edge too, half as deep, which gives them thickness
+- In split view the two pages are cards with a narrow gap between them, and the active one has a thin accent frame
 
 ## 158.2 — 2026-10-09
 

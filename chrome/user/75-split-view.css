@@ -1,0 +1,44 @@
+/* Split view: two tabs shown side by side.
+   User sheet, imported by ../userChrome.css. */
+
+/* The two pages are two cards like a single page (60-cards.css), with the
+   splitter as the 4px gutter between them. Firefox's own panel margins and
+   borders go; the active page gets the thin accent frame of the focus ring,
+   drawn outside the card so the page's scrollbar can't cover it. */
+:root:not([inDOMFullscreen]) #tabbrowser-tabpanels[splitview] {
+    & > .split-view-panel.split-view-panel-active {
+        margin: 0 !important;
+    }
+
+    & > .split-view-panel > .browserContainer {
+        margin-block: 4px 5px !important;
+        border: none !important;
+        outline: none !important;
+    }
+
+    & > .split-view-panel[column="0"] > .browserContainer {
+        margin-inline: 4px 0 !important;
+    }
+
+    & > .split-view-panel[column="1"] > .browserContainer {
+        margin-inline: 0 4px !important;
+    }
+
+    & > .split-view-panel.deck-selected > .browserContainer {
+        outline: var(--myfox-focus-border) !important;
+        outline-offset: 0 !important;
+    }
+
+    & > .split-view-splitter {
+        width: 4px !important;
+        margin: 0 !important;
+    }
+}
+
+/* Next to the sidebar the outer card drops that margin, as a single page does. */
+#sidebar-box:not([hidden]) ~ #tabbrowser-tabbox:not([sidebar-positionend]) #tabbrowser-tabpanels[splitview] > .split-view-panel[column="0"] > .browserContainer {
+    margin-inline-start: 0 !important;
+}
+#sidebar-box[sidebar-positionend]:not([hidden]) ~ #tabbrowser-tabbox #tabbrowser-tabpanels[splitview] > .split-view-panel[column="1"] > .browserContainer {
+    margin-inline-end: 0 !important;
+}
