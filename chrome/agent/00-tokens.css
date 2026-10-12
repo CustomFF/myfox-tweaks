@@ -67,6 +67,11 @@
        on the left / on the right). */
     --myfox-column-shadow: inset -3px 0 4px -4px rgba(0, 0, 0, 0.25);
     --myfox-column-shadow-end: inset 3px 0 4px -4px rgba(0, 0, 0, 0.25);
+    /* The same shadows on the tabs in the background (and their ears), half
+       as deep, which shows the tabs' thickness. */
+    --myfox-strip-shadow-tab: inset 0 -1.5px 2px -2px rgba(0, 0, 0, 0.25);
+    --myfox-column-shadow-tab: inset -1.5px 0 2px -2px rgba(0, 0, 0, 0.25);
+    --myfox-column-shadow-tab-end: inset 1.5px 0 2px -2px rgba(0, 0, 0, 0.25);
 }
 
 /* On a light theme the faint container tint is lost on the near-white

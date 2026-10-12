@@ -14,6 +14,7 @@
 - Background tabs darken toward the edge tucked under the next card; the strip behind horizontal tabs is a shade darker, and the vertical tab column takes the color of a tab under its neighbor's shadow
 - On dark themes too the selected tab and the stacked background tabs cast soft shadows
 - The tabs' whole look (shape, size, cards, shadows, container colors, vertical tabs) applies only with the MyFox themes; under any other theme tabs look as Firefox draws them
+- Background tabs take the toolbar's shadow along their bottom edge too, half as deep, which gives them thickness
 
 ## 158.2 — 2026-10-09
 

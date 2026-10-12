@@ -142,6 +142,9 @@
     }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
         position: relative !important;
+        /* The navigation bar's shadow on the strip (--myfox-strip-shadow),
+           half as deep on the card and its ear: the card looks thick. */
+        box-shadow: var(--myfox-strip-shadow-tab) !important;
     }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):not(:hover) > .tab-stack > .tab-background {
         background-color: var(--toolbox-background-color) !important;
@@ -151,7 +154,10 @@
         content: "" !important;
         display: block !important;
         position: absolute !important;
-        bottom: -1px !important;
+        /* Level with the card (a selected tab's ears sit 1px lower), so the
+           shadow along its bottom runs on under the ear. */
+        bottom: 0 !important;
+        box-shadow: var(--myfox-strip-shadow-tab) !important;
         width: var(--user-tab-ear-rounding) !important;
         height: var(--user-tab-ear-rounding) !important;
         pointer-events: none !important;
