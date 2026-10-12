@@ -60,10 +60,8 @@
     outline: none !important;
     box-shadow: none !important;
 }
-@media (prefers-color-scheme: light) {
-    :root #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[usercontextid]:is([selected], [multiselected])>.tab-stack>.tab-background {
-        box-shadow: var(--myfox-tab-shadow) !important;
-    }
+:root #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[usercontextid]:is([selected], [multiselected])>.tab-stack>.tab-background {
+    box-shadow: var(--myfox-tab-shadow) !important;
 }
 /* Vertical: the gradient, laid out over the border box it is painted on
    (sized to the padding box it repeated into the border as a thin line). */

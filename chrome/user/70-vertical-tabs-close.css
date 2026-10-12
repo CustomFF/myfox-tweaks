@@ -25,17 +25,14 @@
     box-shadow: var(--myfox-column-shadow-end) !important;
 }
 
-/* On a light theme the selected tab gets a soft shadow too, a tighter one
-   than a horizontal tab's (--myfox-vtab-shadow), cut off on the side where it
-   joins the window. */
-@media (prefers-color-scheme: light) {
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
-        box-shadow: var(--myfox-vtab-shadow) !important;
-        clip-path: inset(-16px -2px -16px -12px);
-    }
-    :root:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
-        clip-path: inset(-16px -12px -16px -2px);
-    }
+/* The selected tab gets a soft shadow too, a tighter one than a horizontal
+   tab's (--myfox-vtab-shadow), cut off on the side where it joins the window. */
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
+    box-shadow: var(--myfox-vtab-shadow) !important;
+    clip-path: inset(-16px -2px -16px -12px);
+}
+:root:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
+    clip-path: inset(-16px -12px -16px -2px);
 }
 
 /* Vertical tabs are part of the window, like horizontal ones: each tab

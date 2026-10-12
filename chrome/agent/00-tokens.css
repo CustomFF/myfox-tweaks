@@ -36,13 +36,13 @@
     --myfox-shadow: 3px 6px 8px rgba(0, 0, 0, 0.3);
     /* A lighter one for popups that sit right under the pointer (tab previews). */
     --myfox-shadow-small: 2px 4px 6px rgba(0, 0, 0, 0.2);
-    /* Around the selected tab on a light theme, setting it off the near-white
-       tab strip (../user/50-tab-ears.css). */
+    /* Around the selected tab, setting it off the tab strip
+       (../user/50-tab-ears.css). */
     --myfox-tab-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
     /* The same around a selected vertical tab, tighter on its low row. */
     --myfox-vtab-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
     /* The color of the soft shadow a background tab casts on its neighbor
-       on a light theme (../user/50-tab-ears.css). */
+       (../user/50-tab-ears.css). */
     --myfox-tab-card-shadow: rgba(0, 0, 0, 0.15);
     /* A background tab darkens toward the edge tucked under the next card,
        this much black at that edge; the tab strip behind the tabs is the

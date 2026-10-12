@@ -91,17 +91,14 @@
     background-image: none !important;
 }
 
-/* Light themes: the selected tab is white on a near-white strip and all but
-   disappears. A soft shadow around its top and sides (the bottom is clipped
-   away, since the tab joins the toolbar there) sets it apart; dark themes
-   already have contrast, so nothing (shadow or clip) is applied there. Vertical
-   tabs (a list in the sidebar, no strip to blend into) don't get it either. */
-@media (prefers-color-scheme: light) {
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[selected] .tab-background,
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[multiselected] .tab-background {
-        box-shadow: var(--myfox-tab-shadow) !important;
-        clip-path: inset(-12px -16px -2px -16px);
-    }
+/* A soft shadow around the selected tab's top and sides (the bottom is
+   clipped away, since the tab joins the toolbar there) sets it apart from the
+   strip, on a light theme and a dark one alike. Vertical tabs have their own
+   (70-vertical-tabs-close.css). */
+#tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[selected] .tab-background,
+#tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[multiselected] .tab-background {
+    box-shadow: var(--myfox-tab-shadow) !important;
+    clip-path: inset(-12px -16px -2px -16px);
 }
 
 /* The first tab sits at the left edge of the window, with no tab to its left.
@@ -126,8 +123,8 @@
    lift a card, it only recolors it). A card has only the ear on its outer
    side and is filled with the tab strip's color, which looks the same but
    hides the corner under it, hovered or not. The top corner tucked under the
-   next card is square until hovered. On a light theme a card casts a soft
-   shadow outward, along its side and its ear (--myfox-tab-card-shadow). */
+   next card is square until hovered. A card casts a soft shadow outward,
+   along its side and its ear (--myfox-tab-card-shadow). */
 #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) {
     z-index: sibling-index() !important;
 }
@@ -175,15 +172,13 @@
 #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]):not(:hover) > .tab-stack > .tab-background {
     border-start-start-radius: 0 !important;
 }
-@media (prefers-color-scheme: light) {
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background {
-        filter: drop-shadow(-1px 0 1px var(--myfox-tab-card-shadow));
-        clip-path: inset(0 0 -2px -16px);
-    }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background {
-        filter: drop-shadow(1px 0 1px var(--myfox-tab-card-shadow));
-        clip-path: inset(0 -16px -2px 0);
-    }
+#tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [selected] ~ .tabbrowser-tab) > .tab-stack > .tab-background {
+    filter: drop-shadow(-1px 0 1px var(--myfox-tab-card-shadow));
+    clip-path: inset(0 0 -2px -16px);
+}
+#tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[selected] ~ .tabbrowser-tab:not([multiselected], [dragtarget]) > .tab-stack > .tab-background {
+    filter: drop-shadow(1px 0 1px var(--myfox-tab-card-shadow));
+    clip-path: inset(0 -16px -2px 0);
 }
 
 /* Over its title, a background tab darkens toward the edge tucked under the
