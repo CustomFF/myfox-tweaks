@@ -266,3 +266,407 @@
         }
     }
 }
+
+/* Tab column, both with the sidebar expanded and collapsed to icons: the
+   label's + or − (for a collapsed or an open group; the whole label toggles
+   it) in a small square, and a collapsed group's count, in badges in the
+   colors of the tab strip's count, swapped from the label's. The count: the
+   tabs are all gone from a collapsed group's column (no counter counts
+   them), but its children are not: the label, Firefox's slot and its count
+   box, and the tabs (a split view's pair as one); with its selected tab
+   shown, the number of the others, as Firefox counts them, +N. Firefox's
+   line beside the group and its row with that number are not used. */
+:root[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-group {
+    /* Three quarters of an icon. */
+    --myfox-group-sign: calc(var(--icon-size) * 0.75);
+
+    & .tab-group-line,
+    & > .tab-group-overflow-count-container {
+        display: none !important;
+    }
+    & .tab-group-label::before {
+        content: "−";
+        box-sizing: border-box !important;
+        width: var(--myfox-group-sign) !important;
+        height: var(--myfox-group-sign) !important;
+        border-radius: calc(var(--myfox-radius) - 2px) !important;
+        font-weight: 700 !important;
+        line-height: var(--myfox-group-sign) !important;
+        text-align: center !important;
+        color: var(--tab-group-color) !important;
+        background: var(--tab-group-text-color) !important;
+    }
+    &[collapsed] .tab-group-label::before {
+        content: "+";
+    }
+    &[collapsed] > .tab-group-label-container {
+        counter-reset: myfox-group-count calc(sibling-count() - 3);
+    }
+    &[collapsed][hasactivetab] > .tab-group-label-container {
+        counter-reset: myfox-group-count calc(sibling-count() - 4);
+    }
+}
+/* The count's badge: on the bar's far end with the sidebar expanded, in
+   place of the + or − (but under the pointer) with it collapsed. */
+:root[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-group[collapsed] {
+    &:is(#sidebar-container[sidebar-launcher-expanded] *) .tab-group-label-hover-highlight::after,
+    &:is(#sidebar-container:not([sidebar-launcher-expanded]) *) .tab-group-label:not(:hover)::before {
+        content: counter(myfox-group-count) !important;
+        box-sizing: border-box !important;
+        width: auto !important;
+        min-width: 1.6em !important;
+        height: 1.6em !important;
+        padding: 0 0.45em !important;
+        border-radius: 0.8em !important;
+        font-size: 0.9em !important;
+        font-weight: 600 !important;
+        line-height: 1.6em !important;
+        text-align: center !important;
+        color: var(--tab-group-color) !important;
+        background: var(--tab-group-text-color) !important;
+        pointer-events: none !important;
+    }
+    &[hasactivetab]:is(#sidebar-container[sidebar-launcher-expanded] *) .tab-group-label-hover-highlight::after,
+    &[hasactivetab]:is(#sidebar-container:not([sidebar-launcher-expanded]) *) .tab-group-label:not(:hover)::before {
+        content: "+" counter(myfox-group-count) !important;
+    }
+}
+
+/* Sidebar expanded: the group as an upside-down tree in its color. Its root
+   is the label, a bar of the group's color across the column, the + or − at
+   its start, the name after it, a collapsed group's count at its end. The
+   trunk runs down from under the + or −, a branch out to each tab, the last
+   one rounding off; the tabs hang just beyond it. */
+:root[theme-effective-id^="myfox-"] #sidebar-container[sidebar-launcher-expanded] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-group {
+    /* The tree's lines: thinner than the shelf in the tab strip; the trunk
+       a little thinner than the branches. */
+    --myfox-group-line: calc(var(--myfox-group-shelf) * 5 / 6);
+    --myfox-group-trunk-line: calc(var(--myfox-group-line) * 4 / 5);
+    /* The tree's pieces, as vector shapes (masks over the group's color),
+       so its lines and the fillets where they meet (flowing into each other
+       and into the tabs, as a tab's ears do) are smooth: drawn at the sizes
+       the values below give (lines of 2 and 2.5px, fillets of 2.5px, a row
+       of 30px), stretched to fit if those change. The trunk where it leaves
+       the label; the trunk through a tab's row with its branch; the last
+       branch, ending the trunk. */
+    --myfox-group-tree-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 3' preserveAspectRatio='none'%3E%3Cpath d='M0 0H7A2.5 2.5 0 0 0 4.5 2.5V3H2.5V2.5A2.5 2.5 0 0 0 0 0Z'/%3E%3C/svg%3E");
+    --myfox-group-tree-branch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 30' preserveAspectRatio='none'%3E%3Cpath d='M0 0H2V11.25A2.5 2.5 0 0 0 4.5 13.75H6.5A2.5 2.5 0 0 0 9 11.25V18.75A2.5 2.5 0 0 0 6.5 16.25H4.5A2.5 2.5 0 0 0 2 18.75V30H0Z'/%3E%3C/svg%3E");
+    --myfox-group-tree-last: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 30' preserveAspectRatio='none'%3E%3Cpath d='M0 0H2V11.25A2.5 2.5 0 0 0 4.5 13.75H6.5A2.5 2.5 0 0 0 9 11.25V18.75A2.5 2.5 0 0 0 6.5 16.25H5A5 5 0 0 1 0 11.25Z'/%3E%3C/svg%3E");
+    /* The + or −, a little in from the column's inner edge; the trunk's
+       middle, from that edge, under it; the tabs, moved in past the trunk
+       by a branch's length. */
+    --myfox-group-sign-start: calc((var(--icon-size) - var(--myfox-group-sign)) / 2 + var(--tab-padding-inline) / 4);
+    --myfox-group-trunk-middle: calc(var(--myfox-group-sign-start) + var(--myfox-group-sign) / 2);
+    --myfox-group-indent: calc(var(--myfox-group-trunk-middle) + var(--tab-padding-inline));
+    /* The trunk's start, from the column's (and a hung tab's) inner edge. */
+    --myfox-group-trunk: calc(var(--myfox-group-trunk-middle) - var(--myfox-group-trunk-line) / 2);
+    /* The fillets where the trunk meets the label and the branches. */
+    --myfox-group-fillet: var(--myfox-group-line);
+    /* A branch's length, from the trunk to the tab. */
+    --myfox-group-branch: calc(var(--myfox-group-indent) - var(--myfox-group-trunk));
+    /* The bar, and the space a group leaves below it and below its last
+       tab (what is left of a tab's height). */
+    --myfox-group-label-height: calc(var(--icon-size) + var(--tab-padding-inline));
+    --myfox-group-gap: calc((var(--tab-min-height) - var(--myfox-group-label-height)) / 2);
+
+    & > .tab-group-label-container {
+        position: relative !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 0 var(--myfox-group-gap) !important;
+    }
+    /* The last tab: the one before Firefox's count box (which shows only
+       in a collapsed group), or the selected one a collapsed group shows,
+       alone. */
+    &:not([collapsed]) > :is(.tabbrowser-tab, tab-split-view-wrapper):has(+ .tab-group-overflow-count-container),
+    &[collapsed] > .tabbrowser-tab[selected] {
+        margin-block-end: var(--myfox-group-gap) !important;
+    }
+    /* Collapsed with none shown, no space. */
+    &[collapsed]:not([hasactivetab]) > .tab-group-label-container {
+        padding-block-end: 0 !important;
+    }
+    & .tab-group-label-hover-highlight {
+        position: relative !important;
+        /* Firefox's is a row's height; the row's is set above. */
+        block-size: auto !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    & .tab-group-label {
+        position: relative !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        height: var(--myfox-group-label-height) !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 var(--tab-padding-inline) 0 calc(var(--myfox-group-sign-start) + var(--myfox-group-sign) + var(--tab-padding-inline) / 2) !important;
+        line-height: var(--myfox-group-label-height) !important;
+        text-align: start !important;
+        border-radius: 0 !important;
+
+        &::before {
+            position: absolute !important;
+            inset-inline-start: var(--myfox-group-sign-start) !important;
+            inset-block-start: calc(50% - var(--myfox-group-sign) / 2) !important;
+        }
+    }
+    &[collapsed] {
+        & .tab-group-label {
+            padding-inline-end: calc(var(--tab-padding-inline) * 2 + 2em) !important;
+        }
+        & .tab-group-label-hover-highlight::after {
+            position: absolute !important;
+            inset-inline-end: var(--tab-padding-inline) !important;
+            inset-block-start: calc(50% - 0.8em) !important;
+        }
+    }
+
+    /* The trunk below the + or −, while there are tabs hung below it, and
+       where it leaves the label a fillet on either side. */
+    &:is(:not([collapsed]), [hasactivetab]) > .tab-group-label-container::after {
+        content: "" !important;
+        position: absolute !important;
+        inset-inline-start: calc(var(--myfox-group-trunk) - var(--myfox-group-fillet)) !important;
+        inset-block: var(--myfox-group-label-height) 0 !important;
+        width: calc(var(--myfox-group-trunk-line) + var(--myfox-group-fillet) * 2) !important;
+        background: var(--tab-group-color) !important;
+        mask: var(--myfox-group-tree-top) 0 0 / 100% 100% no-repeat !important;
+        pointer-events: none !important;
+    }
+
+    & > .tabbrowser-tab {
+        margin-inline-start: var(--myfox-group-indent) !important;
+
+        /* The branch to a tab: the trunk down through the tab's row, a
+           branch out from it at the tab's middle. */
+        &::before {
+            content: "" !important;
+            position: absolute !important;
+            inset-inline-start: calc(var(--myfox-group-trunk) - var(--myfox-group-indent)) !important;
+            inset-block: 0 !important;
+            width: var(--myfox-group-branch) !important;
+            background: var(--tab-group-color) !important;
+            mask: var(--myfox-group-tree-branch) 0 0 / 100% 100% no-repeat !important;
+            pointer-events: none !important;
+        }
+        /* Its edge toward the tree: a thin line in the branch's color, half
+           as thick, along the middle 60% of it. */
+        &::after {
+            content: "" !important;
+            position: absolute !important;
+            inset-inline-start: 0 !important;
+            inset-block: 20% !important;
+            width: calc(var(--myfox-group-line) / 2) !important;
+            background: var(--tab-group-color) !important;
+            pointer-events: none !important;
+        }
+    }
+    /* The last branch ends the trunk, rounding off into it. */
+    &:not([collapsed]) > .tabbrowser-tab:has(+ .tab-group-overflow-count-container)::before,
+    &[collapsed] > .tabbrowser-tab[selected]::before {
+        mask: var(--myfox-group-tree-last) 0 0 / 100% 100% no-repeat !important;
+    }
+    /* The group's tabs in the background have no ears (70-vertical-tabs-
+       close.css): they hang from the tree, not in the stack's run. The
+       selected one keeps its. */
+    & > .tabbrowser-tab:not([selected], [multiselected]) > .tab-stack > .tab-background {
+        &::before,
+        &::after {
+            display: none !important;
+        }
+    }
+
+    /* With the sidebar on the right, the tree on the group's right, the
+       column's outer side there: the + or − and the trunk at the right,
+       the tabs moved in from it, the shapes turned over; the name next to
+       the + or −, the count at the left. */
+    &:is(:root:has(#sidebar-container[sidebar-positionend]) *) {
+        & .tab-group-label {
+            padding-inline: var(--tab-padding-inline) calc(var(--myfox-group-sign-start) + var(--myfox-group-sign) + var(--tab-padding-inline) / 2) !important;
+            text-align: end !important;
+
+            &::before {
+                inset-inline: auto var(--myfox-group-sign-start) !important;
+            }
+        }
+        &[collapsed] {
+            & .tab-group-label {
+                padding-inline-start: calc(var(--tab-padding-inline) * 2 + 2em) !important;
+            }
+            & .tab-group-label-hover-highlight::after {
+                inset-inline: var(--tab-padding-inline) auto !important;
+            }
+        }
+        &:is(:not([collapsed]), [hasactivetab]) > .tab-group-label-container::after {
+            inset-inline: auto calc(var(--myfox-group-trunk) - var(--myfox-group-fillet)) !important;
+        }
+        & > .tabbrowser-tab {
+            margin-inline: 0 var(--myfox-group-indent) !important;
+
+            &::before {
+                inset-inline: auto calc(var(--myfox-group-trunk) - var(--myfox-group-indent)) !important;
+                scale: -1 1 !important;
+            }
+            &::after {
+                inset-inline: auto 0 !important;
+            }
+        }
+    }
+}
+
+/* Sidebar collapsed to a strip of icons: no tree. The group's label a bar
+   across the strip like its tabs, the + or − (or the count) in the middle,
+   in place of the name's first letter Firefox puts there; the tabs in the
+   background on the group's color, their icons on it (on a dark theme its
+   deep shade: Firefox's own is pale there, and the light icons are lost on
+   it; hovered, the hover shade); the selected one on its own card, with
+   the group's line along its outer side. */
+:root[theme-effective-id^="myfox-"] #sidebar-container:not([sidebar-launcher-expanded]) #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-group {
+    --myfox-group-fill: var(--tab-group-color);
+    --myfox-group-fill-hover: var(--tab-group-background-color-hover);
+    /* The line, thinner than the shelf in the tab strip. */
+    --myfox-group-edge: calc(var(--myfox-group-shelf) * 2 / 3);
+    @media (prefers-color-scheme: dark) {
+        --myfox-group-fill: var(--tab-group-color-invert);
+        --myfox-group-fill-hover: color-mix(in srgb, var(--tab-group-color-invert), var(--tab-group-color) 25%);
+    }
+
+    & > .tab-group-label-container,
+    & .tab-group-label-hover-highlight {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    & .tab-group-label {
+        position: relative !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: 100% !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        color: transparent !important;
+
+        &::before {
+            position: absolute !important;
+            inset-inline-start: 50% !important;
+            inset-block-start: 50% !important;
+            translate: -50% -50% !important;
+            /* Firefox shrinks the label's text away there (all but the
+               first letter) by its font-size-adjust. */
+            font-size-adjust: none !important;
+        }
+    }
+    & > .tabbrowser-tab:not([selected], [multiselected]) > .tab-stack > .tab-background {
+        background-color: var(--myfox-group-fill) !important;
+        /* One block of the group's color across the column: no gap at
+           either side (the column's edge showed through), no shadow, no
+           ears. */
+        margin-inline: 0 !important;
+        box-shadow: none !important;
+
+        &::before,
+        &::after {
+            display: none !important;
+        }
+    }
+    & > .tabbrowser-tab:not([selected], [multiselected]):hover > .tab-stack > .tab-background {
+        background-color: var(--myfox-group-fill-hover) !important;
+    }
+    & > .tabbrowser-tab:is([selected], [multiselected]) {
+        /* Above it is the group's color (the label or a tab of the group):
+           its rounded top corner on that color, not the column's. */
+        background: linear-gradient(var(--tab-group-color), var(--tab-group-color)) 0 0 / var(--myfox-radius) var(--myfox-radius) no-repeat !important;
+
+        &::after {
+            content: "" !important;
+            position: absolute !important;
+            inset-block: 0 !important;
+            inset-inline-start: 0 !important;
+            width: var(--myfox-group-edge) !important;
+            background: var(--tab-group-color) !important;
+            pointer-events: none !important;
+        }
+        /* Its outer corners a little rounded, the line with them. */
+        & > .tab-stack > .tab-background,
+        &::after {
+            border-start-start-radius: calc(var(--myfox-radius) - 1px) !important;
+            border-end-start-radius: calc(var(--myfox-radius) - 1px) !important;
+        }
+    }
+    /* Shown alone from a collapsed group, the line turns along its bottom
+       too, closing the group off (drawn as backgrounds, not borders, which
+       round to whole pixels apart from the arc's), and on round the ear
+       there to the page: a vector arc (drawn for an ear of 10px and a line
+       of 2px, stretched to fit) along the ear's curve, from where the ear
+       starts (1px out past the tab, see 70-vertical-tabs-close.css). */
+    &[collapsed] > .tabbrowser-tab[selected] {
+        &::after {
+            inset-inline: 0 calc(var(--myfox-vtab-ear) - 1px) !important;
+            width: auto !important;
+            background:
+                linear-gradient(var(--tab-group-color), var(--tab-group-color)) 0 0 / var(--myfox-group-edge) 100% no-repeat,
+                linear-gradient(var(--tab-group-color), var(--tab-group-color)) 0 100% / 100% var(--myfox-group-edge) no-repeat !important;
+        }
+        &::before {
+            content: "" !important;
+            position: absolute !important;
+            inset-inline-end: -1px !important;
+            inset-block-end: calc(0px - var(--myfox-vtab-ear)) !important;
+            width: var(--myfox-vtab-ear) !important;
+            height: calc(var(--myfox-vtab-ear) + var(--myfox-group-edge)) !important;
+            /* Over the tab's card and its ear, which come after it. */
+            z-index: 1 !important;
+            background: var(--tab-group-color) !important;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12' preserveAspectRatio='none'%3E%3Cpath d='M0 0A12 12 0 0 1 10 5.37V12A10 10 0 0 0 0 2Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat !important;
+            pointer-events: none !important;
+        }
+    }
+
+    /* With the sidebar on the right, all that on the other side. */
+    &:is(:root:has(#sidebar-container[sidebar-positionend]) *) {
+        & > .tabbrowser-tab:is([selected], [multiselected]) {
+            background-position: 100% 0 !important;
+
+            &::after {
+                inset-inline: auto 0 !important;
+            }
+            & > .tab-stack > .tab-background,
+            &::after {
+                border-radius: 0 calc(var(--myfox-radius) - 1px) calc(var(--myfox-radius) - 1px) 0 !important;
+            }
+        }
+        &[collapsed] > .tabbrowser-tab[selected] {
+            &::after {
+                inset-inline: calc(var(--myfox-vtab-ear) - 1px) 0 !important;
+                background-position: 100% 0, 0 100% !important;
+            }
+            &::before {
+                inset-inline: -1px auto !important;
+                scale: -1 1 !important;
+            }
+        }
+    }
+}
+
+/* With the sidebar collapsed to icons the cards stand 1px in from the page
+   (70-vertical-tabs-close.css), the group's tabs and label do not: under
+   the ear a card next to a group puts over it, the group's color showed in
+   that 1px. That ear reaches the page, as a hovered card's does, and draws
+   that 1px itself: the column's color with the window's shadow on it. */
+:root[theme-effective-id^="myfox-"] #sidebar-container:not([sidebar-launcher-expanded]) #vertical-tabs #tabbrowser-tabs[orient="vertical"] {
+    & .tabbrowser-tab:has(+ tab-group) > .tab-stack > .tab-background::after,
+    & tab-group + .tabbrowser-tab > .tab-stack > .tab-background::before {
+        inset-inline-end: -1px !important;
+        box-shadow: var(--myfox-column-shadow), inset -1px 0 0 0 var(--myfox-column-color) !important;
+    }
+    &:is(:root:has(#sidebar-container[sidebar-positionend]) *) {
+        & .tabbrowser-tab:has(+ tab-group) > .tab-stack > .tab-background::after,
+        & tab-group + .tabbrowser-tab > .tab-stack > .tab-background::before {
+            inset-inline: -1px auto !important;
+            box-shadow: var(--myfox-column-shadow-end), inset 1px 0 0 0 var(--myfox-column-color) !important;
+        }
+    }
+}

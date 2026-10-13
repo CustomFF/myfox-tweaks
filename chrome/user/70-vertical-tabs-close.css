@@ -267,8 +267,9 @@
 
     /* Vertical tabs, launcher expanded: the tab content is inset 17px so that an
        icon centers in the collapsed strip, which leaves the expanded list looking
-       indented; half that is enough. */
-    #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab {
+       indented; half that is enough. A tab group's label row too
+       (77-tab-groups.css), which lines up with the tabs. */
+    #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] :is(.tabbrowser-tab, tab-group) {
         --tab-padding-inline: 8px;
     }
 
@@ -302,7 +303,6 @@
         width: auto !important;
         justify-self: stretch !important;
     }
-
     /* But the selected tab's card reaches the page, as with the sidebar
        expanded; the 1px left there showed the column's edge as a strip
        down its side. */
@@ -312,6 +312,7 @@
     &:has(#sidebar-container[sidebar-positionend]) #sidebar-container:not([sidebar-launcher-expanded]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
         margin-inline: 0 1px !important;
     }
+
     /* "New tab" row, vertical tabs expanded: a text label next to the icon reads
        oddly for a plain "add" action (unlike every other row, which is a real
        tab). Icon only, centered — same idea as the collapsed strip. */
