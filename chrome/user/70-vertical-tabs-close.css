@@ -303,6 +303,15 @@
         justify-self: stretch !important;
     }
 
+    /* But the selected tab's card reaches the page, as with the sidebar
+       expanded; the 1px left there showed the column's edge as a strip
+       down its side. */
+    #sidebar-container:not([sidebar-launcher-expanded]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
+        margin-inline-end: 0 !important;
+    }
+    &:has(#sidebar-container[sidebar-positionend]) #sidebar-container:not([sidebar-launcher-expanded]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
+        margin-inline: 0 1px !important;
+    }
     /* "New tab" row, vertical tabs expanded: a text label next to the icon reads
        oddly for a plain "add" action (unlike every other row, which is a real
        tab). Icon only, centered — same idea as the collapsed strip. */
