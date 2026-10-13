@@ -23,6 +23,7 @@
 - With vertical tabs and the sidebar expanded, tab icons sit half as far from the tab's edge
 - Tabs on either side of a tab group's edge overlap in the right order
 - Tab groups have a label of a tab's shape with the group's name and a solid shelf in the group's color under their tabs, which are a little narrower than others; a collapsed group shows the number of its tabs on the label
+- With the tab column on the right, a tab's close button is on its other side; with the sidebar collapsed to icons the close button no longer slips under the tab above
 
 ## 158.2 — 2026-10-09
 

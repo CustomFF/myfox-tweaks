@@ -240,6 +240,23 @@
         pointer-events: auto !important;
     }
 
+    /* With the tab column on the right, the close button on a tab's other
+       side, mirrored: at the start of the row, before the icon, or, with the
+       sidebar collapsed to icons, over the icon's other corner. */
+    &:has(#sidebar-container[sidebar-positionend]) #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] .tab-close-button {
+        order: -1 !important;
+        margin-inline: calc(var(--tab-padding-inline) / -2) 0 !important;
+    }
+    &:has(#sidebar-container[sidebar-positionend]) #sidebar-container:not([sidebar-launcher-expanded]) #tabbrowser-tabs[orient="vertical"] .tab-close-button {
+        inset-inline: auto 2px !important;
+    }
+    /* With the sidebar collapsed, Firefox puts the button a little above the
+       tab, where the card above lies over it (the cards stack, a hovered one
+       isn't lifted): within the tab. */
+    #sidebar-container:not([sidebar-launcher-expanded]) #tabbrowser-tabs[orient="vertical"] .tab-close-button {
+        top: 0 !important;
+    }
+
     /* Once the tabs get narrow, Firefox sets closebuttons="activetab" on the
        strip and display:none's the close button of every tab but the selected
        one — so hover-to-close silently stopped working past a certain tab count
