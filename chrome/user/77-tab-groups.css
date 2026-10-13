@@ -1,0 +1,268 @@
+/* Tab groups: a shelf in the group's color under its tabs, the group's name
+   on a label at its start. User sheet, imported by ../userChrome.css. */
+
+/* Tab strip: the group is framed in its color: at its start the label with
+   its name, the full height of the strip and rounded like a tab (a square
+   with no name), its color on in the first tab's rounded corner; a solid
+   shelf under its tabs, which ends in an ear, as the label starts. The
+   group's tabs are narrower than others (--myfox-group-tab-width). */
+:root[theme-effective-id^="myfox-"] #navigator-toolbox #tabbrowser-tabs[orient="horizontal"] tab-group {
+    & > .tab-group-label-container {
+        padding-inline-end: 0 !important;
+    }
+    /* The label and the end of the shelf take their places in the stack of
+       cards, as the tabs do (50-tab-ears.css), so their ears lie under or
+       over the neighbors' as a tab's would. */
+    & > :is(.tab-group-label-container, .tab-group-overflow-count-container) {
+        position: relative !important;
+        z-index: var(--myfox-stack-pos) !important;
+    }
+    & > :is(.tab-group-label-container, .tab-group-overflow-count-container):is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) {
+        z-index: calc(100000 - var(--myfox-stack-pos)) !important;
+    }
+    & .tab-group-label-hover-highlight {
+        position: relative !important;
+        height: 100% !important;
+    }
+    & .tab-group-label {
+        position: relative !important;
+        height: 100% !important;
+        margin: 0 !important;
+        /* A square, wider for a name, as long as the name (Firefox cuts it
+           short). */
+        min-width: var(--tab-min-height) !important;
+        max-width: none !important;
+        line-height: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: var(--user-tab-ear-rounding) 0 0 0 !important;
+    }
+    /* Hovered (or while its collapsed group's menu is open), Firefox fills
+       the label with another shade, which parted it from the ear and the
+       shelf on its sides: the shade faded out to the group's color toward
+       its sides instead. */
+    & .tab-group-label:hover,
+    &[previewpanelactive] .tab-group-label {
+        background-color: var(--tab-group-color) !important;
+        background-image: linear-gradient(to right, transparent, var(--tab-group-background-color-hover) 3%, var(--tab-group-background-color-hover) 97%, transparent) !important;
+    }
+    /* The ear on the box round the label, which clips what overflows it. */
+    & .tab-group-label-hover-highlight::before {
+        content: "" !important;
+        position: absolute !important;
+        bottom: 0 !important;
+        width: var(--user-tab-ear-rounding) !important;
+        height: var(--user-tab-ear-rounding) !important;
+        background: var(--tab-group-color) !important;
+        pointer-events: none !important;
+    }
+    & .tab-group-label-hover-highlight::before {
+        left: calc(0px - var(--user-tab-ear-rounding)) !important;
+        mask: var(--myfox-ear-start) !important;
+    }
+    /* The shelf down to the strip's bottom edge, under the thin border a
+       tab's card has there, and under the neighbors' feet. */
+    & .tab-background {
+        border-block-end-width: 0 !important;
+        /* Firefox's thin frame round the selected tab covered the plate. */
+        outline: none !important;
+    }
+    & .tab-group-line {
+        height: var(--myfox-group-shelf) !important;
+        inset-block-end: 0 !important;
+        inset-inline: calc(0px - var(--user-tab-ear-rounding)) !important;
+        border-radius: 0 !important;
+        /* Over the tab's own feet, its ::after one included. */
+        z-index: 3 !important;
+    }
+    /* A tab's shade (50-tab-ears.css) stops above the shelf. */
+    & .tabbrowser-tab > .tab-stack::after {
+        inset-block-end: var(--myfox-group-shelf) !important;
+    }
+    /* Collapsed, its selected tab shown: the tab on the group's color, one
+       block with the label and the count. */
+    &[collapsed] > .tabbrowser-tab[selected] {
+        background: var(--tab-group-color) !important;
+    }
+    & > .tabbrowser-tab:first-of-type {
+        background: linear-gradient(var(--tab-group-color), var(--tab-group-color)) left top / var(--user-tab-rounding) var(--user-tab-rounding) no-repeat !important;
+    }
+    /* The shelf's end: Firefox's box for the count of a collapsed group (the
+       last thing in it), shown with no width while the group is open: the
+       shelf's last piece, under the last tab's foot, and the ear. */
+    &:not([collapsed]) > .tab-group-overflow-count-container {
+        display: flex !important;
+        align-self: stretch !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        & > .tab-group-overflow-count {
+            display: none !important;
+        }
+        &::before,
+        &::after {
+            content: "" !important;
+            position: absolute !important;
+            pointer-events: none !important;
+            background: var(--tab-group-color) !important;
+        }
+        &::before {
+            bottom: 0 !important;
+            right: 0 !important;
+            width: var(--user-tab-ear-rounding) !important;
+            height: var(--myfox-group-shelf) !important;
+        }
+        &::after {
+            bottom: 0 !important;
+            left: 0 !important;
+            width: var(--user-tab-ear-rounding) !important;
+            height: var(--user-tab-ear-rounding) !important;
+            mask: var(--myfox-ear-end) !important;
+        }
+    }
+    /* Not the tabs a collapsed group hides, which Firefox narrows to nothing;
+       a split view's pair as well, as wide as a tab. Nor a tab opening or
+       closing ([fadein] off): Firefox narrows it to nothing then, and only
+       removes a closed tab once it has. */
+    &:not([collapsed]) > :is(.tabbrowser-tab[fadein], tab-split-view-wrapper),
+    &[collapsed] > .tabbrowser-tab[fadein][selected],
+    &[collapsed] > tab-split-view-wrapper[hasactivetab] {
+        max-width: calc(var(--tab-max-width) * var(--myfox-group-tab-width)) !important;
+        flex-grow: calc(100 * var(--myfox-group-tab-width)) !important;
+        flex-shrink: calc(100 * var(--myfox-group-tab-width)) !important;
+    }
+}
+
+/* A split view's pair in a group: its halves (on the tab content,
+   75-split-view.css) and their ears cover the shelf under its tabs; the
+   shelf over them instead, along the pair's bottom. */
+:root#main-window[theme-effective-id^="myfox-"] #navigator-toolbox #tabbrowser-tabs[orient="horizontal"] tab-group > tab-split-view-wrapper {
+    position: relative !important;
+
+    &::after {
+        content: "" !important;
+        position: absolute !important;
+        bottom: 0 !important;
+        inset-inline: calc(0px - var(--user-tab-ear-rounding)) !important;
+        height: var(--myfox-group-shelf) !important;
+        background: var(--tab-group-color) !important;
+        z-index: 2000000 !important;
+        pointer-events: none !important;
+    }
+}
+
+/* A split view's pair shown in its collapsed group: on the group's color,
+   as a tab is, the pair itself (drawn in the strip's color, its ears too,
+   75-split-view.css) see-through to it. The id outweighs that sheet. */
+:root#main-window[theme-effective-id^="myfox-"] #navigator-toolbox #tabbrowser-tabs[orient="horizontal"] tab-group[collapsed] > tab-split-view-wrapper[hasactivetab] {
+    background: var(--tab-group-color) !important;
+
+    & > .tabbrowser-tab > .tab-stack > .tab-background {
+        background-color: transparent !important;
+        &::before,
+        &::after {
+            display: none !important;
+        }
+    }
+}
+
+/* The cards next to a group down to the strip's bottom edge too: their feet
+   lie over the group's ears, and would leave its color showing under them. */
+:root[theme-effective-id^="myfox-"] #navigator-toolbox #tabbrowser-tabs[orient="horizontal"] :is(tab-group + .tabbrowser-tab, .tabbrowser-tab:has(+ tab-group)) .tab-background {
+    border-block-end-width: 0 !important;
+}
+
+/* A collapsed group: the label with the number of its tabs at its end. Its
+   tabs stay in the strip, only narrowed to nothing, so a counter counts them
+   all; Firefox's own count (for the tab it keeps showing) is one less. With
+   one of its tabs selected, Firefox shows that tab and the number of the
+   others after it: a block of the label's look. The number is a badge in
+   the label's colors swapped, set off from the name. */
+:root[theme-effective-id^="myfox-"] #navigator-toolbox #tabbrowser-tabs[orient="horizontal"] tab-group {
+    counter-reset: myfox-group-tabs;
+
+    & .tabbrowser-tab {
+        counter-increment: myfox-group-tabs;
+    }
+    /* Firefox narrows a split view's pair in a collapsed group to nothing
+       and clips it; its ears and shadows (75-split-view.css) unclipped it. */
+    &[collapsed] > tab-split-view-wrapper:not([hasactivetab]) {
+        overflow: hidden !important;
+    }
+    /* Nor do the hidden tabs' ears and shadows show between label and count. */
+    &[collapsed] > :is(.tabbrowser-tab:not([selected]), tab-split-view-wrapper:not([hasactivetab])) {
+        visibility: hidden !important;
+    }
+    &[collapsed] > .tab-group-overflow-count-container {
+        align-self: stretch !important;
+        margin: 0 !important;
+        padding-block: 0 !important;
+        padding-inline: 8px !important;
+        justify-content: center !important;
+        background: var(--tab-group-color) !important;
+        color: var(--tab-group-text-color) !important;
+        border-radius: var(--user-tab-ear-rounding) var(--user-tab-ear-rounding) 0 0 !important;
+    }
+    &[collapsed] .tab-group-overflow-count,
+    &[collapsed]:not([hasactivetab]) > .tab-group-overflow-count-container::before {
+        align-self: center !important;
+        box-sizing: border-box !important;
+        min-width: 1.6em !important;
+        height: 1.6em !important;
+        margin: 0 !important;
+        padding: 0 0.45em !important;
+        border-radius: 0.8em !important;
+        font-size: 0.9em !important;
+        font-weight: 600 !important;
+        line-height: 1.6em !important;
+        text-align: center !important;
+        color: var(--tab-group-color) !important;
+        background: var(--tab-group-text-color) !important;
+    }
+    &[collapsed] > .tab-group-overflow-count-container::before,
+    &[collapsed] > .tab-group-overflow-count-container::after {
+        content: "" !important;
+        position: absolute !important;
+        bottom: 0 !important;
+        width: var(--user-tab-ear-rounding) !important;
+        height: var(--user-tab-ear-rounding) !important;
+        background: var(--tab-group-color) !important;
+        pointer-events: none !important;
+    }
+    &[collapsed] > .tab-group-overflow-count-container::before {
+        left: calc(0px - var(--user-tab-ear-rounding)) !important;
+        mask: var(--myfox-ear-start) !important;
+    }
+    &[collapsed] > .tab-group-overflow-count-container::after {
+        right: calc(0px - var(--user-tab-ear-rounding)) !important;
+        mask: var(--myfox-ear-end) !important;
+    }
+
+    /* With its selected tab shown, the count joins that tab's plate. */
+    &[collapsed][hasactivetab] > .tab-group-overflow-count-container {
+        border-start-start-radius: 0 !important;
+        &::before {
+            display: none !important;
+        }
+    }
+
+    /* None of its tabs shown: the count joins the label, as one block. */
+    &[collapsed]:not([hasactivetab]) {
+        & > .tab-group-overflow-count-container {
+            display: flex !important;
+            padding-inline-start: 0 !important;
+            border-start-start-radius: 0 !important;
+        }
+        & .tab-group-overflow-count {
+            display: none !important;
+        }
+        & > .tab-group-overflow-count-container::before {
+            content: counter(myfox-group-tabs) !important;
+            position: static !important;
+            width: auto !important;
+            mask: none !important;
+        }
+    }
+}

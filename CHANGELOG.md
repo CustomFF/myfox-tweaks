@@ -22,6 +22,7 @@
 - A split view's tab sits lower than other tabs (with vertical tabs, in from the column's edge), on a strip in the tab bar's color, with no shadow, so it can't be mistaken for a container tab; each half takes its own container's color, and the window around each page is tinted by its own container, split at the splitter
 - With vertical tabs and the sidebar expanded, tab icons sit half as far from the tab's edge
 - Tabs on either side of a tab group's edge overlap in the right order
+- Tab groups have a label of a tab's shape with the group's name and a solid shelf in the group's color under their tabs, which are a little narrower than others; a collapsed group shows the number of its tabs on the label
 
 ## 158.2 — 2026-10-09
 

@@ -43,6 +43,12 @@
     /* The height of each half of a pair with vertical tabs. */
     --myfox-split-vtab-height: 24px;
 
+    /* Tab groups (../user/77-tab-groups.css): the shelf in the group's color
+       under its label and tabs. */
+    --myfox-group-shelf: 3px;
+    /* The width of a group's tabs, as a share of other tabs' width. */
+    --myfox-group-tab-width: 0.8;
+
     /* Text size of menus, panels, sidebars and the browser's own pages. */
     --myfox-font-size: 12px;
 
