@@ -27,6 +27,7 @@
 - With the sidebar collapsed to icons the selected tab reaches the page, with no strip of the column showing along its side
 - With the tab column on the right, a hovered split view pair's ears reach the page, as on the left
 - With vertical tabs the line between a split view's two tabs is shorter, in their middle
+- With vertical tabs a split view in the background takes the window's shadow along its side and casts a soft shadow on its neighbor, as other tabs do; in the selected split view the faded tab's ears are faded too
 
 ## 158.2 — 2026-10-09
 
