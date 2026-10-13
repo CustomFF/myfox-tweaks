@@ -358,8 +358,8 @@
     &::after {
         inset-inline-end: -1px !important;
     }
-    :root:has(#sidebar-container[sidebar-positionend]) &::before,
-    :root:has(#sidebar-container[sidebar-positionend]) &::after {
+    &:is(:root:has(#sidebar-container[sidebar-positionend]) *)::before,
+    &:is(:root:has(#sidebar-container[sidebar-positionend]) *)::after {
         inset-inline-end: auto !important;
         inset-inline-start: -1px !important;
     }

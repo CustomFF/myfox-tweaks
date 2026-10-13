@@ -25,6 +25,7 @@
 - Tab groups have a label of a tab's shape with the group's name and a solid shelf in the group's color under their tabs, which are a little narrower than others; a collapsed group shows the number of its tabs on the label
 - With the tab column on the right, a tab's close button is on its other side; with the sidebar collapsed to icons the close button no longer slips under the tab above
 - With the sidebar collapsed to icons the selected tab reaches the page, with no strip of the column showing along its side
+- With the tab column on the right, a hovered split view pair's ears reach the page, as on the left
 
 ## 158.2 — 2026-10-09
 
