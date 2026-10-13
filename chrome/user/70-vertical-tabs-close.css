@@ -90,7 +90,7 @@
         box-shadow: var(--myfox-column-shadow-tab-end) !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):not(:hover) > .tab-stack > .tab-background {
-        background-color: var(--toolbox-background-color) !important;
+        background-color: var(--myfox-tab-card-color) !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
         filter: drop-shadow(0 -1px 1px var(--myfox-tab-card-shadow));

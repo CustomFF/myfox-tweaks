@@ -64,6 +64,10 @@
     /* The color of the soft shadow a background tab casts on its neighbor
        (../user/50-tab-ears.css). */
     --myfox-tab-card-shadow: rgba(0, 0, 0, 0.15);
+    /* A background tab's card: the toolbar's color, with this much white
+       (a dark theme sets some below). */
+    --myfox-tab-card-lift: 0%;
+    --myfox-tab-card-color: color-mix(in srgb, var(--toolbox-background-color), white var(--myfox-tab-card-lift));
     /* A background tab darkens toward the edge tucked under the next card,
        this much black at that edge (../user/50-tab-ears.css). */
     --myfox-tab-shade: 5%;
@@ -119,5 +123,8 @@
         --myfox-vtab-shade: 10%;
         --myfox-tab-backdrop: 19%;
         --myfox-vtab-backdrop: 19%;
+        /* The background tabs a touch lighter than the toolbar, which is
+           near black. */
+        --myfox-tab-card-lift: 2%;
     }
 }

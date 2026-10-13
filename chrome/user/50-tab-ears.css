@@ -170,7 +170,7 @@
         box-shadow: var(--myfox-strip-shadow-tab) !important;
     }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):not(:hover) > .tab-stack > .tab-background {
-        background-color: var(--toolbox-background-color) !important;
+        background-color: var(--myfox-tab-card-color) !important;
     }
     #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background::before,
     #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background::after {

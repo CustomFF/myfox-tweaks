@@ -30,6 +30,7 @@
 - With vertical tabs a split view in the background takes the window's shadow along its side and casts a soft shadow on its neighbor, as other tabs do; in the selected split view the faded tab's ears are faded too
 - With the sidebar collapsed to icons a split view spans the column like other tabs, its icons nearer the middle, with a short dash between them and the window's shadow along its side
 - With vertical tabs a tab group is a tree in its color: the group's name on a bar across the column with a + or − to collapse or open it, its tabs hanging from a trunk; a collapsed group shows the number of its tabs, +N while one of them is selected. With the sidebar collapsed to icons the group is a block in its color, the selected tab on its own card edged in it
+- On dark themes background tabs are a touch lighter than the toolbar
 
 ## 158.2 — 2026-10-09
 

@@ -377,7 +377,7 @@
    outweigh the tab rules of 20-tabs.css, 50-tab-ears.css,
    70-vertical-tabs-close.css and the ones above. */
 :root#main-window[theme-effective-id^="myfox-"] :is(#navigator-toolbox, #vertical-tabs) #tabbrowser-tabs tab-split-view-wrapper > .tabbrowser-tab {
-    --myfox-split-half-bg: var(--toolbox-background-color);
+    --myfox-split-half-bg: var(--myfox-tab-card-color);
     --myfox-split-half-line: transparent;
     --myfox-split-half-direction: to right;
 
