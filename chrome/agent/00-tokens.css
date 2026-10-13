@@ -33,6 +33,10 @@
        of a tab pair, and how faint the title of the half not shown in focus is. */
     --myfox-split-divider: color-mix(in srgb, currentColor 30%, transparent);
     --myfox-split-dim: 0.6;
+    /* How far in the halves of a pair lie: below its top in the tab strip,
+       from the column's side in the tab column. */
+    --myfox-split-inset-top: 4px;
+    --myfox-split-vinset: 7px;
     /* Hovering a pair in the background lights up its other half this much
        (the half under the pointer as any hovered tab, --myfox-tab-hover). */
     --myfox-split-hover: calc(var(--myfox-tab-hover) / 2);

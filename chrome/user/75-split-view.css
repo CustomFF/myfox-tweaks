@@ -104,9 +104,6 @@
     & > .tabbrowser-tab:last-child > .tab-stack > .tab-background::before {
         display: none !important;
     }
-    & > .tabbrowser-tab:last-child .tab-content:not([attention]) {
-        background: linear-gradient(var(--myfox-split-divider), var(--myfox-split-divider)) left center / 1px 50% no-repeat !important;
-    }
 
     /* A pair in the background is one card stacked toward the selected tab:
        the shadow and the shade only on its outer side, none across the seam. */
@@ -258,9 +255,6 @@
     & > .tabbrowser-tab:last-child > .tab-stack > .tab-background {
         clip-path: inset(0 -2px -16px -2px) !important;
     }
-    & > .tabbrowser-tab:last-child .tab-content:not([attention]) {
-        background: linear-gradient(var(--myfox-split-divider), var(--myfox-split-divider)) center top / 100% 1px no-repeat content-box !important;
-    }
 
     /* One diagonal shade across the whole card. */
     &:not([hasactivetab]) > .tabbrowser-tab > .tab-stack::after {
@@ -344,19 +338,9 @@
     }
 }
 
-/* Hovering either half of a pair in the background lights up the whole pair:
-   the half under the pointer as a hovered tab (50-tab-ears.css), the other
-   one fainter (--myfox-split-hover). The pair's tucked corner rounds and its
-   ears reach the window, as a hovered tab's do. #main-window outweighs the
-   background-card rules of 50-tab-ears.css and 70-vertical-tabs-close.css. */
-:root#main-window[theme-effective-id^="myfox-"] #tabbrowser-tabs tab-split-view-wrapper:not([hasactivetab]):hover > .tabbrowser-tab {
-    & > .tab-stack > .tab-background {
-        background-color: color-mix(in srgb, currentColor var(--myfox-split-hover), var(--tab-background-color-selected)) !important;
-    }
-    &:hover > .tab-stack > .tab-background {
-        background-color: color-mix(in srgb, currentColor var(--myfox-tab-hover), var(--tab-background-color-selected)) !important;
-    }
-}
+/* Hovering either half of a pair in the background lights up the whole pair
+   (the halves' fill: see below). The pair's tucked corner rounds and its
+   ears reach the window, as a hovered tab's do. */
 :root#main-window[theme-effective-id^="myfox-"] #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper:not([hasactivetab]):hover {
     & > .tabbrowser-tab > .tab-stack > .tab-background::before,
     & > .tabbrowser-tab > .tab-stack > .tab-background::after {
@@ -378,5 +362,179 @@
     :root:has(#sidebar-container[sidebar-positionend]) &::after {
         inset-inline-end: auto !important;
         inset-inline-start: -1px !important;
+    }
+}
+
+/* The pair takes its place in the stack of tabs, but is drawn in the color
+   of the strip or column behind the tabs, with no shadow and no shade: an
+   opening in it, its two halves laid in it as tabs of a strip of their own,
+   as wide as it but lower in the tab strip (--myfox-split-inset-top), in
+   from the column's side in the tab column (--myfox-split-vinset), in no
+   color a container's could match. The halves are drawn on the tab content
+   and colored as tabs of their own: the color of a tab in the background,
+   of the selected tab in the selected pair (both halves), a container tab's
+   line and tint on its half only. The ids
+   outweigh the tab rules of 20-tabs.css, 50-tab-ears.css,
+   70-vertical-tabs-close.css and the ones above. */
+:root#main-window[theme-effective-id^="myfox-"] :is(#navigator-toolbox, #vertical-tabs) #tabbrowser-tabs tab-split-view-wrapper > .tabbrowser-tab {
+    --myfox-split-half-bg: var(--toolbox-background-color);
+    --myfox-split-half-line: transparent;
+    --myfox-split-half-direction: to right;
+
+    & > .tab-stack > .tab-background {
+        background-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-tab-backdrop)) !important;
+        background-image: none !important;
+        box-shadow: none !important;
+        filter: none !important;
+        border-width: 0 !important;
+        /* Firefox's thin frame round the selected tab ran down the seam. */
+        outline: none !important;
+    }
+    & > .tab-stack::after {
+        display: none !important;
+    }
+    & .tab-content {
+        background-color: var(--myfox-split-half-bg) !important;
+        background-image: var(--myfox-split-half-divider, none), var(--myfox-split-half-gradient, none) !important;
+        background-repeat: no-repeat !important;
+    }
+    &:last-child .tab-content:not([attention]) {
+        --myfox-split-half-divider: linear-gradient(var(--myfox-split-divider), var(--myfox-split-divider));
+    }
+    &[usercontextid] {
+        --myfox-split-half-line: color-mix(in srgb, var(--identity-tab-color) var(--myfox-container-inactive), transparent);
+    }
+}
+:root#main-window[theme-effective-id^="myfox-"]:has(#sidebar-container[sidebar-positionend]) #vertical-tabs #tabbrowser-tabs tab-split-view-wrapper > .tabbrowser-tab {
+    --myfox-split-half-direction: to left;
+}
+:root#main-window[theme-effective-id^="myfox-"] :is(#navigator-toolbox, #vertical-tabs) #tabbrowser-tabs tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab {
+    --myfox-split-half-bg: var(--tab-background-color-selected);
+
+    &[usercontextid] {
+        --myfox-split-half-bg: color-mix(in srgb, var(--identity-tab-color) var(--myfox-container-join), var(--toolbar-background-color));
+        --myfox-split-half-line: color-mix(in srgb, var(--identity-tab-color) var(--myfox-container-edge), var(--toolbar-background-color));
+    }
+}
+:root#main-window[theme-effective-id^="myfox-"] :is(#navigator-toolbox, #vertical-tabs) #tabbrowser-tabs tab-split-view-wrapper:not([hasactivetab]):hover > .tabbrowser-tab {
+    --myfox-split-half-bg: color-mix(in srgb, currentColor var(--myfox-split-hover), var(--tab-background-color-selected));
+
+    &:hover {
+        --myfox-split-half-bg: color-mix(in srgb, currentColor var(--myfox-tab-hover), var(--tab-background-color-selected));
+    }
+}
+
+/* Tab strip: the halves sit at the bottom of the pair, like tabs in a strip
+   of their own: lower than it (--myfox-split-inset-top), as wide, with the
+   rounded top corners and ears of a tab on the outer sides (none where they
+   meet); a container
+   tab's line along the top, the divider down the middle. */
+:root#main-window[theme-effective-id^="myfox-"] #navigator-toolbox #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper > .tabbrowser-tab {
+    & .tab-content {
+        position: relative !important;
+        /* + the 1px the tab's own card starts below the tab (20-tabs.css) */
+        margin-block-start: calc(var(--myfox-split-inset-top) + 1px) !important;
+        box-shadow: inset 0 var(--myfox-container-line) 0 0 var(--myfox-split-half-line) !important;
+        background-position: left center !important;
+        background-size: 1px 50% !important;
+    }
+    &:first-child .tab-content {
+        border-start-start-radius: var(--user-tab-ear-rounding) !important;
+    }
+    &:last-child .tab-content {
+        border-start-end-radius: var(--user-tab-ear-rounding) !important;
+    }
+    &:first-child .tab-content::before,
+    &:last-child .tab-content::after {
+        content: "" !important;
+        position: absolute !important;
+        bottom: 0 !important;
+        width: var(--user-tab-ear-rounding) !important;
+        height: var(--user-tab-ear-rounding) !important;
+        background: var(--myfox-split-half-bg) !important;
+        pointer-events: none !important;
+    }
+    &:first-child .tab-content::before {
+        left: calc(0px - var(--user-tab-ear-rounding)) !important;
+        mask: var(--myfox-ear-start) !important;
+    }
+    &:last-child .tab-content::after {
+        right: calc(0px - var(--user-tab-ear-rounding)) !important;
+        mask: var(--myfox-ear-end) !important;
+    }
+}
+
+/* Tab column: the halves moved toward the page (--myfox-split-vinset), so a
+   strip of the pair shows on the column's side, as above them in the tab
+   strip; the divider between them, a container tab's gradient from their
+   outer side. Where they meet the page
+   the ears are the halves' color, not the pair's. */
+:root#main-window[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper > .tabbrowser-tab {
+    & > .tab-stack > .tab-background {
+        background-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-vtab-backdrop)) !important;
+    }
+    --myfox-split-half-gradient: linear-gradient(var(--myfox-split-half-direction), var(--myfox-split-half-line), transparent 67%);
+
+    & .tab-content {
+        margin-inline-start: var(--myfox-split-vinset) !important;
+        background-position: center top, 0 0 !important;
+        background-size: 100% 1px, 100% 100% !important;
+        background-origin: content-box, border-box !important;
+    }
+    & > .tab-stack > .tab-background::before,
+    & > .tab-stack > .tab-background::after {
+        background: var(--myfox-split-half-bg) !important;
+    }
+}
+:root#main-window[theme-effective-id^="myfox-"]:has(#sidebar-container[sidebar-positionend]) #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper > .tabbrowser-tab .tab-content {
+    margin-inline-start: 0 !important;
+    margin-inline-end: var(--myfox-split-vinset) !important;
+}
+:root#main-window[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab[usercontextid] {
+    --myfox-split-half-gradient: linear-gradient(var(--myfox-split-half-direction), var(--myfox-split-half-line), var(--myfox-split-half-bg) calc(100% - var(--user-tab-ear-rounding) - 2px));
+}
+
+/* Around the two pages the window is split as well: the area round each page
+   card, and the toolbars above them, take the color of its tab's container
+   (no tint for a tab in none), so the colors meet at the splitter wherever it
+   is dragged. Its position: --myfox-split-x, from the window's left edge,
+   kept by ../../autoconfig/myfox/55-split-view.js; these toolbars start at
+   that edge too, so it holds in each of them. Without the variable the
+   gradient is invalid and the toolbars keep the selected tab's tint. As in
+   20-tabs.css, a container's color is matched by its class. */
+:root[theme-effective-id^="myfox-"]:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab[usercontextid]) {
+    --myfox-split-page0: var(--toolbar-background-color);
+    --myfox-split-page1: var(--toolbar-background-color);
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-blue) { --myfox-split-page0: #37adff; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-cyan) { --myfox-split-page0: #00c79a; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-green) { --myfox-split-page0: #51cd00; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-yellow) { --myfox-split-page0: #ffcb00; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-orange) { --myfox-split-page0: #ff9f00; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-red) { --myfox-split-page0: #ff613d; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-pink) { --myfox-split-page0: #ff4bda; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-purple) { --myfox-split-page0: #af51f5; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-violet) { --myfox-split-page0: #764edd; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:first-child.identity-color-gray) { --myfox-split-page0: currentColor; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-blue) { --myfox-split-page1: #37adff; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-cyan) { --myfox-split-page1: #00c79a; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-green) { --myfox-split-page1: #51cd00; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-yellow) { --myfox-split-page1: #ffcb00; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-orange) { --myfox-split-page1: #ff9f00; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-red) { --myfox-split-page1: #ff613d; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-pink) { --myfox-split-page1: #ff4bda; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-purple) { --myfox-split-page1: #af51f5; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-violet) { --myfox-split-page1: #764edd; }
+    &:has(tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab:last-child.identity-color-gray) { --myfox-split-page1: currentColor; }
+
+    & :is(#nav-bar, #PersonalToolbar, #browser) {
+        background-image: linear-gradient(to right,
+            color-mix(in srgb, var(--myfox-split-page0) var(--myfox-container-join), var(--toolbar-background-color)) var(--myfox-split-x),
+            color-mix(in srgb, var(--myfox-split-page1) var(--myfox-container-join), var(--toolbar-background-color)) var(--myfox-split-x)) !important;
+    }
+    & #tabbrowser-tabpanels[splitview] > .split-view-panel[column="0"] {
+        background-color: color-mix(in srgb, var(--myfox-split-page0) var(--myfox-container-join), var(--toolbar-background-color)) !important;
+    }
+    & #tabbrowser-tabpanels[splitview] > .split-view-panel[column="1"] {
+        background-color: color-mix(in srgb, var(--myfox-split-page1) var(--myfox-container-join), var(--toolbar-background-color)) !important;
     }
 }
