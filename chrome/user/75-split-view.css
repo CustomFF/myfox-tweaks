@@ -471,7 +471,7 @@
    the ears are the halves' color, not the pair's. */
 :root#main-window[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper > .tabbrowser-tab {
     & > .tab-stack > .tab-background {
-        background-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-vtab-backdrop)) !important;
+        background-color: var(--myfox-column-color) !important;
     }
     --myfox-split-half-gradient: linear-gradient(var(--myfox-split-half-direction), var(--myfox-split-half-line), transparent 67%);
 

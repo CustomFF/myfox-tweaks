@@ -73,6 +73,8 @@
        shadow, so the outermost tab blends into it. */
     --myfox-tab-backdrop: var(--myfox-tab-shade);
     --myfox-vtab-backdrop: 15%;
+    /* That vertical tab column's color. */
+    --myfox-column-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-vtab-backdrop));
     /* A vertical tab in the background darkens diagonally toward the corner
        tucked under the next card, this much black at that corner
        (../user/70-vertical-tabs-close.css). */
