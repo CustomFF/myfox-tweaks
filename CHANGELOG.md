@@ -20,6 +20,7 @@
 - With vertical tabs a split view's two tabs are one card as well, one above the other with a thin line between them
 - Hovering either tab of a split view lights up the whole pair, the other tab a little less
 - A split view's tab sits lower than other tabs (with vertical tabs, in from the column's edge), on a strip in the tab bar's color, with no shadow, so it can't be mistaken for a container tab; each half takes its own container's color, and the window around each page is tinted by its own container, split at the splitter
+- With vertical tabs and the sidebar expanded, tab icons sit half as far from the tab's edge
 
 ## 158.2 — 2026-10-09
 

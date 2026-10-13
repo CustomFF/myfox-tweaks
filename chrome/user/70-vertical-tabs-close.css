@@ -249,9 +249,9 @@
 
     /* Vertical tabs, launcher expanded: the tab content is inset 17px so that an
        icon centers in the collapsed strip, which leaves the expanded list looking
-       indented. Bring the favicons in line with the "new tab" row's plus sign. */
+       indented; half that is enough. */
     #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab {
-        --tab-inline-padding: 8px;
+        --tab-padding-inline: 8px;
     }
 
     /* Collapsed to icons: the 17px inset was meant for a wider strip; with our
