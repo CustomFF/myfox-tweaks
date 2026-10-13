@@ -131,6 +131,14 @@
         padding-inline: 0 !important;
     }
 
+    /* Horizontal tabs: the title in the middle of the room between the icon
+       and the close button's place, about the middle of the tab; a title
+       too long for it starts at its start as before ("safe"), so its end
+       fades out, not its start. */
+    #tabbrowser-tabs[orient="horizontal"] .tab-label-container {
+        align-items: safe center !important;
+    }
+
     /* Tab height: 30px (Firefox's compact density gives 28-29px). */
 
     #TabsToolbar,
