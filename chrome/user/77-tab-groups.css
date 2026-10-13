@@ -85,8 +85,14 @@
     &[collapsed] > .tabbrowser-tab[selected] {
         background: var(--tab-group-color) !important;
     }
+    /* The first tab's corner by the label rounded on the group's color,
+       even where it is a card's tucked corner, square (50-tab-ears.css). */
     & > .tabbrowser-tab:first-of-type {
         background: linear-gradient(var(--tab-group-color), var(--tab-group-color)) left top / var(--user-tab-rounding) var(--user-tab-rounding) no-repeat !important;
+
+        & > .tab-stack > .tab-background {
+            border-start-start-radius: var(--user-tab-rounding) !important;
+        }
     }
     /* The shelf's end: Firefox's box for the count of a collapsed group (the
        last thing in it), shown with no width while the group is open: the
