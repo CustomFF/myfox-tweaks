@@ -523,6 +523,64 @@
     margin-inline-start: 0 !important;
     margin-inline-end: var(--myfox-split-vinset) !important;
 }
+:root#main-window[theme-effective-id^="myfox-"] #sidebar-container:not([sidebar-launcher-expanded]) #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper {
+    /* With the sidebar collapsed to icons Firefox sizes the pair and its
+       halves' content to its strip of icons, narrower than our column: the
+       whole column, as the other tabs. */
+    width: auto !important;
+    align-self: stretch !important;
+
+    /* The halves' content there has no room for a tab's padding (it
+       overflowed the column): none, which leaves a half's icon in the middle
+       of the half moved in, a little toward the column's middle from other
+       tabs' icons. 1px in from the page side, as the other cards there are
+       (70-vertical-tabs-close.css), which shows the window's shadow on the
+       column along it. */
+    & > .tabbrowser-tab .tab-content {
+        width: auto !important;
+        padding-inline: 0 !important;
+        margin-inline-end: 1px !important;
+    }
+    &:not([hasactivetab]) > .tabbrowser-tab {
+        /* In that 1px the pair's own card shows, drawn in the column's
+           color: with the window's shadow on it too, as the column has, and
+           the soft shadow the other cards cast there
+           (--myfox-tab-card-shadow), which the halves don't. */
+        & > .tab-stack > .tab-background {
+            box-shadow: var(--myfox-column-shadow), inset -1px 0 0 0 color-mix(in srgb, var(--myfox-tab-card-shadow), transparent 37%) !important;
+        }
+        /* The line between the halves, drawn across their whole width, a
+           short dash instead, an icon wide, over the icons. */
+        &:last-child .tab-content {
+            background-size: var(--icon-size) 1px, 100% 100% !important;
+        }
+    }
+    /* The pair's ears 1px in as well, in line with its halves (the pair's
+       own card spans the column: its ears stood out to the page and hid
+       that shadow); under the pointer they reach the page (above). */
+    &:not([hasactivetab], :hover) > .tabbrowser-tab > .tab-stack > .tab-background {
+        &::before,
+        &::after {
+            inset-inline-end: 1px !important;
+        }
+    }
+
+    /* With the sidebar on the right, all that on the other side. */
+    &:is(:root:has(#sidebar-container[sidebar-positionend]) *) {
+        & > .tabbrowser-tab .tab-content {
+            margin-inline: 1px var(--myfox-split-vinset) !important;
+        }
+        &:not([hasactivetab]) > .tabbrowser-tab > .tab-stack > .tab-background {
+            box-shadow: var(--myfox-column-shadow-end), inset 1px 0 0 0 color-mix(in srgb, var(--myfox-tab-card-shadow), transparent 37%) !important;
+        }
+        &:not([hasactivetab], :hover) > .tabbrowser-tab > .tab-stack > .tab-background {
+            &::before,
+            &::after {
+                inset-inline: 1px auto !important;
+            }
+        }
+    }
+}
 :root#main-window[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab[usercontextid] {
     --myfox-split-half-gradient: linear-gradient(var(--myfox-split-half-direction), var(--myfox-split-half-line), var(--myfox-split-half-bg) calc(100% - var(--user-tab-ear-rounding) - 2px));
 }
