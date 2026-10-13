@@ -466,9 +466,9 @@
 
 /* Tab column: the halves moved toward the page (--myfox-split-vinset), so a
    strip of the pair shows on the column's side, as above them in the tab
-   strip; the divider between them, a container tab's gradient from their
-   outer side. Where they meet the page
-   the ears are the halves' color, not the pair's. */
+   strip; the divider between them, in their middle and shorter than they
+   are, a container tab's gradient from their outer side. Where they
+   meet the page the ears are the halves' color, not the pair's. */
 :root#main-window[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper > .tabbrowser-tab {
     & > .tab-stack > .tab-background {
         background-color: var(--myfox-column-color) !important;
@@ -478,7 +478,7 @@
     & .tab-content {
         margin-inline-start: var(--myfox-split-vinset) !important;
         background-position: center top, 0 0 !important;
-        background-size: 100% 1px, 100% 100% !important;
+        background-size: calc((100% - var(--tab-padding-inline) * 2) * 0.85) 1px, 100% 100% !important;
         background-origin: content-box, border-box !important;
     }
     & > .tab-stack > .tab-background::before,
