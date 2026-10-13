@@ -4,6 +4,14 @@
 /* The whole look of the tabs is fitted to the MyFox themes: it applies only
    with one of them active, so tabs under any other theme look as Firefox
    draws them. */
+/* A tab group's place in the strip, computed where it is set (on the group)
+   and passed down to what the group holds; see the stack below. */
+@property --myfox-group-pos {
+    syntax: "<integer>";
+    inherits: true;
+    initial-value: 0;
+}
+
 :root[theme-effective-id^="myfox-"] {
     /* The ear shapes (see the note on the masks below). */
     & {
@@ -19,7 +27,7 @@
        place and flew off to the side. */
     .tabbrowser-tab[selected]:not([dragtarget]),
     .tabbrowser-tab[multiselected]:not([dragtarget]) {
-        z-index: 2000 !important;
+        z-index: 1000000 !important;
         position: relative !important;
     }
     .tabbrowser-tab[selected],
@@ -123,17 +131,32 @@
 
     /* Background tabs (horizontal) as overlapping cards, stacked toward the
        selected tab: left of it each card lies over its left neighbor, right of
-       it over its right neighbor (sibling-index() orders them; hovering doesn't
+       it over its right neighbor (their places order them; hovering doesn't
        lift a card, it only recolors it). A card has only the ear on its outer
        side and is filled with the tab strip's color, which looks the same but
        hides the corner under it, hovered or not. The top corner tucked under the
        next card is square until hovered. A card casts a soft shadow outward,
-       along its side and its ear (--myfox-tab-card-shadow). */
+       along its side and its ear (--myfox-tab-card-shadow).
+       A card's place: its position among the strip's tabs and split views,
+       by hundreds; a tab group takes one such place, and what it holds (its
+       label, its tabs) the places right after it, so the stack runs on
+       across a group's edges. Vertical tabs (70-vertical-tabs-close.css),
+       split views (75-split-view.css) and the group's own parts
+       (77-tab-groups.css) take theirs from here too. */
+    #tabbrowser-tabs :where(.tabbrowser-tab, tab-split-view-wrapper, tab-group) {
+        --myfox-stack-pos: calc(sibling-index() * 100);
+    }
+    #tabbrowser-tabs tab-group {
+        --myfox-group-pos: var(--myfox-stack-pos);
+    }
+    #tabbrowser-tabs tab-group > * {
+        --myfox-stack-pos: calc(var(--myfox-group-pos) + sibling-index());
+    }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) {
-        z-index: sibling-index() !important;
+        z-index: var(--myfox-stack-pos) !important;
     }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) {
-        z-index: calc(1000 - sibling-index()) !important;
+        z-index: calc(100000 - var(--myfox-stack-pos)) !important;
     }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]),
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack,

@@ -61,17 +61,18 @@
 
     /* The tabs in the background are a stack of cards, as horizontal ones are,
        turned on their side: above the selected tab each card lies over the one
-       above it, below the selected tab over the one below it (sibling-index()
-       orders them; hovering only recolors a card). A card is filled with the
-       frame color and has an ear on the side away from the selected tab only; it
+       above it, below the selected tab over the one below it (their places in
+       the strip order them, see 50-tab-ears.css; hovering only recolors a
+       card). A card is filled with the frame color and has an ear on the side
+       away from the selected tab only; it
        casts a soft shadow that way (--myfox-tab-card-shadow) and, over its title,
        darkens diagonally toward the corner tucked under the next card
        (--myfox-vtab-shade). */
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) {
-        z-index: sibling-index() !important;
+        z-index: var(--myfox-stack-pos) !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) {
-        z-index: calc(1000 - sibling-index()) !important;
+        z-index: calc(100000 - var(--myfox-stack-pos)) !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]),
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack,

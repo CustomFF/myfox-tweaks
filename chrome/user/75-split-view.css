@@ -66,13 +66,13 @@
 
     /* Stacked among the other cards as one of them: see 50-tab-ears.css. */
     &:not([hasactivetab]) {
-        z-index: sibling-index() !important;
+        z-index: var(--myfox-stack-pos) !important;
     }
     &:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([hasactivetab]) {
-        z-index: calc(1000 - sibling-index()) !important;
+        z-index: calc(100000 - var(--myfox-stack-pos)) !important;
     }
     &[hasactivetab] {
-        z-index: 2000 !important;
+        z-index: 1000000 !important;
     }
 
     & > .tabbrowser-tab {
@@ -210,13 +210,13 @@
     overflow: visible !important;
 
     &:not([hasactivetab]) {
-        z-index: sibling-index() !important;
+        z-index: var(--myfox-stack-pos) !important;
     }
     &:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([hasactivetab]) {
-        z-index: calc(1000 - sibling-index()) !important;
+        z-index: calc(100000 - var(--myfox-stack-pos)) !important;
     }
     &[hasactivetab] {
-        z-index: 2000 !important;
+        z-index: 1000000 !important;
     }
 
     & > .tabbrowser-tab {
