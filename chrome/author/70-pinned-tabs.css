@@ -30,10 +30,3 @@
 :root[theme-effective-id^="myfox-"] #tabbrowser-tabs[orient="vertical"] #pinned-tabs-container::part(items-wrapper) {
     flex: none !important;
 }
-/* The tabs' own scroll box (the rest of them, below the pinned ones) cuts
-   off what reaches out above its first tab: a selected first tab's top
-   ear. Room for it inside the box, the box moved up by as much
-   (../user/70-vertical-tabs-close.css). */
-:root[theme-effective-id^="myfox-"] #tabbrowser-tabs[orient="vertical"] #tabbrowser-arrowscrollbox::part(items-wrapper) {
-    padding-block-start: var(--myfox-vtab-ear) !important;
-}

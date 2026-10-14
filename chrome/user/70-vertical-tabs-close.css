@@ -460,7 +460,7 @@
             linear-gradient(var(--tab-background-color-selected), var(--tab-background-color-selected)) 0 var(--myfox-vtab-ear) / 100% var(--myfox-splitter-band) no-repeat !important;
     }
 
-    /* The tabs' scroll box moved up by the room ../author/70-pinned-tabs.css
+    /* The tabs' scroll box moved up by the room ../author/70-vertical-tabs.css
        makes in it for a first tab's top ear. */
     #tabbrowser-tabs[orient="vertical"] #tabbrowser-arrowscrollbox {
         margin-block-start: calc(0px - var(--myfox-vtab-ear)) !important;

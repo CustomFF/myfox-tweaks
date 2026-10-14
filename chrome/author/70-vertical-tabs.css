@@ -1,0 +1,12 @@
+/* Vertical tabs, what only ::part() reaches, and only from an author sheet
+   (this one, registered by myfox/10-agent-sheets.js for every document: the
+   root's theme attribute keeps it to the browser window). Pinned tabs have
+   their own (70-pinned-tabs.css). */
+
+/* The tabs' own scroll box (the rest of them, below the pinned ones) cuts
+   off what reaches out above its first tab: a selected first tab's top
+   ear. Room for it inside the box, the box moved up by as much
+   (../user/70-vertical-tabs-close.css). */
+:root[theme-effective-id^="myfox-"] #tabbrowser-tabs[orient="vertical"] #tabbrowser-arrowscrollbox::part(items-wrapper) {
+    padding-block-start: var(--myfox-vtab-ear) !important;
+}
