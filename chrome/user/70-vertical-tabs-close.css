@@ -432,6 +432,8 @@
         position: relative !important;
         z-index: 1000001 !important;
         min-height: 0 !important;
+        /* Firefox rounds it under the pointer, which cut into the ears. */
+        border-radius: 0 !important;
         height: calc(var(--myfox-splitter-band) + var(--myfox-vtab-ear) * 2) !important;
         margin: calc(var(--myfox-splitter-band) - var(--myfox-vtab-ear)) 0 !important;
         background:
@@ -451,15 +453,6 @@
             radial-gradient(circle var(--myfox-vtab-ear) at 100% 100%, transparent calc(var(--myfox-vtab-ear) - 0.5px), var(--tab-background-color-selected) calc(var(--myfox-vtab-ear) + 0.5px)) 0 100% / var(--myfox-vtab-ear) var(--myfox-vtab-ear) no-repeat !important;
         clip-path: inset(-4px -4px -4px 0) !important;
     }
-    /* While it is dragged the pinned tabs' box is any height, the stacks'
-       ends anywhere: the sliver alone, no ears. */
-    #vertical-pinned-tabs-splitter[state="dragging"],
-    &:has(#sidebar-container[sidebar-positionend]) #vertical-pinned-tabs-splitter[state="dragging"] {
-        background:
-            linear-gradient(color-mix(in srgb, currentColor 35%, transparent), color-mix(in srgb, currentColor 35%, transparent)) center / var(--icon-size) 1px no-repeat,
-            linear-gradient(var(--tab-background-color-selected), var(--tab-background-color-selected)) 0 var(--myfox-vtab-ear) / 100% var(--myfox-splitter-band) no-repeat !important;
-    }
-
     /* The tabs' scroll box moved up by the room ../author/70-vertical-tabs.css
        makes in it for a first tab's top ear. */
     #tabbrowser-tabs[orient="vertical"] #tabbrowser-arrowscrollbox {
