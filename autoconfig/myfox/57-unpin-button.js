@@ -3,9 +3,15 @@
 // Every tab gets the element, as it opens; the stylesheet shows it once the
 // tab is pinned.
 (function (MyFox) {
-  const { t } = MyFox;
+  const { t, whenDelayedStartupDone } = MyFox;
 
+  // The window hooks run at DOMContentLoaded, before the window has its
+  // gBrowser: wait for its startup.
   function initWindow(win) {
+    whenDelayedStartupDone(win, () => addButtons(win));
+  }
+
+  function addButtons(win) {
     const doc = win.document;
     const gBrowser = win.gBrowser;
     if (!gBrowser) return;
