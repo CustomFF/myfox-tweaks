@@ -273,6 +273,90 @@
         --tab-padding-inline: 8px;
     }
 
+    /* Pinned tabs, launcher expanded: tabs too, not tiles. Firefox lays them
+       out as a grid of equal tiles, one pinned tab a button across the
+       column; ../author/70-pinned-tabs.css makes that a wrapping row. In it
+       the selected pinned tab (none selected, the last) is a full tab, its
+       icon and title, taking the rest of the row up to the page, which it
+       joins as any selected tab; the others only their icons, before it.
+       It needs room for a title: with less than half the row left it goes
+       below them. Firefox sizes its box and rows for its tiles: to a tab's
+       height. While a tab is dragged ([movingtab]) the selected one stands
+       in its real place, so where it drops is where it shows. */
+    #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] {
+        & #pinned-tabs-container {
+            height: auto !important;
+            min-height: 0 !important;
+        }
+        & #pinned-tabs-container > .tabbrowser-tab[pinned] {
+            flex: 0 0 auto !important;
+            width: calc(var(--icon-size) + var(--tab-padding-inline) * 2) !important;
+            height: var(--tab-min-height) !important;
+            min-height: 0 !important;
+        }
+        /* Side by side, as in the tab strip, each rounds its corners on the
+           side away from the page (half as much as a tab there: the row is
+           low), but the outermost one, flush with the column's edge: the
+           first, or after it, the selected one moved to the page. */
+        & #pinned-tabs-container > .tabbrowser-tab[pinned] > .tab-stack > .tab-background {
+            border-start-start-radius: calc(var(--user-tab-rounding) / 2) !important;
+            border-end-start-radius: calc(var(--user-tab-rounding) / 2) !important;
+        }
+        & #pinned-tabs-container > .tabbrowser-tab[pinned]:first-of-type > .tab-stack > .tab-background,
+        &:not([movingtab]) #pinned-tabs-container > .tabbrowser-tab[pinned][selected]:first-of-type + .tabbrowser-tab[pinned] > .tab-stack > .tab-background {
+            border-start-start-radius: 0 !important;
+            border-end-start-radius: 0 !important;
+        }
+        &:not([movingtab]) #pinned-tabs-container > .tabbrowser-tab[pinned][selected]:first-of-type:not(:only-of-type) > .tab-stack > .tab-background {
+            border-start-start-radius: calc(var(--user-tab-rounding) / 2) !important;
+            border-end-start-radius: calc(var(--user-tab-rounding) / 2) !important;
+        }
+        /* With the column on the right, its page side is the left: the row
+           runs from the right (../author/70-pinned-tabs.css), the corners
+           round on the right. */
+        &:is(:root:has(#sidebar-container[sidebar-positionend]) *) #pinned-tabs-container > .tabbrowser-tab[pinned] > .tab-stack > .tab-background {
+            border-start-start-radius: 0 !important;
+            border-end-start-radius: 0 !important;
+            border-start-end-radius: calc(var(--user-tab-rounding) / 2) !important;
+            border-end-end-radius: calc(var(--user-tab-rounding) / 2) !important;
+        }
+        &:is(:root:has(#sidebar-container[sidebar-positionend]) *) #pinned-tabs-container > .tabbrowser-tab[pinned]:first-of-type > .tab-stack > .tab-background,
+        &:is(:root:has(#sidebar-container[sidebar-positionend]) *):not([movingtab]) #pinned-tabs-container > .tabbrowser-tab[pinned][selected]:first-of-type + .tabbrowser-tab[pinned] > .tab-stack > .tab-background {
+            border-start-end-radius: 0 !important;
+            border-end-end-radius: 0 !important;
+        }
+        &:is(:root:has(#sidebar-container[sidebar-positionend]) *):not([movingtab]) #pinned-tabs-container > .tabbrowser-tab[pinned][selected]:first-of-type:not(:only-of-type) > .tab-stack > .tab-background {
+            border-start-end-radius: calc(var(--user-tab-rounding) / 2) !important;
+            border-end-end-radius: calc(var(--user-tab-rounding) / 2) !important;
+        }
+        /* Side by side, the pinned tabs in the background have no ears
+           below or above them: the selected one's alone join the page. */
+        & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected]) > .tab-stack > .tab-background {
+            &::before,
+            &::after {
+                display: none !important;
+            }
+        }
+        & #pinned-tabs-container:not(:has(> .tabbrowser-tab[selected])) > .tabbrowser-tab[pinned]:last-of-type,
+        &:not([movingtab]) #pinned-tabs-container > .tabbrowser-tab[pinned][selected] {
+            order: 1 !important;
+            flex: 1 1 0 !important;
+            width: auto !important;
+            min-width: 50% !important;
+
+            & .tab-content {
+                justify-content: normal !important;
+            }
+            & .tab-icon-image {
+                margin-inline-end: var(--tab-icon-margin-inline-end) !important;
+            }
+            & .tab-label-container {
+                display: flex !important;
+                width: auto !important;
+            }
+        }
+    }
+
     /* Collapsed to icons: the 17px inset was meant for a wider strip; with our
        28px cards (4px margins in a 36px tab) it pushes the icon toward the right
        edge, where the page card clips it. Center the icon in its card. The close

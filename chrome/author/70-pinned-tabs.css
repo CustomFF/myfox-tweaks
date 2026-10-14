@@ -1,0 +1,25 @@
+/* Pinned tabs with the sidebar expanded, as a row of tabs (see
+   ../user/70-vertical-tabs-close.css): Firefox lays them out on a grid of
+   equal tiles inside its pinned tabs box, which only ::part() reaches, and
+   only from an author sheet (this one, registered by myfox/10-agent-sheets.js
+   for every document: the root's theme attribute keeps it to the browser
+   window). Instead a row that wraps, the tabs as wide as they make
+   themselves. */
+:root[theme-effective-id^="myfox-"] #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] #pinned-tabs-container::part(items-wrapper) {
+    display: flex !important;
+    /* Across, though the box is vertical. */
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    padding: 0 !important;
+}
+/* Nor does its scroll box clip the tabs to the row: the selected one's ears
+   reach out above and below it, as any selected tab's (the box is as tall
+   as its rows, see that sheet: there is nothing to scroll). */
+:root[theme-effective-id^="myfox-"] #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] #pinned-tabs-container::part(scrollbox) {
+    overflow: visible !important;
+}
+/* With the column on the right, the row runs from the right, the selected
+   tab at its left end, by the page. */
+:root[theme-effective-id^="myfox-"]:has(#sidebar-container[sidebar-positionend]) #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] #pinned-tabs-container::part(items-wrapper) {
+    flex-direction: row-reverse !important;
+}

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- With vertical tabs and the sidebar expanded, pinned tabs are tabs in a row, not tiles: the selected one (or the last) a full tab joined to the page, the others their icons before it
+
 ## 159.0 — 2026-10-13
 
 - On light themes the container colors show: a thicker, stronger line on container tabs and a stronger tint of the window
