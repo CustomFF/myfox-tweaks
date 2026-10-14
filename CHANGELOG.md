@@ -5,6 +5,7 @@
 - With vertical tabs and the sidebar expanded, pinned tabs are tabs in a row, not tiles: the selected one (or the last) a full tab joined to the page, the others their icons before it
 - A pinned tab has a small pin at its icon's corner that unpins it on click; it shows under the pointer, and always in the collapsed vertical tab strip
 - Pinned tabs in a row cast their shadows on each other along their rounded corners and darken toward the next one, as background tabs in the tab strip do
+- With vertical tabs collapsed to icons, pinned tabs are rows as the other tabs are, only the selected tab has ears, and the splitter below the pinned tabs looks like a thin selected tab with a grip and can be dragged again
 
 ## 159.0 — 2026-10-13
 

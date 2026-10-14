@@ -656,23 +656,3 @@
         }
     }
 }
-
-/* With the sidebar collapsed to icons the cards stand 1px in from the page
-   (70-vertical-tabs-close.css), the group's tabs and label do not: under
-   the ear a card next to a group puts over it, the group's color showed in
-   that 1px. That ear reaches the page, as a hovered card's does, and draws
-   that 1px itself: the column's color with the window's shadow on it. */
-:root[theme-effective-id^="myfox-"] #sidebar-container:not([sidebar-launcher-expanded]) #vertical-tabs #tabbrowser-tabs[orient="vertical"] {
-    & .tabbrowser-tab:has(+ tab-group) > .tab-stack > .tab-background::after,
-    & tab-group + .tabbrowser-tab > .tab-stack > .tab-background::before {
-        inset-inline-end: -1px !important;
-        box-shadow: var(--myfox-column-shadow), inset -1px 0 0 0 var(--myfox-column-color) !important;
-    }
-    &:is(:root:has(#sidebar-container[sidebar-positionend]) *) {
-        & .tabbrowser-tab:has(+ tab-group) > .tab-stack > .tab-background::after,
-        & tab-group + .tabbrowser-tab > .tab-stack > .tab-background::before {
-            inset-inline: -1px auto !important;
-            box-shadow: var(--myfox-column-shadow-end), inset 1px 0 0 0 var(--myfox-column-color) !important;
-        }
-    }
-}

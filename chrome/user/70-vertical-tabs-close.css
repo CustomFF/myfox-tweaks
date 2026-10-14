@@ -280,12 +280,12 @@
        icon and title, taking the rest of the row up to the page, which it
        joins as any selected tab; the others only their icons, before it.
        It needs room for a title: with less than half the row left it goes
-       below them. Firefox sizes its box and rows for its tiles: to a tab's
-       height. While a tab is dragged ([movingtab]) the selected one stands
-       in its real place, so where it drops is where it shows. */
+       below them. The box's height stays Firefox's (as tall as the rows, or
+       lower if its splitter is dragged), but not at least a tile's. While a
+       tab is dragged ([movingtab]) the selected one stands in its real
+       place, so where it drops is where it shows. */
     #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] {
         & #pinned-tabs-container {
-            height: auto !important;
             min-height: 0 !important;
         }
         & #pinned-tabs-container > .tabbrowser-tab[pinned] {
@@ -413,6 +413,82 @@
         margin-inline: 1px !important;
         width: auto !important;
         justify-self: stretch !important;
+    }
+    /* The pinned tabs and the rest are two stacks of cards, and the splitter
+       between them (which sets the pinned tabs' height) a sliver of a
+       selected tab: across the column to the page, which it joins with ears
+       above and below as a selected tab does, a short groove in its middle
+       to grip, as far from each stack as it is thick (Firefox's own gap
+       there goes). A splitter draws nothing of its own (::before, ::after)
+       but its box: the sliver, its ears and the groove all drawn on it as
+       backgrounds, the box as tall as all that; its shadow (a filter, which
+       follows what is drawn) not over the page; over a selected tab's ears
+       next to it, shading them. */
+    #tabbrowser-tabs[orient="vertical"] {
+        row-gap: 0 !important;
+    }
+    #vertical-pinned-tabs-splitter {
+        --myfox-splitter-band: calc(var(--tab-min-height) / 5);
+        position: relative !important;
+        z-index: 1000001 !important;
+        min-height: 0 !important;
+        height: calc(var(--myfox-splitter-band) + var(--myfox-vtab-ear) * 2) !important;
+        margin: calc(var(--myfox-splitter-band) - var(--myfox-vtab-ear)) 0 !important;
+        background:
+            linear-gradient(color-mix(in srgb, currentColor 35%, transparent), color-mix(in srgb, currentColor 35%, transparent)) center / var(--icon-size) 1px no-repeat,
+            linear-gradient(var(--tab-background-color-selected), var(--tab-background-color-selected)) 0 var(--myfox-vtab-ear) / 100% var(--myfox-splitter-band) no-repeat,
+            radial-gradient(circle var(--myfox-vtab-ear) at 0 0, transparent calc(var(--myfox-vtab-ear) - 0.5px), var(--tab-background-color-selected) calc(var(--myfox-vtab-ear) + 0.5px)) 100% 0 / var(--myfox-vtab-ear) var(--myfox-vtab-ear) no-repeat,
+            radial-gradient(circle var(--myfox-vtab-ear) at 0 100%, transparent calc(var(--myfox-vtab-ear) - 0.5px), var(--tab-background-color-selected) calc(var(--myfox-vtab-ear) + 0.5px)) 100% 100% / var(--myfox-vtab-ear) var(--myfox-vtab-ear) no-repeat !important;
+        /* Twice a selected tab's shadow, plain on the tabs' ears it lies over. */
+        filter: var(--myfox-vtab-shadow-filter) var(--myfox-vtab-shadow-filter) !important;
+        clip-path: inset(-4px 0 -4px -4px) !important;
+    }
+    &:has(#sidebar-container[sidebar-positionend]) #vertical-pinned-tabs-splitter {
+        background:
+            linear-gradient(color-mix(in srgb, currentColor 35%, transparent), color-mix(in srgb, currentColor 35%, transparent)) center / var(--icon-size) 1px no-repeat,
+            linear-gradient(var(--tab-background-color-selected), var(--tab-background-color-selected)) 0 var(--myfox-vtab-ear) / 100% var(--myfox-splitter-band) no-repeat,
+            radial-gradient(circle var(--myfox-vtab-ear) at 100% 0, transparent calc(var(--myfox-vtab-ear) - 0.5px), var(--tab-background-color-selected) calc(var(--myfox-vtab-ear) + 0.5px)) 0 0 / var(--myfox-vtab-ear) var(--myfox-vtab-ear) no-repeat,
+            radial-gradient(circle var(--myfox-vtab-ear) at 100% 100%, transparent calc(var(--myfox-vtab-ear) - 0.5px), var(--tab-background-color-selected) calc(var(--myfox-vtab-ear) + 0.5px)) 0 100% / var(--myfox-vtab-ear) var(--myfox-vtab-ear) no-repeat !important;
+        clip-path: inset(-4px -4px -4px 0) !important;
+    }
+    /* While it is dragged the pinned tabs' box is any height, the stacks'
+       ends anywhere: the sliver alone, no ears. */
+    #vertical-pinned-tabs-splitter[state="dragging"],
+    &:has(#sidebar-container[sidebar-positionend]) #vertical-pinned-tabs-splitter[state="dragging"] {
+        background:
+            linear-gradient(color-mix(in srgb, currentColor 35%, transparent), color-mix(in srgb, currentColor 35%, transparent)) center / var(--icon-size) 1px no-repeat,
+            linear-gradient(var(--tab-background-color-selected), var(--tab-background-color-selected)) 0 var(--myfox-vtab-ear) / 100% var(--myfox-splitter-band) no-repeat !important;
+    }
+
+    /* The tabs' scroll box moved up by the room ../author/70-pinned-tabs.css
+       makes in it for a first tab's top ear. */
+    #tabbrowser-tabs[orient="vertical"] #tabbrowser-arrowscrollbox {
+        margin-block-start: calc(0px - var(--myfox-vtab-ear)) !important;
+    }
+
+    /* With the sidebar collapsed to icons only a selected tab (and the
+       splitter between the pinned tabs and the rest) puts out ears: the
+       cards in the background none. */
+    #sidebar-container:not([sidebar-launcher-expanded]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected]) > .tab-stack > .tab-background {
+        &::before,
+        &::after {
+            display: none !important;
+        }
+    }
+
+    /* Pinned tabs there are rows as the other tabs are: Firefox's grid of
+       tiles is one column the strip's width (it was wider than the strip, the
+       icons pushed off its middle) and rows of a tab's height. */
+    #sidebar-container:not([sidebar-launcher-expanded]) #tabbrowser-tabs[orient="vertical"] {
+        & #pinned-tabs-container {
+            --tab-pinned-min-width: 100% !important;
+            --tab-height-with-margin-padding: var(--tab-min-height) !important;
+            min-height: 0 !important;
+        }
+        & #pinned-tabs-container > .tabbrowser-tab[pinned] {
+            width: auto !important;
+            min-height: 0 !important;
+        }
     }
     /* But the selected tab's card reaches the page, as with the sidebar
        expanded; the 1px left there showed the column's edge as a strip

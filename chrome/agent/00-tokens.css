@@ -61,6 +61,8 @@
     --myfox-tab-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
     /* The same around a selected vertical tab, tighter on its low row. */
     --myfox-vtab-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+    /* The same as a filter, for what is drawn of a box, not the box. */
+    --myfox-vtab-shadow-filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
     /* The color of the soft shadow a background tab casts on its neighbor
        (../user/50-tab-ears.css). */
     --myfox-tab-card-shadow: rgba(0, 0, 0, 0.15);

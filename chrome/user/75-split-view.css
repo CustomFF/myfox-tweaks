@@ -555,15 +555,6 @@
             background-size: var(--icon-size) 1px, 100% 100% !important;
         }
     }
-    /* The pair's ears 1px in as well, in line with its halves (the pair's
-       own card spans the column: its ears stood out to the page and hid
-       that shadow); under the pointer they reach the page (above). */
-    &:not([hasactivetab], :hover) > .tabbrowser-tab > .tab-stack > .tab-background {
-        &::before,
-        &::after {
-            inset-inline-end: 1px !important;
-        }
-    }
 
     /* With the sidebar on the right, all that on the other side. */
     &:is(:root:has(#sidebar-container[sidebar-positionend]) *) {
@@ -572,12 +563,6 @@
         }
         &:not([hasactivetab]) > .tabbrowser-tab > .tab-stack > .tab-background {
             box-shadow: var(--myfox-column-shadow-end), inset 1px 0 0 0 color-mix(in srgb, var(--myfox-tab-card-shadow), transparent 37%) !important;
-        }
-        &:not([hasactivetab], :hover) > .tabbrowser-tab > .tab-stack > .tab-background {
-            &::before,
-            &::after {
-                inset-inline: 1px auto !important;
-            }
         }
     }
 }
