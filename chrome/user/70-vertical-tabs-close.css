@@ -9,7 +9,7 @@
        makes the navigation bar part of the title bar and drops the toolbar
        color from the area around the page, so the whole window turned the
        darker frame color. Toolbars and that area get the toolbar color back;
-       the tab column takes the frame color, as the tab strip has it, so the
+       the tab column takes the tab strip's color (--myfox-strip-color), so the
        selected tab (toolbar color) still stands out. */
     &:has(#tabbrowser-tabs[orient="vertical"]) :is(#nav-bar, #PersonalToolbar, #browser) {
         /* With a container tab selected, its faint window tint (20-tabs.css). */
@@ -17,22 +17,12 @@
         color: var(--toolbar-text-color) !important;
     }
     &:has(#tabbrowser-tabs[orient="vertical"]) #sidebar-container {
-        /* The tab color under a neighbor's shadow (--myfox-vtab-backdrop),
-           so the outermost tab blends into it. */
-        background-color: var(--myfox-column-color) !important;
-        /* The window beyond the column casts a soft shadow onto it, under the
-           tabs: the tabs in the background show it, the selected tab, joined to
-           the window, covers it (as the navigation bar does on the tab strip). */
-        box-shadow: var(--myfox-column-shadow) !important;
-    }
-    &:has(#tabbrowser-tabs[orient="vertical"]):has(#sidebar-container[sidebar-positionend]) #sidebar-container {
-        box-shadow: var(--myfox-column-shadow-end) !important;
+        background-color: var(--myfox-strip-color) !important;
     }
 
-    /* The selected tab gets a soft shadow too, a tighter one than a horizontal
-       tab's (--myfox-vtab-shadow), cut off on the side where it joins the window. */
+    /* The selected tab's ears reach above and below it; cut off on the side
+       where it joins the window. */
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
-        box-shadow: var(--myfox-vtab-shadow) !important;
         clip-path: inset(-16px -2px -16px -12px);
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
@@ -59,19 +49,20 @@
         margin-inline: 0 !important;
     }
 
-    /* The tabs in the background are a stack of cards, as horizontal ones are,
-       turned on their side: above the selected tab each card lies over the one
-       above it, below the selected tab over the one below it (their places in
-       the strip order them, see 50-tab-ears.css; hovering only recolors a
-       card). A card is filled with the frame color and has an ear on the side
-       away from the selected tab only; it
-       casts a soft shadow that way (--myfox-tab-card-shadow) and, over its title,
-       darkens diagonally toward the corner tucked under the next card
-       (--myfox-vtab-shade). */
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) {
+    /* The tabs in the background are stacked as horizontal ones are, turned
+       on their side: above the selected tab each lies over the one above it,
+       below the selected tab over the one below it (their places in the
+       strip order them, see 50-tab-ears.css). Each fades diagonally from
+       transparent at its corner toward the selected tab on the page side to
+       the selected tab's color, half opaque (--myfox-tab-fade), from three
+       quarters of the way across, with an ear in that color on the side away
+       from the selected tab only. Hovered, a tab is filled solid, a touch
+       apart from the selected tab's color, lifted over its neighbors, with
+       both ears. */
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :hover, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) {
         z-index: var(--myfox-stack-pos) !important;
     }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget], :hover) {
         z-index: calc(100000 - var(--myfox-stack-pos)) !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]),
@@ -79,54 +70,36 @@
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
         overflow: visible !important;
     }
-    & #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) {
+        --myfox-tab-fade-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-tab-fade), transparent);
+    }
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) {
+        --myfox-tab-fade-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-pinned-tab-fade), transparent);
+    }
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
         position: relative !important;
         border-width: 0 !important;
-        /* The window's shadow on the column (--myfox-column-shadow), half as
-           deep on the card and its ear: the card looks thick. */
-        box-shadow: var(--myfox-column-shadow-tab) !important;
+        background-color: transparent !important;
+        background-origin: border-box !important;
+        background-repeat: no-repeat !important;
     }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
-        box-shadow: var(--myfox-column-shadow-tab-end) !important;
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :hover, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
+        background-image: linear-gradient(to top left, transparent, var(--myfox-tab-fade-color) 75%) !important;
     }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):not(:hover) > .tab-stack > .tab-background {
-        background-color: var(--myfox-tab-card-color) !important;
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget], :hover) > .tab-stack > .tab-background {
+        background-image: linear-gradient(to bottom left, transparent, var(--myfox-tab-fade-color) 75%) !important;
     }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
-        filter: drop-shadow(0 -1px 1px var(--myfox-tab-card-shadow));
-        clip-path: inset(-16px -2px 0 0);
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :hover, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
+        background-image: linear-gradient(to top right, transparent, var(--myfox-tab-fade-color) 75%) !important;
     }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background {
-        filter: drop-shadow(0 1px 1px var(--myfox-tab-card-shadow));
-        clip-path: inset(0 -2px -16px 0);
+    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget], :hover) > .tab-stack > .tab-background {
+        background-image: linear-gradient(to bottom right, transparent, var(--myfox-tab-fade-color) 75%) !important;
     }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
-        clip-path: inset(-16px 0 0 -2px);
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover {
+        z-index: 999999 !important;
     }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background {
-        clip-path: inset(0 0 -16px -2px);
-    }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack {
-        position: relative !important;
-    }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack::after {
-        content: "" !important;
-        position: absolute !important;
-        inset: 0 !important;
-        z-index: 1;
-        pointer-events: none !important;
-    }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack::after {
-        background: linear-gradient(to top left, rgb(0 0 0 / var(--myfox-vtab-shade)), transparent) !important;
-    }
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack::after {
-        background: linear-gradient(to bottom left, rgb(0 0 0 / var(--myfox-vtab-shade)), transparent) !important;
-    }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack::after {
-        background: linear-gradient(to top right, rgb(0 0 0 / var(--myfox-vtab-shade)), transparent) !important;
-    }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack::after {
-        background: linear-gradient(to bottom right, rgb(0 0 0 / var(--myfox-vtab-shade)), transparent) !important;
+    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background {
+        background-color: color-mix(in srgb, var(--tab-background-color-selected), var(--toolbar-text-color) var(--myfox-tab-hover-lift)) !important;
     }
 
     /* The tab column lines up with the page card (same top and bottom margins,
@@ -190,33 +163,55 @@
         mask: var(--myfox-vear-bottom-start) !important;
     }
 
-    /* A background card's ear sits level with the column's edge (a selected
-       tab's ears reach 1px past it) and takes the card's half-deep shadow
-       along it. It stands at a corner the card's diagonal shade reaches at
-       half strength, so it is shaded as much. */
+    /* A background tab's ear sits level with the column's edge (a selected
+       tab's ears reach 1px past it), in the tab's far color. */
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before,
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         inset-inline-end: 0 !important;
-        box-shadow: var(--myfox-column-shadow-tab) !important;
-        background-image: linear-gradient(rgb(0 0 0 / calc(var(--myfox-vtab-shade) / 2)), rgb(0 0 0 / calc(var(--myfox-vtab-shade) / 2))) !important;
+        background: var(--myfox-tab-fade-color) !important;
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before,
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         inset-inline-start: 0 !important;
-        box-shadow: var(--myfox-column-shadow-tab-end) !important;
     }
 
-    /* Hovered, the card is lighter than the window beside it, and the 1px
-       between the ear and the column's edge shows; the ear reaches the edge
-       then, as a selected tab's does. */
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::before,
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::after {
-        inset-inline-end: -1px !important;
+    /* Hovered (with the sidebar expanded; not a pinned tab in its row), both
+       ears, in the tab's color, reaching the column's edge as a selected
+       tab's do. */
+    #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [pinned]):hover > .tab-stack > .tab-background {
+        &::before,
+        &::after {
+            content: "" !important;
+            display: block !important;
+            position: absolute !important;
+            inset-inline-end: -1px !important;
+            width: var(--myfox-vtab-ear) !important;
+            height: var(--myfox-vtab-ear) !important;
+            pointer-events: none !important;
+            background: inherit !important;
+            background-image: none !important;
+        }
+        &::before {
+            top: calc(0px - var(--myfox-vtab-ear)) !important;
+            mask: var(--myfox-vear-top) !important;
+        }
+        &::after {
+            bottom: calc(0px - var(--myfox-vtab-ear)) !important;
+            mask: var(--myfox-vear-bottom) !important;
+        }
     }
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::before,
-    &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::after {
-        inset-inline-end: auto !important;
-        inset-inline-start: -1px !important;
+    &:has(#sidebar-container[sidebar-positionend]) #sidebar-container[sidebar-launcher-expanded] #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], [pinned]):hover > .tab-stack > .tab-background {
+        &::before,
+        &::after {
+            inset-inline-end: auto !important;
+            inset-inline-start: -1px !important;
+        }
+        &::before {
+            mask: var(--myfox-vear-top-start) !important;
+        }
+        &::after {
+            mask: var(--myfox-vear-bottom-start) !important;
+        }
     }
 
     /* No gap between the tab cards: Firefox pads each vertical tab 3px above /
@@ -337,32 +332,18 @@
                 display: none !important;
             }
         }
-        /* Side by side, too, each card in the background lies over the one
-           before it, as in the tab strip, its shadow cast that way, in the
-           shape of its rounded corners; the column's shadow (a straight line
-           along the page side) only on the one at the page. */
+        /* Side by side, too, each tab in the background lies over the one
+           before it, as in the tab strip, and fades from transparent at its
+           side toward the selected one (the page side) to the selected tab's
+           color, a little brighter than a tab's (--myfox-pinned-tab-fade). */
         & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) {
             z-index: var(--myfox-stack-pos) !important;
         }
-        & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
-            filter: drop-shadow(-1px 0 1px var(--myfox-tab-card-shadow)) !important;
-            clip-path: inset(0 0 0 -16px) !important;
+        & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget], :hover) > .tab-stack > .tab-background {
+            background-image: linear-gradient(to left, transparent, var(--myfox-tab-fade-color)) !important;
         }
-        &:is(:root:has(#sidebar-container[sidebar-positionend]) *) #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
-            filter: drop-shadow(1px 0 1px var(--myfox-tab-card-shadow)) !important;
-            clip-path: inset(0 -16px 0 0) !important;
-        }
-        /* And it darkens over its title toward the edge tucked under the next
-           card, as there (50-tab-ears.css). */
-        & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack::after {
-            background: linear-gradient(to left, rgb(0 0 0 / var(--myfox-tab-shade)), transparent 40%) !important;
-        }
-        &:is(:root:has(#sidebar-container[sidebar-positionend]) *) #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack::after {
-            background: linear-gradient(to right, rgb(0 0 0 / var(--myfox-tab-shade)), transparent 40%) !important;
-        }
-        & #pinned-tabs-container:has(> .tabbrowser-tab[selected]) > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background,
-        & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget], :last-of-type) > .tab-stack > .tab-background {
-            box-shadow: none !important;
+        &:is(:root:has(#sidebar-container[sidebar-positionend]) *) #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget], :hover) > .tab-stack > .tab-background {
+            background-image: linear-gradient(to right, transparent, var(--myfox-tab-fade-color)) !important;
         }
         & #pinned-tabs-container:not(:has(> .tabbrowser-tab[selected])) > .tabbrowser-tab[pinned]:last-of-type,
         &:not([movingtab]) #pinned-tabs-container > .tabbrowser-tab[pinned][selected] {

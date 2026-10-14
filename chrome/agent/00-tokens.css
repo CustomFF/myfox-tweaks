@@ -79,17 +79,14 @@
        its neighbor's shadow, so the outermost tab blends into it. */
     --myfox-tab-backdrop: var(--myfox-tab-shade);
     --myfox-vtab-backdrop: 15%;
-    /* That vertical tab column's color. */
+    /* That vertical tab column's color (split views in it). */
     --myfox-column-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-vtab-backdrop));
-    /* A vertical tab in the background darkens diagonally toward the corner
-       tucked under the next card, this much black at that corner
-       (../user/70-vertical-tabs-close.css). */
-    --myfox-vtab-shade: 6%;
     /* A tab in the background under the pointer: this much of the text
        color over the selected tab's color. */
     --myfox-tab-hover: 17%;
-    /* The horizontal tab strip behind the tabs: the address field's color,
-       a little darker (../user/50-tab-ears.css). */
+    /* Behind the tabs, the tab strip and the vertical tab column: the
+       address field's color, a little darker (a light theme sets more below;
+       ../user/50-tab-ears.css, ../user/70-vertical-tabs-close.css). */
     --myfox-strip-color: color-mix(in srgb, var(--toolbar-field-background-color), black 15%);
     /* A horizontal tab in the background fills from transparent at its side
        toward the selected tab to the selected tab's color, this opaque, at
@@ -100,7 +97,7 @@
        tab's color with this much of the text color, a touch apart from it. */
     --myfox-tab-hover-lift: 5%;
     /* The window casting a soft shadow onto the vertical tab column, from its
-       page side (sidebar on the left / on the right). */
+       page side (sidebar on the left / on the right; split views in it). */
     --myfox-column-shadow: inset -3px 0 4px -4px rgba(0, 0, 0, 0.25);
     --myfox-column-shadow-end: inset 3px 0 4px -4px rgba(0, 0, 0, 0.25);
     /* The same shadows on the tabs in the background (and their ears), half
@@ -122,6 +119,8 @@
         /* The background card is darker than the selected-tab color the hover
            mixes into, so half the hover barely differs from it. */
         --myfox-split-hover: calc(var(--myfox-tab-hover) * 0.75);
+        /* The address field is near white: darker, so the tabs stand out. */
+        --myfox-strip-color: color-mix(in srgb, var(--toolbar-field-background-color), black 22%);
     }
 }
 
@@ -129,7 +128,6 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --myfox-tab-shade: 10%;
-        --myfox-vtab-shade: 10%;
         --myfox-tab-backdrop: 19%;
         --myfox-vtab-backdrop: 19%;
         /* The background tabs a touch lighter than the toolbar, which is

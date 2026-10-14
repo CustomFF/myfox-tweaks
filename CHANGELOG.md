@@ -4,11 +4,13 @@
 
 - With vertical tabs and the sidebar expanded, pinned tabs are tabs in a row, not tiles: the selected one (or the last) a full tab joined to the page, the others their icons before it
 - A pinned tab has a small pin at its icon's corner that unpins it on click; it shows under the pointer, and always in the collapsed vertical tab strip, and grows while the tab is under the pointer
-- Pinned tabs in a row cast their shadows on each other along their rounded corners and darken toward the next one, as background tabs in the tab strip do
+- Pinned tabs in a row fade toward the selected one as background tabs in the tab strip do
 - With vertical tabs collapsed to icons, pinned tabs are rows as the other tabs are, only the selected tab has ears, and the splitter below the pinned tabs looks like a thin selected tab with a grip and can be dragged again
 - In the tab strip, background tabs fade from transparent beside the selected tab to the selected tab's color, half see-through, at their outer side (pinned ones a little brighter), over a strip the color of the address field, a little darker
 - A background tab under the pointer is solid, a touch apart from the selected tab's color, and shows both its curved feet over its neighbors
 - The tab strip has no shadows any more: none around the selected tab, between background tabs or from the navigation bar
+- Vertical tabs in the background fade diagonally from transparent at their corner toward the selected tab, by the page, to the selected tab's color, over a column the color of the tab strip, with no shadows or shading; one under the pointer is solid and shows both its curved feet
+- On light themes the tab strip and the vertical tab column are a little darker
 
 ## 159.0 — 2026-10-13
 
