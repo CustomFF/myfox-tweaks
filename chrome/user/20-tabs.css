@@ -131,6 +131,55 @@
         padding-inline: 0 !important;
     }
 
+    /* Pinned tabs: a pin at the icon's lower start corner (the sound icon
+       takes an upper one), on a dot of the toolbar's color, a little larger
+       under the pointer, which unpins the tab (a button ../../autoconfig/myfox/
+       57-unpin-button.js adds to every tab; shown once it is pinned). */
+    .tabbrowser-tab .myfox-unpin-button {
+        display: none;
+    }
+    .tabbrowser-tab[pinned] .tab-icon-stack {
+        position: relative !important;
+    }
+    .tabbrowser-tab[pinned] .myfox-unpin-button {
+        /* Its size; grown from its middle under the pointer (scale didn't
+           take on this element). */
+        --myfox-pin-size: calc(var(--icon-size) * 0.625);
+        display: block !important;
+        position: absolute !important;
+        inset-inline-start: calc(var(--icon-size) * 0.0625 - var(--myfox-pin-size) / 2) !important;
+        inset-block-end: calc(var(--icon-size) * 0.0625 - var(--myfox-pin-size) / 2) !important;
+        width: var(--myfox-pin-size) !important;
+        height: var(--myfox-pin-size) !important;
+        border-radius: 50% !important;
+        background: var(--toolbox-background-color) url("chrome://browser/skin/pin-12.svg") center / calc(var(--myfox-pin-size) * 0.8) no-repeat !important;
+        -moz-context-properties: fill !important;
+        fill: currentColor !important;
+        transition-property: width, height, inset-inline-start, inset-block-end, background-size, opacity !important;
+        transition-duration: 0.15s !important;
+
+        /* As large as a tab's close button. */
+        &:hover {
+            --myfox-pin-size: var(--icon-size);
+            fill: var(--myfox-accent) !important;
+        }
+    }
+    /* In the vertical tabs' strip of icons on the right, the corner the
+       other way: on the side away from the page, as on the left. */
+    &:has(#sidebar-container[sidebar-positionend]) #sidebar-container:not([sidebar-launcher-expanded]) .tabbrowser-tab[pinned] .myfox-unpin-button {
+        inset-inline-start: auto !important;
+        inset-inline-end: calc(var(--icon-size) * 0.0625 - var(--myfox-pin-size) / 2) !important;
+        transition-property: width, height, inset-inline-end, inset-block-end, background-size, opacity !important;
+    }
+
+    /* Only under the pointer, as a tab's close button: a pinned tab stands
+       out from the others well enough there. Not in the vertical tabs'
+       strip of icons, where it is what sets a pinned tab apart. */
+    #tabbrowser-tabs:not(#sidebar-container:not([sidebar-launcher-expanded]) *) .tabbrowser-tab[pinned]:not(:hover) .myfox-unpin-button {
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
     /* Horizontal tabs: the title in the middle of the room between the icon
        and the close button's place, about the middle of the tab; a title
        too long for it starts at its start as before ("safe"), so its end
