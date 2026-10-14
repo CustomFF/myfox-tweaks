@@ -53,16 +53,12 @@
     }
     /* The line is the tab's top border: on a rounded corner a border's top side
        curves down it and tapers off by itself, where an inset shadow leaked down
-       the tab's straight side. No side borders or inner outline. The
-       selected tab's shadow (50-tab-ears.css) is restated with this weight. */
+       the tab's straight side. No side borders or inner outline. */
     & #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[usercontextid]>.tab-stack>.tab-background {
         border-style: solid !important;
         border-width: var(--myfox-container-line) 0 0 0 !important;
         border-color: var(--myfox-container-line-color) !important;
         outline: none !important;
-    }
-    & #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[usercontextid]:is([selected], [multiselected])>.tab-stack>.tab-background {
-        box-shadow: var(--myfox-tab-shadow) !important;
     }
     /* Vertical: the gradient, laid out over the border box it is painted on
        (sized to the padding box it repeated into the border as a thin line). */

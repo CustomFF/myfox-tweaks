@@ -103,13 +103,10 @@
         background-image: none !important;
     }
 
-    /* A soft shadow around the selected tab's top and sides (the bottom is
-       clipped away, since the tab joins the toolbar there) sets it apart from the
-       strip, on a light theme and a dark one alike. Vertical tabs have their own
-       (70-vertical-tabs-close.css). */
+    /* The selected tab's ears reach past its sides; the bottom is clipped
+       away, since the tab joins the toolbar there. */
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[selected] .tab-background,
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[multiselected] .tab-background {
-        box-shadow: var(--myfox-tab-shadow) !important;
         clip-path: inset(-12px -16px -2px -16px);
     }
 
@@ -122,22 +119,16 @@
         overflow: visible !important;
     }
 
-    /* The navigation bar casts a soft shadow up onto the tab strip: drawn along
-       the strip's bottom edge, under the tabs, so the tabs in the background show
-       it and the selected tab, joined to the bar, covers it. */
-    #TabsToolbar {
-        box-shadow: var(--myfox-strip-shadow) !important;
-    }
-
-    /* Background tabs (horizontal) as overlapping cards, stacked toward the
-       selected tab: left of it each card lies over its left neighbor, right of
-       it over its right neighbor (their places order them; hovering doesn't
-       lift a card, it only recolors it). A card has only the ear on its outer
-       side and is filled with the tab strip's color, which looks the same but
-       hides the corner under it, hovered or not. The top corner tucked under the
-       next card is square until hovered. A card casts a soft shadow outward,
-       along its side and its ear (--myfox-tab-card-shadow).
-       A card's place: its position among the strip's tabs and split views,
+    /* Background tabs (horizontal) are stacked toward the selected tab: left
+       of it each tab lies over its left neighbor, right of it over its right
+       neighbor (their places order them). Each fades in from transparent at
+       its side toward the selected tab to the selected tab's color, half
+       opaque (--myfox-tab-fade), at the other side, where it has its only
+       ear, in that color. Hovered, a tab is filled solid, a touch apart from
+       the selected tab's color, lifted over its neighbors, with both ears.
+       The tab strip behind them is the address field's color, a little
+       darker (--myfox-strip-color).
+       A tab's place: its position among the strip's tabs and split views,
        by hundreds; a tab group takes one such place, and what it holds (its
        label, its tabs) the places right after it, so the stack runs on
        across a group's edges. Vertical tabs (70-vertical-tabs-close.css),
@@ -152,10 +143,10 @@
     #tabbrowser-tabs tab-group > * {
         --myfox-stack-pos: calc(var(--myfox-group-pos) + sibling-index());
     }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) {
+    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :hover, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) {
         z-index: var(--myfox-stack-pos) !important;
     }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) {
+    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget], :hover) {
         z-index: calc(100000 - var(--myfox-stack-pos)) !important;
     }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]),
@@ -163,36 +154,37 @@
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
         overflow: visible !important;
     }
+    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) {
+        --myfox-tab-fade-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-tab-fade), transparent);
+    }
+    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) {
+        --myfox-tab-fade-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-pinned-tab-fade), transparent);
+    }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
         position: relative !important;
-        /* The navigation bar's shadow on the strip (--myfox-strip-shadow),
-           half as deep on the card and its ear: the card looks thick. */
-        box-shadow: var(--myfox-strip-shadow-tab) !important;
+        background-color: transparent !important;
+        /* Laid out over the border box it is painted on (sized to the padding
+           box, it repeated into the border as a thin line at the edge). */
+        background-origin: border-box !important;
+        background-repeat: no-repeat !important;
     }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):not(:hover) > .tab-stack > .tab-background {
-        background-color: var(--myfox-tab-card-color) !important;
+    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not(:hover) > .tab-stack > .tab-background {
+        background-image: linear-gradient(to left, transparent, var(--myfox-tab-fade-color)) !important;
+    }
+    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget], :hover) > .tab-stack > .tab-background {
+        background-image: linear-gradient(to right, transparent, var(--myfox-tab-fade-color)) !important;
     }
     #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background::before,
     #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         content: "" !important;
         display: block !important;
         position: absolute !important;
-        /* Level with the card (a selected tab's ears sit 1px lower), so the
-           shadow along its bottom runs on under the ear. */
+        /* Level with the tab (a selected tab's ears sit 1px lower). */
         bottom: 0 !important;
-        box-shadow: var(--myfox-strip-shadow-tab) !important;
         width: var(--user-tab-ear-rounding) !important;
         height: var(--user-tab-ear-rounding) !important;
         pointer-events: none !important;
-        background: inherit !important;
-        background-image: none !important;
-    }
-    /* Hovered, the card is lighter than the window under it, and the 1px
-       between the raised ear and the window shows; the ear reaches down to
-       the window then, as a selected tab's does. */
-    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::before,
-    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::after {
-        bottom: -1px !important;
+        background: var(--myfox-tab-fade-color) !important;
     }
     #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background::before {
         left: calc(0px - var(--user-tab-ear-rounding)) !important;
@@ -202,49 +194,26 @@
         right: calc(0px - var(--user-tab-ear-rounding)) !important;
         mask: var(--myfox-ear-end) !important;
     }
-    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::after,
-    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::before {
+    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :hover, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::after,
+    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget], :hover) > .tab-stack > .tab-background::before {
         display: none !important;
     }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not(:hover) > .tab-stack > .tab-background {
-        border-start-end-radius: 0 !important;
-    }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]):not(:hover) > .tab-stack > .tab-background {
-        border-start-start-radius: 0 !important;
-    }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
-        filter: drop-shadow(-1px 0 1px var(--myfox-tab-card-shadow));
-        clip-path: inset(0 0 -2px -16px);
-    }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background {
-        filter: drop-shadow(1px 0 1px var(--myfox-tab-card-shadow));
-        clip-path: inset(0 -16px -2px 0);
-    }
 
-    /* Over its title, a background tab darkens toward the edge tucked under the
-       next card (--myfox-tab-shade at that edge, gone 40% of the way across).
-       The tab strip behind the tabs is the tab color darkened by
-       --myfox-tab-backdrop. */
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack {
-        position: relative !important;
+    /* Hovered: solid (a translucent tab would let its ears show the
+       neighbors through), over its neighbors but under the selected tab, its
+       ears reaching down to the window as a selected tab's do. */
+    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover {
+        z-index: 999999 !important;
     }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack::after {
-        content: "" !important;
-        position: absolute !important;
-        inset: 0 !important;
-        z-index: 1;
-        pointer-events: none !important;
-        border-start-start-radius: var(--user-tab-rounding);
+    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background {
+        background-color: color-mix(in srgb, var(--tab-background-color-selected), var(--toolbar-text-color) var(--myfox-tab-hover-lift)) !important;
     }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack::after {
-        background: linear-gradient(to left, rgb(0 0 0 / var(--myfox-tab-shade)), transparent 40%) !important;
-    }
-    #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack::after {
-        background: linear-gradient(to right, rgb(0 0 0 / var(--myfox-tab-shade)), transparent 40%) !important;
-        border-start-start-radius: 0;
-        border-start-end-radius: var(--user-tab-rounding);
+    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::before,
+    #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::after {
+        bottom: -1px !important;
+        background: inherit !important;
     }
     #TabsToolbar {
-        background-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-tab-backdrop)) !important;
+        background-color: var(--myfox-strip-color) !important;
     }
 }
