@@ -337,6 +337,33 @@
                 display: none !important;
             }
         }
+        /* Side by side, too, each card in the background lies over the one
+           before it, as in the tab strip, its shadow cast that way, in the
+           shape of its rounded corners; the column's shadow (a straight line
+           along the page side) only on the one at the page. */
+        & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) {
+            z-index: var(--myfox-stack-pos) !important;
+        }
+        & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
+            filter: drop-shadow(-1px 0 1px var(--myfox-tab-card-shadow)) !important;
+            clip-path: inset(0 0 0 -16px) !important;
+        }
+        &:is(:root:has(#sidebar-container[sidebar-positionend]) *) #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
+            filter: drop-shadow(1px 0 1px var(--myfox-tab-card-shadow)) !important;
+            clip-path: inset(0 -16px 0 0) !important;
+        }
+        /* And it darkens over its title toward the edge tucked under the next
+           card, as there (50-tab-ears.css). */
+        & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack::after {
+            background: linear-gradient(to left, rgb(0 0 0 / var(--myfox-tab-shade)), transparent 40%) !important;
+        }
+        &:is(:root:has(#sidebar-container[sidebar-positionend]) *) #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack::after {
+            background: linear-gradient(to right, rgb(0 0 0 / var(--myfox-tab-shade)), transparent 40%) !important;
+        }
+        & #pinned-tabs-container:has(> .tabbrowser-tab[selected]) > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background,
+        & #pinned-tabs-container > .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget], :last-of-type) > .tab-stack > .tab-background {
+            box-shadow: none !important;
+        }
         & #pinned-tabs-container:not(:has(> .tabbrowser-tab[selected])) > .tabbrowser-tab[pinned]:last-of-type,
         &:not([movingtab]) #pinned-tabs-container > .tabbrowser-tab[pinned][selected] {
             order: 1 !important;
