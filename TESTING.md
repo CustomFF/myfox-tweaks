@@ -10,7 +10,7 @@ redesign is beta-only and several selectors depend on it).
 
 ```bash
 for f in autoconfig/myfox.cfg autoconfig/myfox/*.js; do cp "$f" /tmp/fc.js && node --check /tmp/fc.js; done
-grep -rn 'url(' chrome/user chrome/agent | grep -v 'chrome://\|data:'   # relative url()s must use ../, nothing else
+grep -rn 'url(' chrome/user chrome/agent chrome/author | grep -v 'chrome://\|data:'   # relative url()s must use ../, nothing else
 ```
 
 ## Fresh profile, first start
@@ -38,7 +38,8 @@ grep -rn 'url(' chrome/user chrome/agent | grep -v 'chrome://\|data:'   # relati
 - [ ] light theme: the selected tab is set off with a shadow — check this on
       both stable and beta
 - [ ] `userChrome.css`'s `@import user/*.css` picks up all files, and every
-      `chrome/agent/*.css` sheet registers — check **after a restart**:
+      `chrome/agent/*.css` and `chrome/author/*.css` sheet registers — check
+      **after a restart**:
       content-process pages (about:newtab, about:preferences) don't pick up
       a live agent-sheet re-registration, only a fresh start
 

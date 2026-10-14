@@ -118,11 +118,14 @@ def main():
     if not os.path.exists(profile_chrome):
         os.makedirs(profile_chrome, exist_ok=True)
         
-    # userChrome.css only @imports user/*.css; agent sheets are chrome/agent/*.css.
+    # userChrome.css only @imports user/*.css; agent sheets are chrome/agent/*.css,
+    # author sheets chrome/author/*.css.
     for fname in ["userChrome.css"]:
         shutil.copy2(os.path.join(workspace_chrome, fname), os.path.join(profile_chrome, fname))
         print(f"Synced {fname} to profile.")
-    for dname in ["user", "agent"]:
+    for dname in ["user", "agent", "author"]:
+        if not os.path.isdir(os.path.join(workspace_chrome, dname)):
+            continue
         dst = os.path.join(profile_chrome, dname)
         shutil.rmtree(dst, ignore_errors=True)
         shutil.copytree(os.path.join(workspace_chrome, dname), dst)
@@ -131,6 +134,8 @@ def main():
     def concat(dname):
         d = os.path.join(workspace_chrome, dname)
         out = []
+        if not os.path.isdir(d):
+            return ""
         for fn in sorted(os.listdir(d)):
             if fn.endswith(".css"):
                 with open(os.path.join(d, fn), "r", encoding="utf-8") as f:
@@ -140,10 +145,11 @@ def main():
     # Data-URI injection can't @import, so feed it the concatenated parts.
     userchrome_css = concat("user")
     sidebar_agent_css = concat("agent")
+    author_css = concat("author")
 
     # JS Code to dynamically reload stylesheets using data URIs to bypass caching
     js_code = """
-    (function(chromeCSS, agentCSS) {
+    (function(chromeCSS, agentCSS, authorCSS) {
       try {
         const { classes: Cc, interfaces: Ci } = Components;
         const sss = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
@@ -173,6 +179,16 @@ def main():
           } catch(e) {}
         }
         
+        // 2b. And the previous author data URI
+        if (win.myfoxLastAuthorURI) {
+          try {
+            const prevURI = ios.newURI(win.myfoxLastAuthorURI);
+            if (sss.sheetRegistered(prevURI, sss.AUTHOR_SHEET)) {
+              sss.unregisterSheet(prevURI, sss.AUTHOR_SHEET);
+            }
+          } catch(e) {}
+        }
+        
         // 3. Register new userChrome.css content
         const chromeURIStr = "data:text/css;charset=utf-8," + encodeURIComponent(chromeCSS);
         const chromeURI = ios.newURI(chromeURIStr);
@@ -185,12 +201,18 @@ def main():
         sss.loadAndRegisterSheet(agentURI, sss.AGENT_SHEET);
         win.myfoxLastAgentURI = agentURIStr;
         
+        // 5. Register new author sheets content (::part() only works from these)
+        const authorURIStr = "data:text/css;charset=utf-8," + encodeURIComponent(authorCSS);
+        const authorURI = ios.newURI(authorURIStr);
+        sss.loadAndRegisterSheet(authorURI, sss.AUTHOR_SHEET);
+        win.myfoxLastAuthorURI = authorURIStr;
+        
         return "Reload OK";
       } catch (e) {
         return "Reload Error: " + e.toString();
       }
-    })(__CHROME_CSS__, __AGENT_CSS__);
-    """.replace("__CHROME_CSS__", json.dumps(userchrome_css)).replace("__AGENT_CSS__", json.dumps(sidebar_agent_css))
+    })(__CHROME_CSS__, __AGENT_CSS__, __AUTHOR_CSS__);
+    """.replace("__CHROME_CSS__", json.dumps(userchrome_css)).replace("__AGENT_CSS__", json.dumps(sidebar_agent_css)).replace("__AUTHOR_CSS__", json.dumps(author_css))
     
     # 3. Send evaluateJSAsync
     send_msg(sock, {
