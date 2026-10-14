@@ -76,23 +76,6 @@
         mask: var(--myfox-ear-end) !important;
     }
 
-    /* Firefox's own default tab hover fill is a translucent overlay
-       (~17% alpha), not a solid color. The ear pseudo-elements use
-       `background: inherit` to pick up whatever color the tab body has, so a
-       hovered tab's semi-transparent fill and its ear's semi-transparent fill
-       compound wherever they visually overlap at the seam, appearing as a
-       visible dark patch right at the curve. A solid color (same visual shade
-       as the translucent one, composited against the toolbar background)
-       sidesteps the alpha-stacking entirely instead of trying to
-       position/mask around it. */
-    .tabbrowser-tab:hover:not([selected]):not([multiselected]) .tab-background {
-        /* Firefox's tab-text-color overlay (17%, stronger on a light theme:
-           --myfox-tab-hover), pre-mixed over the selected-tab/toolbar color so it
-           is opaque and follows the theme (a fixed rgb here looked wrong on
-           light themes). */
-        background-color: color-mix(in srgb, currentColor var(--myfox-tab-hover), var(--tab-background-color-selected)) !important;
-    }
-
     /* The built-in light theme paints the selected tab with a blue-to-orange
        gradient that shows through its transparent border as a rainbow outline
        (and the ears, which inherit the background, carry it too). Keep the

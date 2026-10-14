@@ -11,6 +11,7 @@
 - The tab strip has no shadows any more: none around the selected tab, between background tabs or from the navigation bar
 - Vertical tabs in the background fade diagonally from transparent at their corner toward the selected tab, by the page, to the selected tab's color, over a column the color of the tab strip, with no shadows or shading; one under the pointer is solid and shows both its curved feet
 - On light themes the tab strip and the vertical tab column are a little darker
+- A split view's pair of tabs has no backing or shadows of its own: in the background it fades across both halves as one tab does, and selected, both halves are the selected tab's color, the other half no longer dimmed
 
 ## 159.0 — 2026-10-13
 

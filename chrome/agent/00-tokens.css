@@ -30,16 +30,12 @@
     --myfox-container-join: 5%;
 
     /* Split view (../user/75-split-view.css): the line between the two halves
-       of a tab pair, and how faint the title of the half not shown in focus is. */
+       of a tab pair. */
     --myfox-split-divider: color-mix(in srgb, currentColor 30%, transparent);
-    --myfox-split-dim: 0.6;
     /* How far in the halves of a pair lie: below its top in the tab strip,
        from the column's side in the tab column. */
     --myfox-split-inset-top: 4px;
     --myfox-split-vinset: 7px;
-    /* Hovering a pair in the background lights up its other half this much
-       (the half under the pointer as any hovered tab, --myfox-tab-hover). */
-    --myfox-split-hover: calc(var(--myfox-tab-hover) / 2);
     /* The height of each half of a pair with vertical tabs. */
     --myfox-split-vtab-height: 24px;
 
@@ -56,58 +52,25 @@
     --myfox-shadow: 3px 6px 8px rgba(0, 0, 0, 0.3);
     /* A lighter one for popups that sit right under the pointer (tab previews). */
     --myfox-shadow-small: 2px 4px 6px rgba(0, 0, 0, 0.2);
-    /* Around the selected tab of a split view in the tab strip, setting it
-       off the strip (../user/75-split-view.css). */
-    --myfox-tab-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
-    /* The same around a selected vertical tab, tighter on its low row. */
-    --myfox-vtab-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
-    /* The same as a filter, for what is drawn of a box, not the box. */
+    /* Around the pinned tabs' splitter in the vertical tab column, as a
+       filter, for what is drawn of a box, not the box. */
     --myfox-vtab-shadow-filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
-    /* The color of the soft shadow a background tab casts on its neighbor
-       (vertical tabs, split views). */
-    --myfox-tab-card-shadow: rgba(0, 0, 0, 0.15);
-    /* A background tab's card: the toolbar's color, with this much white
-       (a dark theme sets some below). */
-    --myfox-tab-card-lift: 0%;
-    --myfox-tab-card-color: color-mix(in srgb, var(--toolbox-background-color), white var(--myfox-tab-card-lift));
-    /* A background tab darkens toward the edge tucked under the next card,
-       this much black at that edge (pinned vertical tabs, split views). */
-    --myfox-tab-shade: 5%;
-    /* Behind the tabs, the tab color with this much black: a split view in
-       the tab strip as much as the shade at a tab's tucked edge (a dark theme
-       sets its own below); the vertical tab column like a tab's edge under
-       its neighbor's shadow, so the outermost tab blends into it. */
-    --myfox-tab-backdrop: var(--myfox-tab-shade);
-    --myfox-vtab-backdrop: 15%;
-    /* That vertical tab column's color (split views in it). */
-    --myfox-column-color: color-mix(in srgb, var(--toolbox-background-color), black var(--myfox-vtab-backdrop));
-    /* A tab in the background under the pointer: this much of the text
-       color over the selected tab's color. */
-    --myfox-tab-hover: 17%;
     /* Behind the tabs, the tab strip and the vertical tab column: the
        address field's color, a little darker (a light theme sets more below;
        ../user/50-tab-ears.css, ../user/70-vertical-tabs-close.css). */
     --myfox-strip-color: color-mix(in srgb, var(--toolbar-field-background-color), black 15%);
-    /* A horizontal tab in the background fills from transparent at its side
-       toward the selected tab to the selected tab's color, this opaque, at
-       the other side; a pinned one is a little brighter. */
+    /* A tab in the background fades from transparent at its side toward
+       the selected tab to the selected tab's color, this opaque, at the
+       other side; a pinned one is a little brighter. */
     --myfox-tab-fade: 50%;
     --myfox-pinned-tab-fade: 70%;
-    /* A horizontal tab in the background under the pointer: the selected
-       tab's color with this much of the text color, a touch apart from it. */
+    /* A tab in the background under the pointer: the selected tab's color
+       with this much of the text color, a touch apart from it. */
     --myfox-tab-hover-lift: 5%;
-    /* The window casting a soft shadow onto the vertical tab column, from its
-       page side (sidebar on the left / on the right; split views in it). */
-    --myfox-column-shadow: inset -3px 0 4px -4px rgba(0, 0, 0, 0.25);
-    --myfox-column-shadow-end: inset 3px 0 4px -4px rgba(0, 0, 0, 0.25);
-    /* The same shadows on the tabs in the background (and their ears), half
-       as deep, which shows the tabs' thickness. */
-    --myfox-column-shadow-tab: inset -1.5px 0 2px -2px rgba(0, 0, 0, 0.25);
-    --myfox-column-shadow-tab-end: inset 1.5px 0 2px -2px rgba(0, 0, 0, 0.25);
 }
 
 /* On a light theme the faint container tint is lost on the near-white
-   toolbars, and a hovered tab barely shows: stronger there. */
+   toolbars: stronger there. */
 @media (prefers-color-scheme: light) {
     :root {
         --myfox-container-join: 14%;
@@ -115,23 +78,7 @@
         --myfox-container-inactive: 50%;
         /* A thin line reads on a dark strip, not on a light one. */
         --myfox-container-line: 3px;
-        --myfox-tab-hover: 25%;
-        /* The background card is darker than the selected-tab color the hover
-           mixes into, so half the hover barely differs from it. */
-        --myfox-split-hover: calc(var(--myfox-tab-hover) * 0.75);
         /* The address field is near white: darker, so the tabs stand out. */
         --myfox-strip-color: color-mix(in srgb, var(--toolbar-field-background-color), black 22%);
-    }
-}
-
-/* The tabs of a dark theme are close to black: a stronger shade shows. */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --myfox-tab-shade: 10%;
-        --myfox-tab-backdrop: 19%;
-        --myfox-vtab-backdrop: 19%;
-        /* The background tabs a touch lighter than the toolbar, which is
-           near black. */
-        --myfox-tab-card-lift: 2%;
     }
 }
