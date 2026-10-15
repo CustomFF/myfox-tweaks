@@ -3,6 +3,7 @@
 ## Unreleased
 
 - The address bar's focus ring no longer drops its bottom edge when the dropdown is closed with Esc
+- The address bar's dropdown no longer jumps as the pointer moves over its rows
 
 ## 159.1 — 2026-10-15
 
