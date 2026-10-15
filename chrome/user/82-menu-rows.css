@@ -1,0 +1,22 @@
+/* Menu rows. User sheet, imported by ../userChrome.css.
+
+   A row of a menu or panel made of more than one button (an item and its
+   "..." or folder button) is highlighted as one under the pointer, edge to
+   edge, as the address bar's result rows are; its buttons have no fill of
+   their own there, but the small icon button that ends it ("...", the
+   folder), which lights up over the row. A menu's rows join by being added
+   to the list below. */
+:is(
+    /* The extensions (puzzle) panel: an extension; "Manage extensions" and
+       the add-ons sidebar button beside it
+       (../../autoconfig/myfox/58-addons-sidebar-button.js). */
+    #unified-extensions-view .unified-extensions-item,
+    #unified-extensions-view #myfox-unified-extensions-manage-row
+) {
+    &:hover {
+        background-color: var(--button-background-color-menu-hover) !important;
+    }
+    & .subviewbutton:not(:last-child):hover {
+        background-color: transparent !important;
+    }
+}

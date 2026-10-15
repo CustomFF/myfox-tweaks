@@ -6,6 +6,7 @@
 - The address bar's dropdown no longer jumps as the pointer moves over its rows
 - The new tab page's weather widget has a square-cornered location field, not a pill
 - The extensions (puzzle) panel has a button next to "Manage extensions" that opens the extensions sidebar panel
+- A row of the extensions panel lights up as a whole under the pointer, edge to edge, its "..." button too
 
 ## 159.1 — 2026-10-15
 
