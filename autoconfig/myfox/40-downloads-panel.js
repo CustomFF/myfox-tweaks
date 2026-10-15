@@ -152,5 +152,21 @@
     list.ensureElementIsVisible(next);
   }
 
+  // The downloads panel's "Show all downloads" opens this sidebar panel, not
+  // the Library window (Ctrl+Shift+Y and the menus still open that).
+  function initWindow(win) {
+    const panel = win.DownloadsPanel;
+    if (!panel) return;
+    const showLibrary = panel.showDownloadsHistory;
+    panel.showDownloadsHistory = function () {
+      if (!win.SidebarController?.sidebars?.has("viewDownloadsSidebar")) {
+        return showLibrary.call(this);
+      }
+      this.hidePanel();
+      win.SidebarController.show("viewDownloadsSidebar");
+    };
+  }
+  MyFox.windowInits.push(initWindow);
+
   MyFox.sidebarHooks.push(({ sbCtrl, sidebar, doc }) => injectSearch(sidebar.contentDocument, sbCtrl, doc));
 })(globalThis.MyFox);
