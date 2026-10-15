@@ -9,6 +9,7 @@
 - A row of the extensions panel lights up as a whole under the pointer, edge to edge, its "..." button too
 - Context menus and the bookmarks menus take the theme's colors and a quiet highlight, as the panels have, instead of the system's colors and accent; items of menus and panels run edge to edge
 - The downloads panel is as compact as the other menus: downloads are rows edge to edge, not cards, lit as a whole under the pointer, with a square folder button
+- The downloads sidebar panel looks like the downloads panel: square rows edge to edge, a quiet highlight instead of the system's accent, larger file icons, and a folder button that is no longer cut off or dimmed on the selected download
 
 ## 159.1 — 2026-10-15
 

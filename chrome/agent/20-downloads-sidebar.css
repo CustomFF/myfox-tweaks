@@ -80,6 +80,7 @@
     margin: 0 !important;
     background-color: transparent !important; /* Blends into sidebar background */
     border: none !important;                  /* Removes the distinct inner frame/border */
+    border-radius: 0 !important;              /* Square, as the rows; rounded, it cut the first row's corner */
     flex-grow: 1 !important;
 }
 richlistitem.download {
@@ -89,29 +90,26 @@ richlistitem.download {
     padding: 2px 0 !important;
     margin: 0 !important;
     outline: none !important;
-    border-radius: var(--myfox-radius) !important;
+    /* Square rows, as a menu's (../user/82-menu-rows.css). */
+    border-radius: 0 !important;
 }
 
-/* Neutral hover state: subtle grey background */
+/* Hover: the menus' quiet fill of the text color. */
 richlistitem.download:hover {
-    background-color: var(--toolbarbutton-hover-background, rgba(255, 255, 255, 0.08)) !important;
+    background-color: color-mix(in srgb, currentColor 15%, transparent) !important;
     outline: none !important;
 }
 
-/* Neutral selected/focused state: matching bookmarks selection (dotted outline, very light background) */
-richlistitem.download[selected="true"] {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    outline: 1px dotted var(--myfox-line-color) !important;
-    outline-offset: -1px !important;
+/* The selected download: lit as a hovered one, in the panel's text color
+   (Firefox gives it a dark text color meant for its accent fill, and the
+   folder button took it, looking disabled). Firefox sets the attribute
+   without the value "true". */
+richlistitem.download[selected] {
+    background-color: color-mix(in srgb, currentColor 15%, transparent) !important;
+    color: var(--sidebar-text-color, inherit) !important;
 }
 
-/* Ensure text inside selected item remains light and readable */
-richlistitem.download[selected="true"] .downloadTarget {
-    color: var(--sidebar-text-color, currentColor) !important;
-}
-
-richlistitem.download[selected="true"] .downloadDetails {
-    color: var(--sidebar-text-color, currentColor) !important;
+richlistitem.download[selected] .downloadDetails {
     opacity: 0.65 !important;
 }
 
@@ -212,6 +210,11 @@ richlistitem.download:focus-visible {
     padding: 0 !important;
     margin: 0 !important;
 }
+/* Hovered, Firefox's button takes its own hover text color, dark here: the
+   icon vanished on the row's fill. Keep the row's color. */
+.downloadButton:hover {
+    color: inherit !important;
+}
 .downloadButton[hidden] {
     display: none !important;
 }
@@ -274,4 +277,20 @@ richlistitem.download:focus-visible {
 /* Hide Clear Downloads footer when there are no download items */
 #contentAreaDownloadsView:not(:has(richlistitem.download)) #downloads-sidebar-footer {
     display: none !important;
+}
+
+/* The sidebar's rows: the file's icon larger than in the toolbar's panel
+   (the rows are taller), the folder button in the row's middle, 4px in from
+   its end, as in the panel. */
+#contentAreaDownloadsView richlistitem.download {
+    padding-inline-end: 4px !important;
+}
+#contentAreaDownloadsView .downloadTypeIcon {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+}
+#contentAreaDownloadsView .downloadButton {
+    align-self: center !important;
 }
