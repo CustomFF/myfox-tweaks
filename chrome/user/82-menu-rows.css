@@ -46,7 +46,9 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
        the add-ons sidebar button beside it
        (../../autoconfig/myfox/58-addons-sidebar-button.js). */
     #unified-extensions-view .unified-extensions-item,
-    #unified-extensions-view #myfox-unified-extensions-manage-row
+    #unified-extensions-view #myfox-unified-extensions-manage-row,
+    /* The downloads panel: a download and its folder button. */
+    #downloadsListBox > richlistitem
 ) {
     &:hover {
         background-color: var(--button-background-color-menu-hover) !important;
@@ -54,4 +56,30 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
     & .subviewbutton:not(:last-child):hover {
         background-color: transparent !important;
     }
+}
+
+/* The downloads panel: its downloads as rows of a menu, not cards with gaps
+   between them, the folder button square, "Show all downloads" as low as
+   a panel's item. */
+#downloadsPanel-mainView {
+    padding: 4px 0 !important;
+}
+#downloadsListBox > richlistitem {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    min-height: 0 !important;
+    /* 1px above and below, the folder button 4px in from the edge, as an
+       extension's row and its "...". */
+    padding-block: 1px !important;
+    padding-inline-end: 4px !important;
+}
+#downloadsListBox > richlistitem > .downloadMainArea {
+    border-radius: 0 !important;
+}
+#downloadsListBox > richlistitem > .downloadButton {
+    border-radius: var(--myfox-radius) !important;
+}
+#downloadsPanel-mainView #downloadsHistory {
+    min-height: 24px !important;
+    padding-block: 2px !important;
 }

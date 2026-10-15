@@ -128,6 +128,23 @@ richlistitem.download:focus-visible {
     display: flex !important;
     align-items: center !important;
 }
+/* The toolbar's downloads panel: rows as low as a menu's
+   (../user/82-menu-rows.css), the two lines of text fit in, the folder
+   button as large as an extension's "...". */
+#downloadsPanel .downloadMainArea {
+    min-height: 24px !important;
+    max-height: 24px !important;
+    height: 24px !important;
+    padding-block: 1px !important;
+}
+#downloadsPanel .downloadButton {
+    min-height: 22px !important;
+    max-height: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    width: 22px !important;
+}
 .downloadTypeIcon {
     width: 16px !important;
     height: 16px !important;
