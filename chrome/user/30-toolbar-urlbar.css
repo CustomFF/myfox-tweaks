@@ -3,6 +3,15 @@
 
 /* ── Toolbar / address bar ─────────────────────────────────────────────── */
 
+/* The browser's buttons outside menus and panels: 1px apart, 2px padded,
+   the spacing the toolbars were laid out with (ddblm's blm_panel.css used to
+   give it to every button, menus' and panels' too). As weak as a bare
+   element rule, so the rules here for particular buttons win over it. */
+toolbarbutton:not(:where(panel, menupopup) *) {
+    margin: 1px !important;
+    padding: 2px !important;
+}
+
 #navigator-toolbox,
 #nav-bar {
     border-bottom: 0px solid rgb(239, 240, 241) !important;
