@@ -114,6 +114,15 @@
     z-index: 100 !important;
 }
 
+/* The button that opens our add-ons sidebar panel, next to "Manage
+   extensions" (../../autoconfig/myfox/58-addons-sidebar-button.js): in line
+   with the extensions' "..." buttons, which sit 4px in from the panel's
+   edge. */
+#unified-extensions-view #myfox-unified-extensions-sidebar {
+    list-style-image: url("chrome://browser/skin/sidebar-collapsed.svg") !important;
+    margin-inline-end: 4px !important;
+}
+
 /* Its fill is drawn on the icon: Firefox's 8px padding made it 30px, taller
    than the row, which clipped off its rounded corners. */
 #unified-extensions-view .unified-extensions-item-menu-button .toolbarbutton-icon {

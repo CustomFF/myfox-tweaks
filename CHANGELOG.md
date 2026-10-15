@@ -5,6 +5,7 @@
 - The address bar's focus ring no longer drops its bottom edge when the dropdown is closed with Esc
 - The address bar's dropdown no longer jumps as the pointer moves over its rows
 - The new tab page's weather widget has a square-cornered location field, not a pill
+- The extensions (puzzle) panel has a button next to "Manage extensions" that opens the extensions sidebar panel
 
 ## 159.1 — 2026-10-15
 

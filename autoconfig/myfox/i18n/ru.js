@@ -12,6 +12,7 @@
 
     "addons.search": "Поиск расширений",
     "addons.manage": "Управление расширениями",
+    "addons.openInSidebar": "Открыть в боковой панели",
     "addons.more": "Ещё",
     "addons.menu.preferences": "Настройки",
     "addons.menu.manage": "Управление",

@@ -15,6 +15,7 @@
 
     "addons.search": "Search add-ons",
     "addons.manage": "Manage extensions",
+    "addons.openInSidebar": "Open in Sidebar",
     "addons.more": "More",
     "addons.menu.preferences": "Preferences",
     "addons.menu.manage": "Manage",
