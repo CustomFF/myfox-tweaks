@@ -40,12 +40,11 @@
     }
     /* Hovered (or while its collapsed group's menu is open), Firefox fills
        the label with another shade, which parted it from the ear and the
-       shelf on its sides: the shade faded out to the group's color toward
-       its sides instead. */
-    & .tab-group-label:hover,
-    &[previewpanelactive] .tab-group-label {
-        background-color: var(--tab-group-color) !important;
-        background-image: linear-gradient(to right, transparent, var(--tab-group-background-color-hover) 3%, var(--tab-group-background-color-hover) 97%, transparent) !important;
+       shelf on its sides: everything in the group's color takes that
+       shade instead. */
+    &:is(:has(.tab-group-label:hover), [previewpanelactive]) {
+        --tab-group-color: var(--tab-group-background-color-hover) !important;
+        --tab-group-line-color: var(--tab-group-background-color-hover) !important;
     }
     /* The ear on the box round the label, which clips what overflows it. */
     & .tab-group-label-hover-highlight::before {
