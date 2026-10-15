@@ -1,11 +1,46 @@
-/* Menu rows. User sheet, imported by ../userChrome.css.
+/* Menus and panels: one look, the extensions (puzzle) panel's.
+   User sheet, imported by ../userChrome.css. */
 
-   A row of a menu or panel made of more than one button (an item and its
-   "..." or folder button) is highlighted as one under the pointer, edge to
-   edge, as the address bar's result rows are; its buttons have no fill of
-   their own there, but the small icon button that ends it ("...", the
-   folder), which lights up over the row. A menu's rows join by being added
-   to the list below. */
+/* The colors of the theme's panels in menus too (context menus, the
+   bookmarks menus...): Firefox gives menus the system's own (Menu,
+   MenuText), the theme's are set on the window's root. */
+:root {
+    --myfox-panel-bg: var(--panel-background-color);
+    --myfox-panel-text: var(--panel-text-color);
+    --myfox-panel-border: var(--panel-border-color);
+}
+menupopup {
+    --panel-background-color: var(--myfox-panel-bg) !important;
+    --panel-text-color: var(--myfox-panel-text) !important;
+    --panel-border-color: var(--myfox-panel-border) !important;
+    /* Items edge to edge: room above and below them only. */
+    --panel-padding: 4px 0 !important;
+}
+
+/* An item under the pointer: a fill of the text color, as a panel's item
+   has, not the system's accent with its own text color. */
+menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
+    background-color: var(--button-background-color-menu-hover) !important;
+    color: inherit !important;
+}
+
+/* A panel's buttons: 1px apart, 2px padded, an item edge to edge, but
+   buttons side by side in a row (zoom, edit). As weak as a bare element
+   rule, so the rules for particular panels win over it. */
+:where(panel) toolbarbutton {
+    margin: 1px !important;
+    padding: 2px !important;
+}
+:where(panel) .subviewbutton:not(:where(toolbaritem > *)) {
+    margin-inline: 0 !important;
+}
+
+/* Menu rows: a row of a menu or panel made of more than one button (an
+   item and its "..." or folder button) is highlighted as one under the
+   pointer, edge to edge, as the address bar's result rows are; its buttons
+   have no fill of their own there, but the small icon button that ends it
+   ("...", the folder), which lights up over the row. A menu's rows join by
+   being added to the list below. */
 :is(
     /* The extensions (puzzle) panel: an extension; "Manage extensions" and
        the add-ons sidebar button beside it

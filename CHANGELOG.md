@@ -7,6 +7,7 @@
 - The new tab page's weather widget has a square-cornered location field, not a pill
 - The extensions (puzzle) panel has a button next to "Manage extensions" that opens the extensions sidebar panel
 - A row of the extensions panel lights up as a whole under the pointer, edge to edge, its "..." button too
+- Context menus and the bookmarks menus take the theme's colors and a quiet highlight, as the panels have, instead of the system's colors and accent; items of menus and panels run edge to edge
 
 ## 159.1 — 2026-10-15
 
