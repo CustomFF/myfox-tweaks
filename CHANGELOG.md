@@ -13,6 +13,7 @@
 - In the downloads sidebar panel, Tab and Shift+Tab step from one download to the next, with the focus ring on the selected one
 - The downloads panel's "Show all downloads" opens the downloads sidebar panel instead of the Library window
 - The downloads sidebar panel's folder button is lit as a rounded square under the pointer, not an oval
+- The downloads sidebar panel's context menu takes the theme's colors, as the other menus do
 
 ## 159.1 — 2026-10-15
 

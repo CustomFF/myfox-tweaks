@@ -72,6 +72,7 @@
     searchInput.addEventListener("input", filterDownloads);
 
     rootEl.insertBefore(header, rootEl.firstChild);
+    syncPanelColors(sidebarDoc, doc);
     // Like the built-in panels: the search box is ready for typing.
     sidebarDoc.defaultView.setTimeout(() => { try { searchInput.focus(); } catch(e) {} }, 0);
 
@@ -133,6 +134,38 @@
     });
     footer.appendChild(clearBtn);
     rootEl.appendChild(footer);
+  }
+
+  // The page's menus (the downloads' context menu) in the theme's panel
+  // colors, as the window's menus (chrome/user/82-menu-rows.css): the page
+  // has only its own; copy them, and again when the theme is switched.
+  function syncPanelColors(sidebarDoc, doc) {
+    const win = doc.defaultView;
+    const apply = () => {
+      try {
+        let rootStyle = win.getComputedStyle(doc.documentElement);
+        for (let [from, to] of [["--panel-background-color", "--myfox-panel-bg"],
+                                ["--panel-text-color", "--myfox-panel-text"],
+                                ["--panel-border-color", "--myfox-panel-border"]]) {
+          let val = rootStyle.getPropertyValue(from).trim();
+          if (val) sidebarDoc.documentElement.style.setProperty(to, val);
+        }
+      } catch(e) {}
+    };
+    apply();
+    let timer = null;
+    let observer = new win.MutationObserver(() => {
+      if (timer) win.clearTimeout(timer);
+      // The theme's colors land on the window over a few mutations.
+      timer = win.setTimeout(apply, 150);
+    });
+    observer.observe(doc.documentElement, {
+      attributes: true,
+      attributeFilter: ["lwtheme", "lwt-sidebar", "lwt-toolbar", "style"],
+    });
+    sidebarDoc.defaultView.addEventListener("unload", () => {
+      try { observer.disconnect(); } catch(e) {}
+    }, { once: true });
   }
 
   // Tab and Shift+Tab step through the downloads, not over the whole list at
