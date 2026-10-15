@@ -26,7 +26,7 @@
        window around it carry a faint tint of it. */
     --myfox-container-line: 2px;
     --myfox-container-edge: 80%;
-    --myfox-container-inactive: 30%;
+    --myfox-container-inactive: 60%;
     --myfox-container-join: 5%;
 
     /* Split view (../user/75-split-view.css): the line between the two halves
@@ -75,7 +75,7 @@
     :root {
         --myfox-container-join: 14%;
         --myfox-container-edge: 100%;
-        --myfox-container-inactive: 50%;
+        --myfox-container-inactive: 80%;
         /* A thin line reads on a dark strip, not on a light one. */
         --myfox-container-line: 3px;
         /* The address field is near white: darker, so the tabs stand out. */
