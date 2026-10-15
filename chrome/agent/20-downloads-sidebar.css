@@ -304,3 +304,10 @@ richlistitem.download:focus-visible {
 #contentAreaDownloadsView .downloadButton {
     align-self: center !important;
 }
+/* Its fill under the pointer is drawn by the box inside it, 16px tall and
+   rounded 8px, an oval: the whole button, with the usual corners, as in
+   the panel. */
+#contentAreaDownloadsView .downloadButton > .button-box {
+    padding: 6px !important;
+    border-radius: var(--myfox-radius) !important;
+}

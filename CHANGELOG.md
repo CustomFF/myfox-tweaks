@@ -12,6 +12,7 @@
 - The downloads sidebar panel looks like the downloads panel: square rows edge to edge, a quiet highlight instead of the system's accent, larger file icons, and a folder button that is no longer cut off or dimmed on the selected download
 - In the downloads sidebar panel, Tab and Shift+Tab step from one download to the next, with the focus ring on the selected one
 - The downloads panel's "Show all downloads" opens the downloads sidebar panel instead of the Library window
+- The downloads sidebar panel's folder button is lit as a rounded square under the pointer, not an oval
 
 ## 159.1 — 2026-10-15
 
