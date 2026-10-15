@@ -358,6 +358,13 @@
     --myfox-group-tree-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 3' preserveAspectRatio='none'%3E%3Cpath d='M0 0H7A2.5 2.5 0 0 0 4.5 2.5V3H2.5V2.5A2.5 2.5 0 0 0 0 0Z'/%3E%3C/svg%3E");
     --myfox-group-tree-branch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 30' preserveAspectRatio='none'%3E%3Cpath d='M0 0H2V11.25A2.5 2.5 0 0 0 4.5 13.75H6.5A2.5 2.5 0 0 0 9 11.25V18.75A2.5 2.5 0 0 0 6.5 16.25H4.5A2.5 2.5 0 0 0 2 18.75V30H0Z'/%3E%3C/svg%3E");
     --myfox-group-tree-last: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 30' preserveAspectRatio='none'%3E%3Cpath d='M0 0H2V11.25A2.5 2.5 0 0 0 4.5 13.75H6.5A2.5 2.5 0 0 0 9 11.25V18.75A2.5 2.5 0 0 0 6.5 16.25H5A5 5 0 0 1 0 11.25Z'/%3E%3C/svg%3E");
+
+    /* Hovered (or while its menu is open), Firefox shades the label: the
+       whole tree takes that shade, as the group in the tab strip does. */
+    &:is(:has(.tab-group-label:hover), [previewpanelactive]) {
+        --tab-group-color: var(--tab-group-background-color-hover) !important;
+        --tab-group-line-color: var(--tab-group-background-color-hover) !important;
+    }
     /* The + or −, a little in from the column's inner edge; the trunk's
        middle, from that edge, under it; the tabs, moved in past the trunk
        by a branch's length. */
@@ -537,6 +544,14 @@
     @media (prefers-color-scheme: dark) {
         --myfox-group-fill: var(--tab-group-color-invert);
         --myfox-group-fill-hover: color-mix(in srgb, var(--tab-group-color-invert), var(--tab-group-color) 25%);
+    }
+    /* Hovered (or while its menu is open), Firefox shades the label: all
+       of the group in its color takes that shade, its tabs their hover
+       fill, as the group in the tab strip does. */
+    &:is(:has(.tab-group-label:hover), [previewpanelactive]) {
+        --tab-group-color: var(--tab-group-background-color-hover) !important;
+        --tab-group-line-color: var(--tab-group-background-color-hover) !important;
+        --myfox-group-fill: var(--myfox-group-fill-hover) !important;
     }
 
     & > .tab-group-label-container,
