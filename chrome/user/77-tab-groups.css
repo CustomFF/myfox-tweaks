@@ -1,11 +1,12 @@
 /* Tab groups: a shelf in the group's color under its tabs, the group's name
    on a label at its start. User sheet, imported by ../userChrome.css. */
 
-/* Tab strip: the group is framed in its color: at its start the label with
-   its name, the full height of the strip and rounded like a tab (a square
-   with no name), its color on in the first tab's rounded corner; a solid
-   shelf under its tabs, which ends in an ear, as the label starts. The
-   group's tabs are narrower than others (--myfox-group-tab-width). */
+/* Tab strip: the group is a card in its color, rounded like a tab, with an
+   ear at each end: at its start the label with its name, the full height of
+   the strip (a square with no name), then its tabs in it, a little lower
+   (the card shows above them and after the last), down to the strip's
+   bottom edge, tinted with its color. The group's tabs are narrower than
+   others (--myfox-group-tab-width). */
 :root[theme-effective-id^="myfox-"] #navigator-toolbox #tabbrowser-tabs[orient="horizontal"] tab-group {
     & > .tab-group-label-container {
         padding-inline-end: 0 !important;
@@ -19,6 +20,11 @@
     }
     & > :is(.tab-group-label-container, .tab-group-overflow-count-container):is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) {
         z-index: calc(100000 - var(--myfox-stack-pos)) !important;
+    }
+    /* The label under the group's own tabs, whichever side the selected tab
+       is on, so the first tab's ear lies on it. */
+    &:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *) > .tab-group-label-container {
+        z-index: calc(100000 - var(--myfox-group-pos) - 99) !important;
     }
     & .tab-group-label-hover-highlight {
         position: relative !important;
@@ -60,43 +66,50 @@
         left: calc(0px - var(--user-tab-ear-rounding)) !important;
         mask: var(--myfox-ear-start) !important;
     }
-    /* The shelf down to the strip's bottom edge, under the thin border a
-       tab's card has there, and under the neighbors' feet. */
     & .tab-background {
         border-block-end-width: 0 !important;
-        /* Firefox's thin frame round the selected tab covered the plate. */
+        /* Firefox's thin frame round the selected tab covered the card. */
         outline: none !important;
     }
+    /* No line of Firefox's under the tabs: the card is the group's mark. */
     & .tab-group-line {
-        height: var(--myfox-group-shelf) !important;
-        inset-block-end: 0 !important;
-        inset-inline: calc(0px - var(--user-tab-ear-rounding)) !important;
-        border-radius: 0 !important;
-        /* Over the tab's own feet, its ::after one included. */
-        z-index: 3 !important;
+        display: none !important;
     }
-    /* A tab's shade (50-tab-ears.css) stops above the shelf. */
-    & .tabbrowser-tab > .tab-stack::after {
-        inset-block-end: var(--myfox-group-shelf) !important;
-    }
-    /* Collapsed, its selected tab shown: the tab on the group's color, one
-       block with the label and the count. */
-    &[collapsed] > .tabbrowser-tab[selected] {
+    /* The card: the group's color under each of its tabs, showing above
+       them (they start this much lower; shorter, not pushed past the
+       strip's bottom edge with their ears) and round their top corners. */
+    & > .tabbrowser-tab {
         background: var(--tab-group-color) !important;
     }
-    /* The first tab's corner by the label rounded on the group's color:
-       the color only outside the rounding (a background tab is see-through,
-       a square of it showed through the tab). */
-    & > .tabbrowser-tab:first-of-type {
-        background: radial-gradient(circle at 100% 100%, transparent calc(var(--user-tab-rounding) - 0.5px), var(--tab-group-color) calc(var(--user-tab-rounding) + 0.5px)) left top / var(--user-tab-rounding) var(--user-tab-rounding) no-repeat !important;
+    & .tabbrowser-tab > .tab-stack > .tab-background {
+        margin-top: 2px !important;
+        min-height: 0 !important;
+    }
+    /* Open, its last tab: the card's end, as far after it, rounded. */
+    &:not([collapsed]) > .tabbrowser-tab:has(+ .tab-group-overflow-count-container) {
+        border-start-end-radius: var(--user-tab-ear-rounding) !important;
 
         & > .tab-stack > .tab-background {
-            border-start-start-radius: var(--user-tab-rounding) !important;
+            margin-inline-end: 2px !important;
         }
     }
-    /* The shelf's end: Firefox's box for the count of a collapsed group (the
+    /* Its tabs in the background tinted with its color, darkened to the
+       strip's depth (lighter, the selected tab's ears were lost on them),
+       their ears too, both of them: in the card, the stack of the tabs
+       shows the one on top. */
+    & .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) {
+        --myfox-group-tint: color-mix(in srgb, color-mix(in srgb, var(--tab-group-color), black 75%) 30%, var(--myfox-strip-color));
+        --myfox-tab-ear-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-tab-fade), var(--myfox-group-tint));
+    }
+    & .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):not(:hover) > .tab-stack > .tab-background {
+        background-color: var(--myfox-group-tint) !important;
+    }
+    &:not([collapsed]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background:is(::before, ::after) {
+        display: block !important;
+    }
+    /* The card's end: Firefox's box for the count of a collapsed group (the
        last thing in it), shown with no width while the group is open: the
-       shelf's last piece, under the last tab's foot, and the ear. */
+       ear. */
     &:not([collapsed]) > .tab-group-overflow-count-container {
         display: flex !important;
         align-self: stretch !important;
@@ -107,26 +120,25 @@
         & > .tab-group-overflow-count {
             display: none !important;
         }
-        &::before,
         &::after {
             content: "" !important;
             position: absolute !important;
             pointer-events: none !important;
             background: var(--tab-group-color) !important;
-        }
-        &::before {
-            bottom: 0 !important;
-            right: 0 !important;
-            width: var(--user-tab-ear-rounding) !important;
-            height: var(--myfox-group-shelf) !important;
-        }
-        &::after {
             bottom: 0 !important;
             left: 0 !important;
             width: var(--user-tab-ear-rounding) !important;
             height: var(--user-tab-ear-rounding) !important;
             mask: var(--myfox-ear-end) !important;
         }
+    }
+    /* No ear on its side toward the selected tab where a tab in the
+       background lies next to it: that tab is see-through, and the ear
+       showed through it, mixed with its own. Next to the selected tab
+       itself the ears simply cross. Open or collapsed. */
+    &:not(:has(.tabbrowser-tab[selected], + .tabbrowser-tab[selected])):has(~ :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected]))) > .tab-group-overflow-count-container::after,
+    &:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *):not(.tabbrowser-tab[selected] + *) .tab-group-label-hover-highlight::before {
+        display: none !important;
     }
     /* Not the tabs a collapsed group hides, which Firefox narrows to nothing;
        a split view's pair as well, as wide as a tab. Nor a tab opening or
@@ -138,24 +150,6 @@
         max-width: calc(var(--tab-max-width) * var(--myfox-group-tab-width)) !important;
         flex-grow: calc(100 * var(--myfox-group-tab-width)) !important;
         flex-shrink: calc(100 * var(--myfox-group-tab-width)) !important;
-    }
-}
-
-/* A split view's pair in a group: its halves (on the tab content,
-   75-split-view.css) and their ears cover the shelf under its tabs; the
-   shelf over them instead, along the pair's bottom. */
-:root#main-window[theme-effective-id^="myfox-"] #navigator-toolbox #tabbrowser-tabs[orient="horizontal"] tab-group > tab-split-view-wrapper {
-    position: relative !important;
-
-    &::after {
-        content: "" !important;
-        position: absolute !important;
-        bottom: 0 !important;
-        inset-inline: calc(0px - var(--user-tab-ear-rounding)) !important;
-        height: var(--myfox-group-shelf) !important;
-        background: var(--tab-group-color) !important;
-        z-index: 2000000 !important;
-        pointer-events: none !important;
     }
 }
 
@@ -241,7 +235,9 @@
         left: calc(0px - var(--user-tab-ear-rounding)) !important;
         mask: var(--myfox-ear-start) !important;
     }
+    /* Firefox sets this box's ::after 2px from its start: it lay inside. */
     &[collapsed] > .tab-group-overflow-count-container::after {
+        left: auto !important;
         right: calc(0px - var(--user-tab-ear-rounding)) !important;
         mask: var(--myfox-ear-end) !important;
     }

@@ -15,6 +15,7 @@
 - The downloads sidebar panel's folder button is lit as a rounded square under the pointer, not an oval
 - The downloads sidebar panel's context menu takes the theme's colors, as the other menus do
 - The "Add bookmarklets" icon on the bookmarks toolbar always takes the toolbar's text color; it sometimes came out dark on a dark theme
+- In the tab strip a tab group is a card in its color, rounded like a tab with an ear at each end: its tabs sit in it a little lower, down to the strip's edge, tinted with its color, with no line under them; the ears of the group and of the tabs next to it no longer mix
 
 ## 159.1 — 2026-10-15
 
