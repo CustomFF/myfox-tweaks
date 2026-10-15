@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- The address bar's focus ring no longer drops its bottom edge when the dropdown is closed with Esc
+
 ## 159.1 — 2026-10-15
 
 - With vertical tabs and the sidebar expanded, pinned tabs are tabs in a row, not tiles: the selected one (or the last) a full tab joined to the page, the others their icons before it

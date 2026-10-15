@@ -36,7 +36,11 @@
     max-height: none !important;
 }
 
+/* The height counts its border too: on top of it, the box reached 1.5px
+   below the bar, which showed as the focus ring's bottom edge dropping
+   once the dropdown closed (Esc) with the bar still focused. */
 #urlbar:not([open]) .urlbar-background {
+    box-sizing: border-box !important;
     min-height: 26px !important;
 }
 
