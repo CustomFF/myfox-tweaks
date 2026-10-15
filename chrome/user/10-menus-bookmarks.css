@@ -33,10 +33,11 @@
     background-image: url("chrome://global/skin/icons/settings.svg") !important;
 }
 
-/* Relative to this file (chrome/user/), hence "../": panel-icons/ is a sibling
-   of user/, copied there from ddblm. */
+/* The profile's chrome/panel-icons/ (copied there from ddblm), by its
+   resource:// address (autoconfig/myfox/70-bookmarks.js): from file:// the
+   icon would not take the toolbar's text color. */
 .bookmark-item[myfox-role="gallery"] image {
-    background-image: url("../panel-icons/import-bookmarklets.svg") !important;
+    background-image: url("resource://myfox-panel-icons/import-bookmarklets.svg") !important;
 }
 
 /* Tighter drop-down/context/popup menu rows. */

@@ -16,6 +16,18 @@
   // one of them (with or without ?lang=) is ours and is moved to the current
   // address. Add the old address here whenever GALLERY_URL changes.
   const GALLERY_LEGACY_URLS = ["https://daydve.github.io/ddblm/"];
+  // The profile's chrome/panel-icons/ (from ddblm) as resource://myfox-panel-icons/,
+  // for the "Add bookmarklets" icon (chrome/user/10-menus-bookmarks.css): from
+  // file:// an SVG gets no context-fill, so it took its own black or white,
+  // sometimes the wrong one; from here it takes the toolbar's text color.
+  try {
+    let iconsDir = MyFox.profileDir.clone();
+    iconsDir.append("chrome");
+    iconsDir.append("panel-icons");
+    MyFox.ios.getProtocolHandler("resource").QueryInterface(Ci.nsIResProtocolHandler)
+      .setSubstitution("myfox-panel-icons", MyFox.ios.newFileURI(iconsDir));
+  } catch(e) {}
+
   const ROLE_PREFS = {
     advanced: "myfox.bookmark.advanced",
     gallery: "myfox.bookmark.gallery",

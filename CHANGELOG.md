@@ -14,6 +14,7 @@
 - The downloads panel's "Show all downloads" opens the downloads sidebar panel instead of the Library window
 - The downloads sidebar panel's folder button is lit as a rounded square under the pointer, not an oval
 - The downloads sidebar panel's context menu takes the theme's colors, as the other menus do
+- The "Add bookmarklets" icon on the bookmarks toolbar always takes the toolbar's text color; it sometimes came out dark on a dark theme
 
 ## 159.1 — 2026-10-15
 
