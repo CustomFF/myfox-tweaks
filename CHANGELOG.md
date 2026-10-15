@@ -15,6 +15,7 @@
 - Hovering a tab group's label recolors the whole group, not only the label, in the tab strip and in the vertical tab column
 - With vertical tabs collapsed to icons, every tab of a group has the group's line along its side, not only the selected one, and the group's background tabs are half see-through
 - The container line on background tabs is stronger, on dark and light themes alike
+- With vertical tabs collapsed to icons, the selected split view pair joins the page with no gap, its other half is a little darker than the selected one, and the halves cast a soft shadow on the column
 
 ## 159.0 — 2026-10-13
 

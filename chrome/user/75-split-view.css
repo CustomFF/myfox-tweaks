@@ -441,11 +441,22 @@
        overflowed the column): none, which leaves a half's icon in the middle
        of the half moved in, a little toward the column's middle from other
        tabs' icons. 1px in from the page side, as the other cards there are
-       (70-vertical-tabs-close.css). */
+       (70-vertical-tabs-close.css), but the selected pair's, which joins the
+       page. A soft shadow on the column's side sets the halves off the
+       column they are moved in from. */
     & > .tabbrowser-tab .tab-content {
         width: auto !important;
         padding-inline: 0 !important;
         margin-inline-end: 1px !important;
+        box-shadow: var(--myfox-split-vinset-shadow) !important;
+    }
+    &[hasactivetab] > .tabbrowser-tab .tab-content {
+        margin-inline-end: 0 !important;
+    }
+    /* With no titles there, the selected pair's other half is set apart by
+       its color: halfway to the tab column's. */
+    &[hasactivetab] > .tabbrowser-tab:not([selected], [usercontextid]) {
+        --myfox-split-half-bg: color-mix(in srgb, var(--tab-background-color-selected), var(--myfox-strip-color));
     }
     /* The line between the halves, drawn across their whole width, a
        short dash instead, an icon wide, over the icons. */
@@ -454,8 +465,14 @@
     }
 
     /* With the sidebar on the right, all that on the other side. */
-    &:is(:root:has(#sidebar-container[sidebar-positionend]) *) > .tabbrowser-tab .tab-content {
-        margin-inline: 1px var(--myfox-split-vinset) !important;
+    &:is(:root:has(#sidebar-container[sidebar-positionend]) *) {
+        & > .tabbrowser-tab .tab-content {
+            margin-inline: 1px var(--myfox-split-vinset) !important;
+            box-shadow: var(--myfox-split-vinset-shadow-end) !important;
+        }
+        &[hasactivetab] > .tabbrowser-tab .tab-content {
+            margin-inline-start: 0 !important;
+        }
     }
 }
 :root#main-window[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab[usercontextid] {
