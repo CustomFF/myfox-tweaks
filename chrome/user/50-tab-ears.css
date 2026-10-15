@@ -137,11 +137,15 @@
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
         overflow: visible !important;
     }
+    /* The ear is that far color as it shows on the strip, but solid: a
+       see-through one showed what it lies over (a tab group's color). */
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) {
         --myfox-tab-fade-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-tab-fade), transparent);
+        --myfox-tab-ear-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-tab-fade), var(--myfox-strip-color));
     }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) {
         --myfox-tab-fade-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-pinned-tab-fade), transparent);
+        --myfox-tab-ear-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-pinned-tab-fade), var(--myfox-strip-color));
     }
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
         position: relative !important;
@@ -162,12 +166,13 @@
         content: "" !important;
         display: block !important;
         position: absolute !important;
-        /* Level with the tab (a selected tab's ears sit 1px lower). */
-        bottom: 0 !important;
+        /* 1px lower, as a selected tab's, its widest row under the
+           navigation bar. */
+        bottom: -1px !important;
         width: var(--user-tab-ear-rounding) !important;
         height: var(--user-tab-ear-rounding) !important;
         pointer-events: none !important;
-        background: var(--myfox-tab-fade-color) !important;
+        background: var(--myfox-tab-ear-color) !important;
     }
     #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background::before {
         left: calc(0px - var(--user-tab-ear-rounding)) !important;
@@ -183,8 +188,8 @@
     }
 
     /* Hovered: solid (a translucent tab would let its ears show the
-       neighbors through), over its neighbors but under the selected tab, its
-       ears reaching down to the window as a selected tab's do. */
+       neighbors through), over its neighbors but under the selected tab,
+       with both ears, in its color. */
     #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover {
         z-index: 999999 !important;
     }
@@ -193,7 +198,6 @@
     }
     #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::before,
     #navigator-toolbox #tabbrowser-tabs:not([orient="vertical"]) .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover > .tab-stack > .tab-background::after {
-        bottom: -1px !important;
         background: inherit !important;
     }
     #TabsToolbar {
