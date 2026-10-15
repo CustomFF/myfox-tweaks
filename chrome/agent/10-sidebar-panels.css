@@ -212,6 +212,13 @@ moz-button.menu-button {
     }
 }
 
+/* The bookmarks (and the old history) panel's tree: no dotted frame of the
+   system's (yellow on GTK) round its current row while it is focused; the
+   selected row is lit already. */
+:is(#bookmarks-view, #historyTree) > treechildren::-moz-tree-row(current, focus) {
+    outline: none !important;
+}
+
 /* Synced-tabs sidebar: its empty-state card starts right under the search
    box; the history panel's card sits 9px lower. Match the two. */
 fxview-empty-state.synced-tabs {
