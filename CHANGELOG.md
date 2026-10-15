@@ -13,6 +13,7 @@
 - On light themes the tab strip and the vertical tab column are a little darker
 - A split view's pair of tabs has no backing or shadows of its own: in the background it fades across both halves as one tab does, and selected, both halves are the selected tab's color, the other half no longer dimmed
 - Hovering a tab group's label recolors the whole group, not only the label, in the tab strip and in the vertical tab column
+- With vertical tabs collapsed to icons, every tab of a group has the group's line along its side, not only the selected one, and the group's background tabs are half see-through
 
 ## 159.0 — 2026-10-13
 

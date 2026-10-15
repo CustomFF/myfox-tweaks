@@ -532,10 +532,10 @@
 /* Sidebar collapsed to a strip of icons: no tree. The group's label a bar
    across the strip like its tabs, the + or − (or the count) in the middle,
    in place of the name's first letter Firefox puts there; the tabs in the
-   background on the group's color, their icons on it (on a dark theme its
-   deep shade: Firefox's own is pale there, and the light icons are lost on
-   it; hovered, the hover shade); the selected one on its own card, with
-   the group's line along its outer side. */
+   background on the group's color, half see-through, their icons on it (on
+   a dark theme its deep shade: Firefox's own is pale there, and the light
+   icons are lost on it; hovered, the hover shade, solid); the selected one
+   on its own card; the group's line along the outer side of every tab. */
 :root[theme-effective-id^="myfox-"] #sidebar-container:not([sidebar-launcher-expanded]) #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-group {
     --myfox-group-fill: var(--tab-group-color);
     --myfox-group-fill-hover: var(--tab-group-background-color-hover);
@@ -581,7 +581,7 @@
         }
     }
     & > .tabbrowser-tab:not([selected], [multiselected]) > .tab-stack > .tab-background {
-        background-color: var(--myfox-group-fill) !important;
+        background-color: color-mix(in srgb, var(--myfox-group-fill) 50%, transparent) !important;
         /* One block of the group's color across the column: no gap at
            either side (the column's edge showed through), no shadow, no
            ears. */
@@ -595,6 +595,21 @@
     }
     & > .tabbrowser-tab:not([selected], [multiselected]):hover > .tab-stack > .tab-background {
         background-color: var(--myfox-group-fill-hover) !important;
+    }
+    & > .tabbrowser-tab:not([selected], [multiselected]) {
+        position: relative !important;
+
+        &::after {
+            content: "" !important;
+            position: absolute !important;
+            inset-block: 0 !important;
+            inset-inline-start: 0 !important;
+            width: var(--myfox-group-edge) !important;
+            background: var(--tab-group-color) !important;
+            /* Over the tab's card. */
+            z-index: 2 !important;
+            pointer-events: none !important;
+        }
     }
     & > .tabbrowser-tab:is([selected], [multiselected]) {
         /* Above it is the group's color (the label or a tab of the group):
@@ -648,6 +663,9 @@
 
     /* With the sidebar on the right, all that on the other side. */
     &:is(:root:has(#sidebar-container[sidebar-positionend]) *) {
+        & > .tabbrowser-tab:not([selected], [multiselected])::after {
+            inset-inline: auto 0 !important;
+        }
         & > .tabbrowser-tab:is([selected], [multiselected]) {
             background-position: 100% 0 !important;
 
