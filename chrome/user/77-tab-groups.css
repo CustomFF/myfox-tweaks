@@ -85,10 +85,11 @@
     &[collapsed] > .tabbrowser-tab[selected] {
         background: var(--tab-group-color) !important;
     }
-    /* The first tab's corner by the label rounded on the group's color,
-       even where it is a card's tucked corner, square (50-tab-ears.css). */
+    /* The first tab's corner by the label rounded on the group's color:
+       the color only outside the rounding (a background tab is see-through,
+       a square of it showed through the tab). */
     & > .tabbrowser-tab:first-of-type {
-        background: linear-gradient(var(--tab-group-color), var(--tab-group-color)) left top / var(--user-tab-rounding) var(--user-tab-rounding) no-repeat !important;
+        background: radial-gradient(circle at 100% 100%, transparent calc(var(--user-tab-rounding) - 0.5px), var(--tab-group-color) calc(var(--user-tab-rounding) + 0.5px)) left top / var(--user-tab-rounding) var(--user-tab-rounding) no-repeat !important;
 
         & > .tab-stack > .tab-background {
             border-start-start-radius: var(--user-tab-rounding) !important;
