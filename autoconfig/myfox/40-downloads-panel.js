@@ -94,6 +94,8 @@
         updateSearchVisibility();
       });
       listObserver.observe(list, { childList: true });
+      list.addEventListener("keydown", e => tabThroughDownloads(e, list), true);
+      list.addEventListener("mousedown", () => list.removeAttribute("myfox-keyboard"), true);
     }
 
     // Footer at the bottom
@@ -131,6 +133,23 @@
     });
     footer.appendChild(clearBtn);
     rootEl.appendChild(footer);
+  }
+
+  // Tab and Shift+Tab step through the downloads, not over the whole list at
+  // once; past the first or the last one they leave the list as usual. The
+  // list is marked for the focus ring: a list focused with the mouse stays
+  // out of :focus-visible when Tab is pressed in it.
+  function tabThroughDownloads(e, list) {
+    if (e.key !== "Tab" || e.ctrlKey || e.altKey || e.metaKey) return;
+    let items = [...list.querySelectorAll(":scope > richlistitem.download")]
+      .filter(item => item.getBoundingClientRect().height > 0);
+    let next = items[items.indexOf(list.selectedItem) + (e.shiftKey ? -1 : 1)];
+    if (!next || !list.selectedItem) return;
+    e.preventDefault();
+    e.stopPropagation();
+    list.setAttribute("myfox-keyboard", "true");
+    list.selectedItem = next;
+    list.ensureElementIsVisible(next);
   }
 
   MyFox.sidebarHooks.push(({ sbCtrl, sidebar, doc }) => injectSearch(sidebar.contentDocument, sbCtrl, doc));

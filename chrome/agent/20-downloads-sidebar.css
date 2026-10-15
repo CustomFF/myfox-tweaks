@@ -118,6 +118,16 @@ richlistitem.download:focus,
 richlistitem.download:focus-visible {
     outline: none !important;
 }
+/* From the keyboard (Tab steps through the downloads, see
+   autoconfig/myfox/40-downloads-panel.js): the focus ring on the selected
+   download, as on other controls. */
+#downloadsListBox:focus-visible {
+    outline: none !important;
+}
+#downloadsListBox:is(:focus-visible, [myfox-keyboard]:focus) > richlistitem.download[selected] {
+    outline: var(--myfox-focus-border) !important;
+    outline-offset: calc(-1 * var(--myfox-focus-width)) !important;
+}
 .downloadMainArea {
     min-height: 36px !important;
     max-height: 36px !important;
