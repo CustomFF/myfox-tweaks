@@ -256,6 +256,11 @@ moz-visual-picker-item {
     .add-button:focus-within {
         opacity: 1 !important;
     }
+    /* The weather widget's "change location" field: a pill (the circle
+       radius) otherwise. */
+    .weather-widget .location-input {
+        border-radius: var(--myfox-radius) !important;
+    }
 }
 
 /* about:config: its search field as tall as the other fields (26px, see
