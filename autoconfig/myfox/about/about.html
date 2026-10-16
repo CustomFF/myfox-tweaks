@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!-- about:myfox (see ../15-about-page.js). Its texts are filled in by
+     about.js from the modules' string catalogs (../i18n/). Its files by
+     their resource:// addresses: relative ones resolve against about:myfox. -->
+<html id="myfox-root">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <title>MyFox tweaks</title>
+  <link rel="icon" href="chrome://branding/content/icon32.png">
+  <link rel="stylesheet" href="chrome://global/skin/global.css">
+  <link rel="stylesheet" href="chrome://global/skin/in-content/common.css">
+  <link rel="stylesheet" href="resource://myfox/about/about.css">
+  <script src="resource://myfox/about/about.js"></script>
+</head>
+<body>
+  <nav id="nav">
+    <h1 id="nav-title">MyFox tweaks</h1>
+    <a class="nav-item" href="#about" data-section="about" data-l10n="aboutpage.nav.about"></a>
+    <a class="nav-item" href="#changelog" data-section="changelog" data-l10n="aboutpage.nav.changelog"></a>
+  </nav>
+  <main>
+    <section id="about" hidden>
+      <h2 data-l10n="aboutpage.nav.about"></h2>
+      <div class="box intro">
+        <img class="cat" src="resource://myfox/about/cat.svg" alt="">
+        <div>
+          <p data-l10n="aboutpage.about.text"></p>
+          <p id="about-version"></p>
+        </div>
+      </div>
+      <h3 data-l10n="aboutpage.links.heading"></h3>
+      <div class="box links">
+        <a href="https://github.com/CustomFF/myfox-tweaks" data-l10n="aboutpage.links.tweaks"></a>
+        <a href="https://github.com/CustomFF/myfox" data-l10n="aboutpage.links.myfox"></a>
+        <a href="https://customff.github.io/ddblm/" data-l10n="aboutpage.links.bookmarklets"></a>
+      </div>
+    </section>
+    <section id="changelog" hidden>
+      <h2 data-l10n="aboutpage.nav.changelog"></h2>
+      <div id="changelog-list"></div>
+    </section>
+  </main>
+</body>
+</html>

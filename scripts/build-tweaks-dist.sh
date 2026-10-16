@@ -12,9 +12,16 @@ mkdir -p "$out_dir"
 
 python3 scripts/changelog_to_json.py -o "$out_dir/changelog.json"
 
+# about:myfox shows the changelog: a copy of changelog.json goes next to
+# its page (autoconfig/myfox/about/), in the archive only.
+stage="$(mktemp -d)"
+trap 'rm -rf "$stage"' EXIT
+cp -r autoconfig chrome "$stage/"
+cp "$out_dir/changelog.json" "$stage/autoconfig/myfox/about/changelog.json"
+
 tar --exclude='__pycache__' --exclude='*.pyc' --exclude='*.swp' --exclude='*~' \
     --exclude='.DS_Store' --owner=0 --group=0 --numeric-owner \
-    -czf "$out_dir/myfox-tweaks.tar.gz" autoconfig chrome
+    -czf "$out_dir/myfox-tweaks.tar.gz" -C "$stage" autoconfig chrome
 
 echo "build-tweaks-dist: $out_dir/myfox-tweaks.tar.gz"
 echo "build-tweaks-dist: $out_dir/changelog.json"

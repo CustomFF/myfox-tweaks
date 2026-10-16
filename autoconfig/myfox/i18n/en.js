@@ -38,5 +38,17 @@
     "toolbar.bookmarks.tooltip": "Show/hide bookmarks toolbar (Ctrl+Shift+B)",
 
     "tabs.unpin": "Unpin Tab",
+
+    "aboutpage.title": "MyFox tweaks",
+    "aboutpage.nav.about": "About",
+    "aboutpage.nav.changelog": "Changelog",
+    "aboutpage.about.version": "Version {0}",
+    "aboutpage.about.versionDev": "A development copy, not a release",
+    "aboutpage.about.text": "MyFox tweaks is a set of user styles and settings for Firefox that changes how it looks and works: it brings back what Mozilla took out, adds what Firefox never had, and keeps the interface the way it is comfortable to use every day.",
+    "aboutpage.links.heading": "Links",
+    "aboutpage.links.tweaks": "The tweaks on GitHub",
+    "aboutpage.links.myfox": "The MyFox installer on GitHub",
+    "aboutpage.links.bookmarklets": "Bookmarklet gallery",
+    "aboutpage.changelog.missing": "The changelog comes with releases; read it on GitHub",
   };
 })(globalThis.MyFox);

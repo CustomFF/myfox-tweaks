@@ -35,5 +35,17 @@
     "toolbar.bookmarks.tooltip": "Показать/скрыть панель закладок (Ctrl+Shift+B)",
 
     "tabs.unpin": "Открепить вкладку",
+
+    "aboutpage.title": "MyFox tweaks",
+    "aboutpage.nav.about": "О проекте",
+    "aboutpage.nav.changelog": "Изменения",
+    "aboutpage.about.version": "Версия {0}",
+    "aboutpage.about.versionDev": "Копия для разработки, не из релиза",
+    "aboutpage.about.text": "MyFox tweaks — набор пользовательских стилей и настроек для Firefox, который меняет его внешний вид и поведение: возвращает то, что Mozilla убрала, добавляет то, чего в нём не было, и держит интерфейс таким, каким им удобно пользоваться каждый день.",
+    "aboutpage.links.heading": "Ссылки",
+    "aboutpage.links.tweaks": "Твики на GitHub",
+    "aboutpage.links.myfox": "Установщик MyFox на GitHub",
+    "aboutpage.links.bookmarklets": "Галерея букмарклетов",
+    "aboutpage.changelog.missing": "Список изменений приходит с релизами; его можно прочитать на GitHub",
   };
 })(globalThis.MyFox);

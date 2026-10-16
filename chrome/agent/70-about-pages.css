@@ -274,14 +274,14 @@ moz-visual-picker-item {
     }
 }
 
-/* about:preferences and about:addons ("Add-ons and themes", known by its
-   drop zone: its root has no id): the page and its boxes in the MyFox
+/* about:preferences, about:addons ("Add-ons and themes", known by its
+   drop zone: its root has no id) and our about:myfox: the page and its boxes in the MyFox
    themes' grays instead of Firefox's violet-tinged ones. These pages follow
    the website appearance setting (light or dark), not the theme, so the
    colors are both themes' at once, picked the same way: the page as the
    address field (dark) or the toolbar (light), a box as the toolbar (dark)
    or the address field (light); see the themes' manifest.json files. */
-:is(#preferences-root, :root:has(> body > drag-drop-addon-installer)):is(:root) {
+:is(#preferences-root, #myfox-root, :root:has(> body > drag-drop-addon-installer)):is(:root) {
     --background-color-canvas: light-dark(rgb(236, 234, 230), rgb(40, 44, 47)) !important;
     --background-color-box: light-dark(rgb(252, 251, 250), rgb(50, 54, 57)) !important;
 }
