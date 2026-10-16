@@ -19,6 +19,7 @@
 - The bookmarks sidebar panel's tree has no dotted frame round its current row
 - The extensions sidebar panel's "..." menu is a real menu, looking like all the others
 - On a dark theme the sidebar is a little darker, so menus opened over it stand out
+- The settings and "Add-ons and themes" pages have the MyFox themes' grays instead of Firefox's violet-tinged ones, light or dark as the website appearance setting says
 
 ## 159.1 — 2026-10-15
 
