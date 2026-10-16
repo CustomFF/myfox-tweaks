@@ -83,3 +83,28 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
     min-height: 24px !important;
     padding-block: 2px !important;
 }
+
+/* The form fields' autocomplete (saved entries under a field): shaped as
+   the other menus, in the colors Firefox gives it, the field's (it belongs
+   to the page, light or dark as the page is). Firefox puts room round its
+   items, rounds them and frames the one chosen with the keyboard in the
+   accent. */
+#PopupAutoComplete {
+    --panel-padding: 4px 0 !important;
+
+    & > richlistbox {
+        padding: 0 !important;
+    }
+    & richlistitem.autocomplete-row-item > autocomplete-row-item {
+        border: none !important;
+        border-radius: 0 !important;
+        --row-item-border-radius: 0px !important;
+        /* Lit by the row's selection below (Firefox selects the row under
+           the pointer too), not by the row's own hover as well. */
+        --button-background-color-hover: transparent !important;
+        --button-text-color-hover: currentColor !important;
+    }
+    & richlistitem.autocomplete-row-item[selected] > autocomplete-row-item {
+        background-color: color-mix(in srgb, currentColor 15%, transparent) !important;
+    }
+}
