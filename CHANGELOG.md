@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- about:myfox links to the bookmarklets' and the userscripts' repositories
+
 ## 159.3 — 2026-10-16
 
 - about:myfox: a page of the tweaks' own, with the installed version and the full changelog

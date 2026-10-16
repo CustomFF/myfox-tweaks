@@ -45,7 +45,8 @@
     "aboutpage.links.heading": "Ссылки",
     "aboutpage.links.tweaks": "Твики на GitHub",
     "aboutpage.links.myfox": "Установщик MyFox на GitHub",
-    "aboutpage.links.bookmarklets": "Галерея букмарклетов",
+    "aboutpage.links.bookmarklets": "Букмарклеты на GitHub",
+    "aboutpage.links.userscripts": "Юзерскрипты на GitHub",
     "aboutpage.changelog.missing": "Список изменений приходит с релизами; его можно прочитать на GitHub",
   };
 })(globalThis.MyFox);

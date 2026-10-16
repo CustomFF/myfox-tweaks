@@ -48,7 +48,8 @@
     "aboutpage.links.heading": "Links",
     "aboutpage.links.tweaks": "The tweaks on GitHub",
     "aboutpage.links.myfox": "The MyFox installer on GitHub",
-    "aboutpage.links.bookmarklets": "Bookmarklet gallery",
+    "aboutpage.links.bookmarklets": "The bookmarklets on GitHub",
+    "aboutpage.links.userscripts": "The userscripts on GitHub",
     "aboutpage.changelog.missing": "The changelog comes with releases; read it on GitHub",
   };
 })(globalThis.MyFox);
