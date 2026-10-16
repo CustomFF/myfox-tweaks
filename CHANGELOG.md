@@ -17,6 +17,7 @@
 - The "Add bookmarklets" icon on the bookmarks toolbar always takes the toolbar's text color; it sometimes came out dark on a dark theme
 - In the tab strip a tab group is a card in its color, rounded like a tab with an ear at each end: its tabs sit in it a little lower, down to the strip's edge, tinted with its color, with no line under them; the ears of the group and of the tabs next to it no longer mix
 - The bookmarks sidebar panel's tree has no dotted frame round its current row
+- The extensions sidebar panel's "..." menu is a real menu, looking like all the others
 
 ## 159.1 — 2026-10-15
 

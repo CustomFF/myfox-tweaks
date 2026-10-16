@@ -94,40 +94,6 @@
         fill: currentColor !important;
     }
 
-    #myfox-addons-menu {
-        position: fixed !important;
-        z-index: 10 !important;
-        min-width: 140px !important;
-        padding: 4px !important;
-        background: color-mix(in srgb, var(--sidebar-background-color, Canvas) 88%, CanvasText) !important;
-        border: 1px solid color-mix(in srgb, currentColor 20%, transparent) !important;
-        border-radius: var(--myfox-radius) !important;
-        box-shadow: var(--myfox-shadow) !important;
-    }
-    .myfox-menu-item {
-        appearance: none !important;
-        display: block !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        height: 26px !important;
-        margin: 0 !important;
-        padding: 0 8px !important;
-        border: none !important;
-        border-radius: 0 !important;
-        background: transparent !important;
-        color: inherit !important;
-        font: inherit !important;
-        text-align: start !important;
-        cursor: pointer !important;
-    }
-    .myfox-menu-item:hover:not(:disabled) {
-        background: color-mix(in srgb, currentColor 12%, transparent) !important;
-    }
-    .myfox-menu-item:disabled {
-        opacity: 0.4 !important;
-        cursor: default !important;
-    }
-
     /* Nothing installed: illustration and a way to the first extension, in
        the style of the synced-tabs empty state. */
     #myfox-addons-empty {

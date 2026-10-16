@@ -47,12 +47,16 @@
     const openAmoSearch = (query) =>
       openAmo("/firefox/search/?type=extension&q=" + encodeURIComponent(query));
 
-    // Per-row "..." menu: one floating element reused for every row.
-    let menu = mk("div", "myfox-addons-menu");
-    menu.hidden = true;
-    panel.appendChild(menu);
-    let menuAnchor = null;
-    const closeMenu = () => { menu.hidden = true; menuAnchor = null; };
+    // Per-row "..." menu: a menu of the browser window's, as the sidebar's
+    // other context menus are, so it looks like every other menu
+    // (chrome/user/82-menu-rows.css); one, refilled for each row.
+    let menu = doc.getElementById("myfox-addons-menu");
+    if (!menu) {
+      menu = doc.createXULElement("menupopup");
+      menu.id = "myfox-addons-menu";
+      doc.getElementById("mainPopupSet").appendChild(menu);
+    }
+    const closeMenu = () => { try { menu.hidePopup(); } catch(ex) {} };
     const openMgr = (view) => {
       try { win.BrowserAddonUI.openAddonsMgr(view); } catch(ex) {}
     };
@@ -69,14 +73,13 @@
       } catch(ex) {}
     }
     function showMenu(addon, anchor) {
-      if (!menu.hidden && menuAnchor === anchor) { closeMenu(); return; }
       menu.textContent = "";
       const item = (label, fn, disabled) => {
-        let b = mk("button", null, "myfox-menu-item");
-        b.textContent = label;
-        b.disabled = !!disabled;
-        b.addEventListener("click", () => { closeMenu(); fn(); });
-        menu.appendChild(b);
+        let mi = doc.createXULElement("menuitem");
+        mi.setAttribute("label", label);
+        if (disabled) mi.setAttribute("disabled", "true");
+        mi.addEventListener("command", fn);
+        menu.appendChild(mi);
       };
       let view = "addons://detail/" + encodeURIComponent(addon.id);
       if (addon.optionsURL) {
@@ -85,22 +88,9 @@
       item(t("addons.menu.manage"), () => openMgr(view));
       item(t("addons.menu.remove"), () => removeAddon(addon),
         !(addon.permissions & AddonManager.PERM_CAN_UNINSTALL));
-      menu.hidden = false;
-      menuAnchor = anchor;
-      // Under the button, right-aligned; above it if there is no room.
-      let r = anchor.getBoundingClientRect();
-      let mw = menu.offsetWidth, mh = menu.offsetHeight;
-      let vw = sbWin.innerWidth, vh = sbWin.innerHeight;
-      let top = r.bottom + 2;
-      if (top + mh > vh - 4) top = Math.max(4, r.top - mh - 2);
-      menu.style.left = Math.max(4, Math.min(r.right - mw, vw - mw - 4)) + "px";
-      menu.style.top = top + "px";
+      // Under the button, its right edge at the button's.
+      menu.openPopup(anchor, "after_end");
     }
-    sidebarDoc.addEventListener("click", ev => {
-      if (!menu.hidden && !menu.contains(ev.target) && !ev.target.closest(".myfox-addon-more")) closeMenu();
-    }, true);
-    sidebarDoc.addEventListener("keydown", ev => { if (ev.key === "Escape") closeMenu(); });
-    sbWin.addEventListener("blur", closeMenu);
     list.addEventListener("scroll", closeMenu);
 
     let renderToken = 0;
