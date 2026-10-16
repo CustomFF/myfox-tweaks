@@ -7,6 +7,12 @@ on a Firefox you already have installed.
 
 ## Apply by hand
 
+Take the files from `myfox-tweaks.tar.gz` of the latest
+[release](https://github.com/CustomFF/myfox-tweaks/releases/latest), not from a
+clone: the archive also carries the changelog that `about:myfox` shows, and
+its version. A copy from the repository works too, but `about:myfox` then
+calls itself a development copy and links to the changelog on GitHub.
+
 Two destinations: the Firefox **install** (the directory with the `firefox`
 binary) and the **profile** (`about:support` → "Profile Folder").
 
