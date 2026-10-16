@@ -22,7 +22,7 @@ binary) and the **profile** (`about:support` → "Profile Folder").
 4. Restart Firefox.
 
 To also install a theme, copy its signed `.xpi` (from this repo's
-[Releases](https://github.com/CustomFF/tweaks/releases) — `build/signed/`
+[Releases](https://github.com/CustomFF/myfox-tweaks/releases) — `build/signed/`
 if building locally, see "Developing" below) into `<profile>/extensions/<id>.xpi`:
 `myfox-dark-theme@daydve.github.io.xpi` or `myfox-light-theme@daydve.github.io.xpi`.
 
