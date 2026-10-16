@@ -18,6 +18,7 @@
 - In the tab strip a tab group is a card in its color, rounded like a tab with an ear at each end: its tabs sit in it a little lower, down to the strip's edge, tinted with its color, with no line under them; the ears of the group and of the tabs next to it no longer mix
 - The bookmarks sidebar panel's tree has no dotted frame round its current row
 - The extensions sidebar panel's "..." menu is a real menu, looking like all the others
+- On a dark theme the sidebar is a little darker, so menus opened over it stand out
 
 ## 159.1 — 2026-10-15
 
