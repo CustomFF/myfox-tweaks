@@ -93,34 +93,47 @@ async function initCommandSetting() {
   document.getElementById("command-box").hidden = false;
   let toggle = document.getElementById("command-toggle");
   let status = document.getElementById("command-status");
-  toggle.ariaLabel = t("aboutpage.command.label");
+  let title = t("aboutpage.command.label");
+  toggle.ariaLabel = title;
   let [before, after] = t("aboutpage.command.desc", "\0").split("\0");
   let code = document.createElement("code");
   code.textContent = "firefox";
   document.getElementById("command-desc").append(before, code, after ?? "");
 
-  // One quiet line at most: an error, or why the command, switched on,
-  // doesn't reach this Firefox yet. MyFox's own notes are for its command
-  // line; what they warn of before switching on, the confirmation says.
+  // A MyFox with "command-backup" says where the backup of another
+  // `firefox` is and can switch off without restoring it. Then another
+  // `firefox` where the command goes while the backup's place is taken
+  // too leaves MyFox nowhere to put it: it won't switch on.
+  let canKeep = myfox.features.includes("command-backup");
+  let blocked = (state) => canKeep && !state.on && !!state.replaces && !!state.backup;
+
+  // One line at most under the setting: an error, why it can't be
+  // switched on, or why, switched on, the command doesn't reach this
+  // Firefox yet. MyFox's own notes are for its command line.
   let show = (state) => {
     let text = "", title = "";
     if (state.error) {
       text = state.error;
     } else {
       toggle.pressed = !!state.on;
-      // The PATH checked is the one Firefox was started with (the desktop
-      // session's when started from a menu), not a terminal's.
-      if (state.on && state.path === "shadowed" && state.found_first) {
+      if (blocked(state)) {
+        text = t("aboutpage.command.blocked", state.replaces, state.backup);
+      } else if (state.on && state.path === "shadowed" && state.found_first) {
         text = t("aboutpage.command.shadowed", state.found_first);
       } else if (state.on && state.path === "not_in_path") {
         text = t("aboutpage.command.notInPath", PathUtils.parent(state.link));
       }
-      if (text) title = t("aboutpage.command.pathHint");
+      // The PATH checked is the one Firefox was started with (the desktop
+      // session's when started from a menu), not a terminal's.
+      if (text && !blocked(state)) title = t("aboutpage.command.pathHint");
     }
     status.textContent = text;
     status.title = title;
     status.classList.toggle("error", !!state.error);
     status.hidden = !text;
+    // The attribute, not the property: the property doesn't take it off,
+    // and a form control with it gets no events.
+    toggle.toggleAttribute("disabled", !!state.error || blocked(state));
   };
 
   // Without a first state there is nothing to switch: the setting stays
@@ -128,23 +141,41 @@ async function initCommandSetting() {
   let state = await runCommand(myfox.launcher, []);
   show(state);
   if (state.error) return;
-  // The attribute, not the property: the property doesn't take it off, and
-  // a form control with it gets no events.
-  toggle.toggleAttribute("disabled", false);
+
+  // Another `firefox` where the command goes is the user's: switching on,
+  // MyFox keeps it aside as a backup, and the page says so afterwards.
+  // Switching off, the user is asked whether to restore it (an older
+  // MyFox always restores it).
   toggle.addEventListener("toggle", async () => {
     let on = toggle.pressed;
-    // Another `firefox` there: MyFox keeps it aside and puts it back when
-    // switched off, but it is the user's, so ask first.
-    if (on && state.replaces && !window.confirm(t("aboutpage.command.replace", state.replaces))) {
-      toggle.pressed = false;
-      return;
+    let args = [on ? "on" : "off"];
+    if (!on && canKeep && state.backup) {
+      let ps = Services.prompt;
+      let choice = ps.confirmEx(window, title, t("aboutpage.command.restore", state.backup),
+        ps.BUTTON_POS_0 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_1 * ps.BUTTON_TITLE_CANCEL +
+          ps.BUTTON_POS_2 * ps.BUTTON_TITLE_IS_STRING,
+        t("aboutpage.command.restoreButton"), null, t("aboutpage.command.keepButton"), null, {});
+      if (choice === 1) {
+        toggle.pressed = true;
+        return;
+      }
+      if (choice === 2) args.push("--keep-backup");
     }
+    let replaced = on ? state.replaces : null;
     toggle.toggleAttribute("disabled", true);
-    let next = await runCommand(myfox.launcher, [on ? "on" : "off"]);
-    if (next.error) toggle.pressed = !on;
-    else state = next;
+    let next = await runCommand(myfox.launcher, args);
+    if (next.error) {
+      toggle.pressed = !on;
+      toggle.toggleAttribute("disabled", false);
+    } else {
+      state = next;
+    }
     show(next);
-    toggle.toggleAttribute("disabled", false);
+    if (next.error) toggle.toggleAttribute("disabled", false);
+    if (replaced && !next.error) {
+      let backup = next.backup || replaced + ".myfox-backup";
+      Services.prompt.alert(window, title, t("aboutpage.command.savedBackup", replaced, backup));
+    }
   });
 }
 

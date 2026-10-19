@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- System integration on about:myfox: switching on tells afterwards where another `firefox` was kept; with MyFox 1.1.20 or newer, switching off asks whether to restore it, and the switch can't be turned on while there is nowhere to keep it
+
 ## 159.5 — 2026-10-19
 
 - about:myfox's Settings have "Appearance": light or dark, a small picture of each, switching both the MyFox theme and the websites' appearance; under another theme neither is chosen
