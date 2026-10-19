@@ -42,9 +42,118 @@ async function loadChangelog() {
   }
 }
 
+// "The firefox command" (MyFox >= 1.1.18): `firefox` on the command line
+// runs this Firefox. MyFox does all of it; the page asks its launcher, named
+// in <install>/myfox.json, for the state and to switch it, and shows what it
+// answers. Tweaks put in by hand have no such file, and MyFox may since have
+// been removed: no file, no "command" among its features, or no runnable
+// launcher, and there is no setting at all.
+async function loadMyfox() {
+  try {
+    let install = Services.dirsvc.get("GreD", Ci.nsIFile).path;
+    let info = await IOUtils.readJSON(PathUtils.join(install, "myfox.json"));
+    if (!info.features?.includes("command") || !info.launcher) return null;
+    let { type, permissions } = await IOUtils.stat(info.launcher);
+    return type === "regular" && (permissions & 0o111) ? info : null;
+  } catch(e) {
+    return null;
+  }
+}
+
+// One `<launcher> command ... --json` run: its JSON answer, or {error}. The
+// child gets Firefox's environment (HOME, PATH, LANG: the paths and the
+// language of its notes depend on it).
+async function runCommand(launcher, args) {
+  try {
+    const { Subprocess } = ChromeUtils.importESModule("resource://gre/modules/Subprocess.sys.mjs");
+    let proc = await Subprocess.call({
+      command: launcher,
+      arguments: ["command", ...args, "--json"],
+      environmentAppend: true,
+      stderr: "pipe",
+    });
+    let out = "", chunk;
+    while ((chunk = await proc.stdout.readString())) out += chunk;
+    let err = "";
+    while ((chunk = await proc.stderr.readString())) err += chunk;
+    let { exitCode } = await proc.wait();
+    try {
+      return JSON.parse(out.trim());
+    } catch(e) {
+      return { error: (err || out).trim() || t("aboutpage.command.failed", exitCode) };
+    }
+  } catch(e) {
+    return { error: String(e.message || e) };
+  }
+}
+
+async function initCommandSetting() {
+  let myfox = await loadMyfox();
+  if (!myfox) return;
+  document.querySelector('.nav-item[data-section="settings"]').hidden = false;
+  showSection();
+  let toggle = document.getElementById("command-toggle");
+  let status = document.getElementById("command-status");
+  toggle.ariaLabel = t("aboutpage.command.label");
+  let [before, after] = t("aboutpage.command.desc", "\0").split("\0");
+  let code = document.createElement("code");
+  code.textContent = "firefox";
+  document.getElementById("command-desc").append(before, code, after ?? "");
+
+  // One quiet line at most: an error, or why the command, switched on,
+  // doesn't reach this Firefox yet. MyFox's own notes are for its command
+  // line; what they warn of before switching on, the confirmation says.
+  let show = (state) => {
+    let text = "", title = "";
+    if (state.error) {
+      text = state.error;
+    } else {
+      toggle.pressed = !!state.on;
+      // The PATH checked is the one Firefox was started with (the desktop
+      // session's when started from a menu), not a terminal's.
+      if (state.on && state.path === "shadowed" && state.found_first) {
+        text = t("aboutpage.command.shadowed", state.found_first);
+      } else if (state.on && state.path === "not_in_path") {
+        text = t("aboutpage.command.notInPath", PathUtils.parent(state.link));
+      }
+      if (text) title = t("aboutpage.command.pathHint");
+    }
+    status.textContent = text;
+    status.title = title;
+    status.classList.toggle("error", !!state.error);
+    status.hidden = !text;
+  };
+
+  // Without a first state there is nothing to switch: the setting stays
+  // off and greyed, with the reason under it.
+  let state = await runCommand(myfox.launcher, []);
+  show(state);
+  if (state.error) return;
+  // The attribute, not the property: the property doesn't take it off, and
+  // a form control with it gets no events.
+  toggle.toggleAttribute("disabled", false);
+  toggle.addEventListener("toggle", async () => {
+    let on = toggle.pressed;
+    // Another `firefox` there: MyFox keeps it aside and puts it back when
+    // switched off, but it is the user's, so ask first.
+    if (on && state.replaces && !window.confirm(t("aboutpage.command.replace", state.replaces))) {
+      toggle.pressed = false;
+      return;
+    }
+    toggle.toggleAttribute("disabled", true);
+    let next = await runCommand(myfox.launcher, [on ? "on" : "off"]);
+    if (next.error) toggle.pressed = !on;
+    else state = next;
+    show(next);
+    toggle.toggleAttribute("disabled", false);
+  });
+}
+
 function showSection() {
+  // A section whose menu item is hidden (settings without MyFox) isn't one.
   let id = location.hash.slice(1);
-  if (!document.getElementById(id)?.matches("section")) id = "about";
+  let item = document.querySelector(`.nav-item[data-section="${CSS.escape(id)}"]`);
+  if (!document.getElementById(id)?.matches("section") || !item || item.hidden) id = "about";
   for (let section of document.querySelectorAll("main > section")) {
     section.hidden = section.id !== id;
   }
@@ -61,6 +170,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.title = t("aboutpage.title");
   showSection();
   window.addEventListener("hashchange", showSection);
+  initCommandSetting();
 
   let versions = await loadChangelog();
   let version = document.getElementById("about-version");

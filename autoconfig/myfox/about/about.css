@@ -88,6 +88,40 @@ h3 {
     font-weight: normal;
     opacity: 0.6;
 }
+/* Settings: the label and its note on the left, the switch on the right. */
+.setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+.setting-desc {
+    margin-top: 2px;
+    opacity: 0.7;
+}
+/* What keeps the setting from working: an icon in the warning (or error)
+   color before it, so it doesn't read as one more line of description. */
+.setting-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+.setting-status::before {
+    content: "";
+    flex: none;
+    width: 16px;
+    height: 16px;
+    background-color: var(--icon-color-warning, #ffa436);
+    mask: url("chrome://global/skin/icons/warning.svg") center / contain no-repeat;
+}
+.setting-status.error {
+    color: var(--text-color-error, #e22850);
+}
+.setting-status.error::before {
+    background-color: currentColor;
+    mask-image: url("chrome://global/skin/icons/error.svg");
+}
 #changelog-list ul {
     margin: 0;
     padding-inline-start: 20px;

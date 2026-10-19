@@ -52,5 +52,13 @@
     "aboutpage.links.bookmarklets": "The bookmarklets on GitHub",
     "aboutpage.links.userscripts": "The userscripts on GitHub",
     "aboutpage.changelog.missing": "The changelog comes with releases; read it on GitHub",
+    "aboutpage.nav.settings": "Settings",
+    "aboutpage.command.label": "System integration",
+    "aboutpage.command.desc": "The {0} command in a terminal and in scripts opens the Firefox MyFox installed",
+    "aboutpage.command.replace": "firefox now starts {0}. It will be kept aside and put back when this is switched off. Switch on?",
+    "aboutpage.command.pathHint": "Checked against the PATH this browser was started with; a terminal's may differ",
+    "aboutpage.command.shadowed": "Not working yet: {0} comes first in PATH",
+    "aboutpage.command.notInPath": "Not working yet: {0} is not in PATH",
+    "aboutpage.command.failed": "MyFox could not run the command (code {0})",
   };
 })(globalThis.MyFox);

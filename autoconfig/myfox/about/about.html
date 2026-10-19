@@ -12,12 +12,14 @@
   <link rel="stylesheet" href="chrome://global/skin/in-content/common.css">
   <link rel="stylesheet" href="resource://myfox/about/about.css">
   <script src="resource://myfox/about/about.js"></script>
+  <script type="module" src="chrome://global/content/elements/moz-toggle.mjs"></script>
 </head>
 <body>
   <nav id="nav">
     <h1 id="nav-title">MyFox tweaks</h1>
     <a class="nav-item" href="#about" data-section="about" data-l10n="aboutpage.nav.about"></a>
     <a class="nav-item" href="#changelog" data-section="changelog" data-l10n="aboutpage.nav.changelog"></a>
+    <a class="nav-item" href="#settings" data-section="settings" data-l10n="aboutpage.nav.settings" hidden></a>
   </nav>
   <main>
     <section id="about" hidden>
@@ -40,6 +42,19 @@
     <section id="changelog" hidden>
       <h2 data-l10n="aboutpage.nav.changelog"></h2>
       <div id="changelog-list"></div>
+    </section>
+    <section id="settings" hidden>
+      <h2 data-l10n="aboutpage.nav.settings"></h2>
+      <div class="box">
+        <div class="setting">
+          <div>
+            <div class="setting-label" data-l10n="aboutpage.command.label"></div>
+            <div class="setting-desc" id="command-desc"></div>
+          </div>
+          <moz-toggle id="command-toggle" disabled></moz-toggle>
+        </div>
+        <div id="command-status" class="setting-status" hidden></div>
+      </div>
     </section>
   </main>
 </body>

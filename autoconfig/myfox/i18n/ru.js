@@ -49,5 +49,13 @@
     "aboutpage.links.bookmarklets": "Букмарклеты на GitHub",
     "aboutpage.links.userscripts": "Юзерскрипты на GitHub",
     "aboutpage.changelog.missing": "Список изменений приходит с релизами; его можно прочитать на GitHub",
+    "aboutpage.nav.settings": "Настройки",
+    "aboutpage.command.label": "Системная интеграция",
+    "aboutpage.command.desc": "Команда {0} в терминале и в скриптах открывает Firefox, установленный MyFox",
+    "aboutpage.command.replace": "Сейчас firefox запускает {0}. Он будет сохранён и вернётся, когда переключатель выключат. Включить?",
+    "aboutpage.command.pathHint": "Проверено по PATH, с которым запущен браузер; в терминале он может быть другим",
+    "aboutpage.command.shadowed": "Пока не работает: в PATH раньше стоит {0}",
+    "aboutpage.command.notInPath": "Пока не работает: {0} нет в PATH",
+    "aboutpage.command.failed": "MyFox не смог выполнить команду (код {0})",
   };
 })(globalThis.MyFox);
