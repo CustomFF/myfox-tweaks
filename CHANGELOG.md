@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 159.6 — 2026-10-19
 
 - System integration on about:myfox: switching on tells afterwards where another `firefox` was kept; with MyFox 1.1.20 or newer, switching off asks whether to restore it, and the switch can't be turned on while there is nowhere to keep it
 
