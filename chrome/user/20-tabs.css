@@ -182,9 +182,11 @@
     /* Horizontal tabs: the title in the middle of the room between the icon
        and the close button's place, about the middle of the tab; a title
        too long for it starts at its start as before ("safe"), so its end
-       fades out, not its start. */
-    #tabbrowser-tabs[orient="horizontal"] .tab-label-container {
-        align-items: safe center !important;
+       fades out, not its start. Set on the title itself: Firefox gives its
+       container align="start", which xul.css turns into an important
+       align-items no user sheet can override. */
+    #tabbrowser-tabs[orient="horizontal"] .tab-label-container > .tab-label {
+        align-self: safe center !important;
     }
 
     /* Tab height: 30px (Firefox's compact density gives 28-29px). */
