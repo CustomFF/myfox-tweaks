@@ -6,6 +6,9 @@
 - The Help menus have "About MyFox tweaks" next to "About Firefox", opening about:myfox
 - about:myfox has the cat for its tab icon, black on a light theme and white on a dark one
 - Titles of horizontal tabs are centered again; a recent Firefox had pinned them to the start
+- On/off switches are smaller (24×12) and flat: no frame, a gray track when off, the accent when on
+- Checkboxes and radio buttons in the browser's own pages match the switches: small and flat, gray when off, the accent when on
+- The look of buttons, fields, switches, checkboxes and radio buttons comes with the MyFox themes only: under another theme they are Firefox's own
 - The form fields' autocomplete menu is shaped like the other menus: items edge to edge, square, the chosen one lit with a quiet fill instead of an accent frame; it keeps the page's light or dark colors
 
 ## 159.3 — 2026-10-16

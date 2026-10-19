@@ -1,15 +1,16 @@
 // Registers chrome/agent/*.css as agent sheets and chrome/author/*.css as
-// author sheets.
+// author sheets, and chrome/themed/*.css as agent sheets while a MyFox theme
+// is on.
 (function (MyFox) {
-  const { Ci, ios, sss, profileDir } = MyFox;
+  const { Ci, ios, sss, prefs, profileDir } = MyFox;
 
   // Every chrome/<dir>/*.css, in file-name order (the numeric prefixes fix
-  // the cascade order), as sheets of the given origin.
-  function registerDir(dir, type) {
+  // the cascade order).
+  function sheetsOf(dir) {
     let d = profileDir.clone();
     d.append("chrome");
     d.append(dir);
-    if (!d.exists() || !d.isDirectory()) return;
+    if (!d.exists() || !d.isDirectory()) return [];
     let files = [];
     let entries = d.directoryEntries;
     while (entries.hasMoreElements()) {
@@ -17,10 +18,14 @@
       if (f.leafName.endsWith(".css")) files.push(f);
     }
     files.sort((a, b) => (a.leafName < b.leafName ? -1 : a.leafName > b.leafName ? 1 : 0));
-    for (let f of files) {
-      let fileURI = ios.newFileURI(f);
-      if (!sss.sheetRegistered(fileURI, type)) {
-        sss.loadAndRegisterSheet(fileURI, type);
+    return files.map(f => ios.newFileURI(f));
+  }
+
+  // Every chrome/<dir>/*.css as sheets of the given origin.
+  function registerDir(dir, type) {
+    for (let uri of sheetsOf(dir)) {
+      if (!sss.sheetRegistered(uri, type)) {
+        sss.loadAndRegisterSheet(uri, type);
       }
     }
   }
@@ -33,4 +38,20 @@
   // own styles and these can reach. They apply to every document, web pages
   // too, so every rule starts from the browser window's root.
   registerDir("author", sss.AUTHOR_SHEET);
+
+  // The controls' look (themed/) belongs to the MyFox themes: the pages and
+  // sidebars don't know the theme, so the sheets come and go with it. Taken
+  // off, they leave every open page; put back, they come after agent/.
+  const THEME_PREF = "extensions.activeThemeID";
+  const themed = sheetsOf("themed");
+  function syncThemed() {
+    let on = prefs.getStringPref(THEME_PREF, "").startsWith("myfox-");
+    for (let uri of themed) {
+      let registered = sss.sheetRegistered(uri, sss.AGENT_SHEET);
+      if (on && !registered) sss.loadAndRegisterSheet(uri, sss.AGENT_SHEET);
+      else if (!on && registered) sss.unregisterSheet(uri, sss.AGENT_SHEET);
+    }
+  }
+  syncThemed();
+  prefs.addObserver(THEME_PREF, syncThemed);
 })(globalThis.MyFox);

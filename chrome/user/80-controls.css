@@ -1,41 +1,44 @@
 /* Controls of the browser window's own panels (the add/edit-bookmark panel
    and the like): the same look as the design-system controls in
-   ../agent/35-controls.css. User sheet, imported by ../userChrome.css. */
+   ../themed/35-controls.css, and like it only under a MyFox theme. User
+   sheet, imported by ../userChrome.css. */
 
-/* One height and radius for fields, drop-downs and buttons. */
-#editBookmarkPanel :is(input, menulist),
-panel :is(button.footer-button, button.panel-button) {
-    box-sizing: border-box !important;
-    height: 26px !important;
-    min-height: 26px !important;
-    border-radius: var(--myfox-radius) !important;
-}
+:root[theme-effective-id^="myfox-"] {
+    /* One height and radius for fields, drop-downs and buttons. */
+    #editBookmarkPanel :is(input, menulist),
+    panel :is(button.footer-button, button.panel-button) {
+        box-sizing: border-box !important;
+        height: 26px !important;
+        min-height: 26px !important;
+        border-radius: var(--myfox-radius) !important;
+    }
 
-/* Fields: a quiet border, no glow when focused. */
-#editBookmarkPanel :is(input, menulist) {
-    border: 1px solid var(--myfox-line-color) !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-#editBookmarkPanel :is(input:focus, menulist:focus, menulist[open], menulist[focused]) {
-    border: var(--myfox-focus-border) !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
+    /* Fields: a quiet border, no glow when focused. */
+    #editBookmarkPanel :is(input, menulist) {
+        border: 1px solid var(--myfox-line-color) !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    #editBookmarkPanel :is(input:focus, menulist:focus, menulist[open], menulist[focused]) {
+        border: var(--myfox-focus-border) !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
 
-/* A drop-down is a field: the same background as the text fields. */
-#editBookmarkPanel menulist {
-    background-color: Field !important;
-}
+    /* A drop-down is a field: the same background as the text fields. */
+    #editBookmarkPanel menulist {
+        background-color: Field !important;
+    }
 
-/* Buttons: no outline; a subtle fill (the default button keeps its accent). */
-panel :is(button.footer-button:not([default]), button.panel-button) {
-    border: 1px solid transparent !important;
-    background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
-}
-panel :is(button.footer-button:not([default]), button.panel-button):hover {
-    background-color: color-mix(in srgb, currentColor 20%, transparent) !important;
-}
-panel :is(button.footer-button:not([default]), button.panel-button):hover:active {
-    background-color: color-mix(in srgb, currentColor 28%, transparent) !important;
+    /* Buttons: no outline; a subtle fill (the default button keeps its accent). */
+    panel :is(button.footer-button:not([default]), button.panel-button) {
+        border: 1px solid transparent !important;
+        background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
+    }
+    panel :is(button.footer-button:not([default]), button.panel-button):hover {
+        background-color: color-mix(in srgb, currentColor 20%, transparent) !important;
+    }
+    panel :is(button.footer-button:not([default]), button.panel-button):hover:active {
+        background-color: color-mix(in srgb, currentColor 28%, transparent) !important;
+    }
 }

@@ -1,0 +1,159 @@
+/* Controls: one look for buttons, text fields, selects, toggles and
+   checkboxes in the browser's own pages, sidebars and dialogs. The
+   design-system components (moz-button, moz-input-text, moz-toggle, ...) read
+   these tokens, so setting them once here restyles every one of them.
+   Agent sheet, but of themed/: registered by myfox/10-agent-sheets.js only
+   while a MyFox theme is on, after the sheets of ../agent/.
+   The same look for the browser window's own panels lives in
+   ../user/80-controls.css. */
+
+@-moz-document url-prefix("about:"), url-prefix("chrome://") {
+    :root {
+        /* Buttons: no outline (Nova outlines the default button in the accent
+           color); the default button is a subtle fill instead. The border
+           keeps its 1px so nothing changes size. */
+        --button-border-color: transparent !important;
+        --button-border-color-hover: transparent !important;
+        --button-border-color-active: transparent !important;
+        --button-background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
+        --button-background-color-hover: color-mix(in srgb, currentColor 20%, transparent) !important;
+        --button-background-color-active: color-mix(in srgb, currentColor 28%, transparent) !important;
+
+        /* Ghost (icon-only, close, "...") buttons stay transparent until hovered. */
+        --button-background-color-ghost: transparent !important;
+        --button-background-color-ghost-hover: color-mix(in srgb, currentColor 15%, transparent) !important;
+        --button-background-color-ghost-active: color-mix(in srgb, currentColor 25%, transparent) !important;
+        --button-border-color-ghost: transparent !important;
+
+        /* Text fields: the same quiet border the sidebar search boxes have. */
+        --input-text-border-color: var(--myfox-line-color) !important;
+
+        /* Keyboard focus: one thin accent border everywhere instead of
+           Firefox's 2px ring (cyan under a theme). The address bar and the
+           find bar read the toolbar-field token. */
+        --focus-outline-color: var(--myfox-focus-color) !important;
+        --focus-outline-width: var(--myfox-focus-width) !important;
+        --toolbar-field-border-color-focus: var(--myfox-focus-color) !important;
+    }
+
+    /* One height for text buttons, fields and selects (icon buttons keep
+       their own square sizes). */
+    moz-button:not([type~="icon"]) {
+        --button-min-height: 26px !important;
+    }
+    moz-input-text,
+    moz-input-search,
+    moz-input-password,
+    moz-select {
+        --input-text-min-height: 26px !important;
+    }
+
+    /* Drop-downs are button-like: the same fill, no outline. Set on the
+       element itself: the component declares its own tokens on :host. */
+    moz-select {
+        --select-border: 1px solid transparent !important;
+    }
+
+    /* Focus: the same thin accent border, not the design system's glowing ring. */
+    moz-input-text:focus-within,
+    moz-input-password:focus-within,
+    moz-select:focus-within {
+        --input-text-border: var(--myfox-focus-border) !important;
+        --focus-outline: none !important;
+    }
+
+    /* Toggles: one small size everywhere (24x12), a flat rounded rectangle
+       with a rounded-square knob instead of a framed pill. Off: a quiet gray
+       track, a light knob. On: the accent track, a knob of the canvas.
+       The knob takes the track's radius: it gets its own below. */
+    moz-toggle {
+        --toggle-width: 24px !important;
+        --toggle-height: 12px !important;
+        /* The button's min-height, from the shared input styles (16px). */
+        --input-height: 12px !important;
+        --toggle-border-width: 0px !important;
+        --toggle-border-radius: 3px !important;
+        --toggle-dot-margin: 2px !important;
+        --toggle-dot-transform-x: 12px !important;
+        --toggle-background-color: color-mix(in srgb, currentColor 22%, transparent) !important;
+        --toggle-background-color-hover: color-mix(in srgb, currentColor 30%, transparent) !important;
+        --toggle-background-color-active: color-mix(in srgb, currentColor 38%, transparent) !important;
+        --toggle-background-color-pressed: var(--myfox-accent) !important;
+        --toggle-background-color-pressed-hover: color-mix(in srgb, var(--myfox-accent) 85%, currentColor) !important;
+        --toggle-background-color-pressed-active: color-mix(in srgb, var(--myfox-accent) 75%, currentColor) !important;
+        --toggle-dot-background-color: light-dark(#ffffff, #d6d7d7) !important;
+        --toggle-dot-background-color-hover: var(--toggle-dot-background-color) !important;
+        --toggle-dot-background-color-active: var(--toggle-dot-background-color) !important;
+        --toggle-dot-background-color-on-pressed: light-dark(#ffffff, #1c1e20) !important;
+    }
+    .toggle-button[part="button"]::before {
+        border-radius: 2px !important;
+    }
+
+    /* Checkboxes: drawn as the toggles are, not by the system. A 12px square
+       with the toggle's radius, no frame. Off: the toggle's gray. On (or
+       mixed): the accent, with a mark of the toggle knob's color. */
+    /* The shared input styles center the box on the label's line by this
+       height (16px). */
+    moz-checkbox,
+    moz-radio {
+        --input-height: 12px !important;
+    }
+    input[type="checkbox"] {
+        appearance: none !important;
+        width: 12px !important;
+        height: 12px !important;
+        min-width: 12px !important;
+        min-height: 12px !important;
+        border: none !important;
+        border-radius: 3px !important;
+        background: color-mix(in srgb, currentColor 22%, transparent) !important;
+    }
+    input[type="checkbox"]:not(:checked, :indeterminate):enabled:hover {
+        background: color-mix(in srgb, currentColor 30%, transparent) !important;
+    }
+    input[type="checkbox"]:not(:checked, :indeterminate):enabled:hover:active {
+        background: color-mix(in srgb, currentColor 38%, transparent) !important;
+    }
+    input[type="checkbox"]:is(:checked, :indeterminate) {
+        background: center / 12px no-repeat var(--myfox-checkbox-mark), var(--myfox-accent) !important;
+        --myfox-checkbox-mark: light-dark(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.8 6.2 5 8.4 9.2 3.6' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.8 6.2 5 8.4 9.2 3.6' fill='none' stroke='%231c1e20' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"));
+    }
+    input[type="checkbox"]:indeterminate {
+        --myfox-checkbox-mark: light-dark(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6h6' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6h6' fill='none' stroke='%231c1e20' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"));
+    }
+    input[type="checkbox"]:is(:checked, :indeterminate):enabled:hover {
+        background-color: color-mix(in srgb, var(--myfox-accent) 85%, currentColor) !important;
+    }
+    input[type="checkbox"]:disabled {
+        opacity: 0.5 !important;
+    }
+
+    /* Radio buttons: the checkboxes' circle. Off: the same gray. On: the
+       accent, with a dot of the toggle knob's color. */
+    input[type="radio"] {
+        appearance: none !important;
+        width: 12px !important;
+        height: 12px !important;
+        min-width: 12px !important;
+        min-height: 12px !important;
+        border: none !important;
+        border-radius: 50% !important;
+        background: color-mix(in srgb, currentColor 22%, transparent) !important;
+    }
+    input[type="radio"]:not(:checked):enabled:hover {
+        background: color-mix(in srgb, currentColor 30%, transparent) !important;
+    }
+    input[type="radio"]:not(:checked):enabled:hover:active {
+        background: color-mix(in srgb, currentColor 38%, transparent) !important;
+    }
+    input[type="radio"]:checked {
+        background: radial-gradient(circle, light-dark(#ffffff, #1c1e20) 2.5px, var(--myfox-accent) 3px) !important;
+    }
+    input[type="radio"]:checked:enabled:hover {
+        background: radial-gradient(circle, light-dark(#ffffff, #1c1e20) 2.5px, color-mix(in srgb, var(--myfox-accent) 85%, currentColor) 3px) !important;
+    }
+    input[type="radio"]:disabled {
+        opacity: 0.5 !important;
+    }
+}

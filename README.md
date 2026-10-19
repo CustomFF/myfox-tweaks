@@ -45,7 +45,7 @@ restart.
 | Path | What |
 |---|---|
 | `autoconfig/` | Privileged JS (`myfox.cfg` + `myfox/*.js`) — prefs, sidebar panels, theme activation. Firefox's Autoconfig mechanism. |
-| `chrome/` | CSS (`userChrome.css` + `user/`, and `agent/`/`author/` registered by `myfox/10-agent-sheets.js`) — the actual visual tweaks. |
+| `chrome/` | CSS (`userChrome.css` + `user/`, and `agent/`/`author/` registered by `myfox/10-agent-sheets.js`, `themed/` too while a MyFox theme is on) — the actual visual tweaks. |
 | `themes/` | Source for the two bundled theme add-ons (see `themes/README.md`). |
 | `assets/` | Misc assets the installer bundles (not theme `.xpi`s — those come from Releases, see above). |
 | `scripts/` | `build-themes.sh`/`sign-themes.sh` (AMO signing — see below), `firefox_rdp_proxy.py` (dev tool, see below). |

@@ -77,12 +77,6 @@ moz-button.more-options-button {
     }
 }
 
-/* Toggle switches: the track (and the knob, which reuses the same token)
-   is a full circle by default. */
-moz-toggle {
-    --toggle-border-radius: var(--myfox-radius) !important;
-}
-
 /* Search-engine list rows: 12px of padding above and below each two-line
    row made them tall and airy. */
 moz-box-item[id^="engineList-"],

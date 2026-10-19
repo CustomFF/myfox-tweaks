@@ -118,12 +118,12 @@ def main():
     if not os.path.exists(profile_chrome):
         os.makedirs(profile_chrome, exist_ok=True)
         
-    # userChrome.css only @imports user/*.css; agent sheets are chrome/agent/*.css,
-    # author sheets chrome/author/*.css.
+    # userChrome.css only @imports user/*.css; agent sheets are chrome/agent/*.css
+    # and chrome/themed/*.css, author sheets chrome/author/*.css.
     for fname in ["userChrome.css"]:
         shutil.copy2(os.path.join(workspace_chrome, fname), os.path.join(profile_chrome, fname))
         print(f"Synced {fname} to profile.")
-    for dname in ["user", "agent", "author"]:
+    for dname in ["user", "agent", "themed", "author"]:
         if not os.path.isdir(os.path.join(workspace_chrome, dname)):
             continue
         dst = os.path.join(profile_chrome, dname)
@@ -144,7 +144,9 @@ def main():
 
     # Data-URI injection can't @import, so feed it the concatenated parts.
     userchrome_css = concat("user")
-    sidebar_agent_css = concat("agent")
+    # themed/ goes in with the agent sheets whatever the theme: a MyFox
+    # theme is what this is developed under.
+    sidebar_agent_css = concat("agent") + "\n" + concat("themed")
     author_css = concat("author")
 
     # JS Code to dynamically reload stylesheets using data URIs to bypass caching
