@@ -40,6 +40,7 @@
     "tabs.unpin": "Unpin Tab",
 
     "aboutpage.title": "MyFox tweaks",
+    "aboutpage.menu": "About MyFox tweaks",
     "aboutpage.nav.about": "About",
     "aboutpage.nav.changelog": "Changelog",
     "aboutpage.about.version": "Version {0}",

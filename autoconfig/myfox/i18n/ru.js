@@ -37,6 +37,7 @@
     "tabs.unpin": "Открепить вкладку",
 
     "aboutpage.title": "MyFox tweaks",
+    "aboutpage.menu": "О MyFox tweaks",
     "aboutpage.nav.about": "О проекте",
     "aboutpage.nav.changelog": "Изменения",
     "aboutpage.about.version": "Версия {0}",

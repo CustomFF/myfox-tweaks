@@ -3,6 +3,8 @@
 ## Unreleased
 
 - about:myfox links to the bookmarklets' and the userscripts' repositories
+- The Help menus have "About MyFox tweaks" next to "About Firefox", opening about:myfox
+- about:myfox has the cat for its tab icon, black on a light theme and white on a dark one
 - The form fields' autocomplete menu is shaped like the other menus: items edge to edge, square, the chosen one lit with a quiet fill instead of an accent frame; it keeps the page's light or dark colors
 
 ## 159.3 — 2026-10-16
