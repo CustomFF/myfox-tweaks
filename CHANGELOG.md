@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 159.4 — 2026-10-19
 
 - about:myfox links to the bookmarklets' and the userscripts' repositories
 - The Help menus have "About MyFox tweaks" next to "About Firefox", opening about:myfox
