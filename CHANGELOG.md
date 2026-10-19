@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- about:myfox's Settings have "Appearance": light or dark, a small picture of each, switching both the MyFox theme and the websites' appearance; under another theme neither is chosen
 - about:myfox has Settings with "System integration": with MyFox 1.1.18 or newer, a switch for whether the `firefox` command in a terminal and in scripts opens the Firefox MyFox installed
 
 ## 159.4 — 2026-10-19

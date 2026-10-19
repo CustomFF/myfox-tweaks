@@ -90,8 +90,7 @@ async function runCommand(launcher, args) {
 async function initCommandSetting() {
   let myfox = await loadMyfox();
   if (!myfox) return;
-  document.querySelector('.nav-item[data-section="settings"]').hidden = false;
-  showSection();
+  document.getElementById("command-box").hidden = false;
   let toggle = document.getElementById("command-toggle");
   let status = document.getElementById("command-status");
   toggle.ariaLabel = t("aboutpage.command.label");
@@ -149,6 +148,78 @@ async function initCommandSetting() {
   });
 }
 
+// Appearance: a MyFox theme and the websites' appearance (the setting in
+// Firefox's own preferences) in the same light or dark. The card of the
+// theme that is on is the chosen one; under any other theme, neither is.
+const THEMES = [
+  { key: "light", id: "myfox-light-theme@daydve.github.io", content: 1 },
+  { key: "dark", id: "myfox-dark-theme@daydve.github.io", content: 0 },
+];
+const ACTIVE_THEME_PREF = "extensions.activeThemeID";
+const CONTENT_SCHEME_PREF = "layout.css.prefers-color-scheme.content-override";
+
+function mockWindow(key) {
+  let mock = document.createElement("div");
+  mock.className = "mock " + key;
+  let tabs = document.createElement("div");
+  tabs.className = "mock-tabs";
+  for (let selected of [true, false, false]) {
+    let tab = document.createElement("span");
+    tab.className = "mock-tab" + (selected ? " selected" : "");
+    tabs.appendChild(tab);
+  }
+  let toolbar = document.createElement("div");
+  toolbar.className = "mock-toolbar";
+  let url = document.createElement("span");
+  url.className = "mock-url";
+  toolbar.appendChild(url);
+  let page = document.createElement("div");
+  page.className = "mock-page";
+  for (let cls of ["mock-line", "mock-line", "mock-line short"]) {
+    let line = document.createElement("span");
+    line.className = cls;
+    page.appendChild(line);
+  }
+  mock.append(tabs, toolbar, page);
+  return mock;
+}
+
+async function initAppearance() {
+  const { AddonManager } = ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs");
+  // The themes come with MyFox or from the releases; put in by hand
+  // without them, a card has nothing to switch to.
+  let addons = await Promise.all(THEMES.map(th => AddonManager.getAddonByID(th.id).catch(() => null)));
+  if (!addons.some(Boolean)) return;
+  let box = document.getElementById("appearance-box");
+  let group = box.querySelector(".theme-cards");
+  group.ariaLabel = t("aboutpage.appearance.label");
+  let cards = THEMES.map((th, i) => {
+    let card = document.createElement("button");
+    card.className = "theme-card";
+    card.setAttribute("role", "radio");
+    card.disabled = !addons[i];
+    let name = document.createElement("span");
+    name.textContent = t("aboutpage.appearance." + th.key);
+    card.append(mockWindow(th.key), name);
+    card.addEventListener("click", async () => {
+      let addon = await AddonManager.getAddonByID(th.id);
+      if (!addon) return;
+      await addon.enable();
+      Services.prefs.setIntPref(CONTENT_SCHEME_PREF, th.content);
+    });
+    group.appendChild(card);
+    return card;
+  });
+  let sync = () => {
+    let active = Services.prefs.getStringPref(ACTIVE_THEME_PREF, "");
+    THEMES.forEach((th, i) => cards[i].setAttribute("aria-checked", th.id === active));
+  };
+  sync();
+  Services.prefs.addObserver(ACTIVE_THEME_PREF, sync);
+  window.addEventListener("unload", () => Services.prefs.removeObserver(ACTIVE_THEME_PREF, sync));
+  box.hidden = false;
+}
+
 function showSection() {
   // A section whose menu item is hidden (settings without MyFox) isn't one.
   let id = location.hash.slice(1);
@@ -170,6 +241,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.title = t("aboutpage.title");
   showSection();
   window.addEventListener("hashchange", showSection);
+  initAppearance();
   initCommandSetting();
 
   let versions = await loadChangelog();

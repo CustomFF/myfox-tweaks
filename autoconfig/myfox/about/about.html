@@ -19,7 +19,7 @@
     <h1 id="nav-title">MyFox tweaks</h1>
     <a class="nav-item" href="#about" data-section="about" data-l10n="aboutpage.nav.about"></a>
     <a class="nav-item" href="#changelog" data-section="changelog" data-l10n="aboutpage.nav.changelog"></a>
-    <a class="nav-item" href="#settings" data-section="settings" data-l10n="aboutpage.nav.settings" hidden></a>
+    <a class="nav-item" href="#settings" data-section="settings" data-l10n="aboutpage.nav.settings"></a>
   </nav>
   <main>
     <section id="about" hidden>
@@ -45,7 +45,12 @@
     </section>
     <section id="settings" hidden>
       <h2 data-l10n="aboutpage.nav.settings"></h2>
-      <div class="box">
+      <div class="box" id="appearance-box" hidden>
+        <div class="setting-label" data-l10n="aboutpage.appearance.label"></div>
+        <div class="setting-desc" data-l10n="aboutpage.appearance.desc"></div>
+        <div class="theme-cards" role="radiogroup"></div>
+      </div>
+      <div class="box" id="command-box" hidden>
         <div class="setting">
           <div>
             <div class="setting-label" data-l10n="aboutpage.command.label"></div>

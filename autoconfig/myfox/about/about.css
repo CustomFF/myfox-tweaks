@@ -99,6 +99,123 @@ h3 {
     margin-top: 2px;
     opacity: 0.7;
 }
+/* Appearance: a card per theme, a small picture of the window in its
+   colors (tabs, the toolbar with the address field, the page) above its
+   name. The chosen one is framed in the accent. */
+.theme-cards {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+.theme-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 4px 4px 6px;
+    border: 2px solid transparent;
+    border-radius: calc(var(--myfox-radius, 4px) + 4px);
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+.theme-card:hover:not(:disabled) {
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+}
+.theme-card[aria-checked="true"] {
+    border-color: var(--myfox-accent, AccentColor);
+}
+.theme-card:disabled {
+    cursor: default;
+    opacity: 0.4;
+}
+.theme-card:focus-visible {
+    outline: var(--focus-outline, 2px solid AccentColor);
+    outline-offset: 2px;
+}
+.mock {
+    display: flex;
+    flex-direction: column;
+    width: 168px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: var(--myfox-radius, 4px);
+    background: var(--frame);
+    box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 15%, transparent);
+}
+.mock.light {
+    --frame: #d9d6d1;
+    --toolbar: #eceae6;
+    --field: #fcfbfa;
+    --text: #212121;
+    --page: #ffffff;
+    --page-text: #d0cdc8;
+}
+.mock.dark {
+    --frame: #2b2c2f;
+    --toolbar: #323639;
+    --field: #282c2f;
+    --text: #d6d7d7;
+    --page: #1f2023;
+    --page-text: #45484c;
+}
+.mock-tabs {
+    display: flex;
+    gap: 3px;
+    padding: 4px 4px 0;
+}
+.mock-tab {
+    display: flex;
+    align-items: center;
+    width: 44px;
+    height: 12px;
+    padding-inline: 5px;
+    border-radius: 3px 3px 0 0;
+}
+.mock-tab::after {
+    content: "";
+    height: 2px;
+    flex: 1;
+    border-radius: 1px;
+    background: var(--text);
+    opacity: 0.5;
+}
+.mock-tab.selected {
+    background: var(--toolbar);
+}
+.mock-tab.selected::after {
+    opacity: 0.9;
+}
+.mock-toolbar {
+    padding: 4px 6px;
+    background: var(--toolbar);
+}
+.mock-url {
+    display: block;
+    height: 9px;
+    border-radius: 3px;
+    background: var(--field);
+}
+.mock-page {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+    padding: 9px 10px;
+    background: var(--page);
+}
+.mock-line {
+    height: 3px;
+    width: 80%;
+    border-radius: 2px;
+    background: var(--page-text);
+}
+.mock-line.short {
+    width: 50%;
+}
+
 /* What keeps the setting from working: an icon in the warning (or error)
    color before it, so it doesn't read as one more line of description. */
 .setting-status {
