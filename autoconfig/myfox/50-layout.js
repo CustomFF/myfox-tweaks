@@ -37,8 +37,10 @@
                       min-height: auto !important;
                       max-height: none !important;
                       /* The right padding keeps the buttons clear of the pinned
-                         "customize" button (below). */
-                      padding: 2px 30px 2px 5px !important;
+                         "customize" button (below). On the left as far as
+                         needed to start under the toolbars' first buttons
+                         (../chrome/user/40-sidebar-launcher.css). */
+                      padding: 2px 30px 2px var(--myfox-launcher-row-start, 0px) !important;
                       box-sizing: border-box !important;
                       position: relative !important;
                       /* One row of a fixed height whatever the width: what does not

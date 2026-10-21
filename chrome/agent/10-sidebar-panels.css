@@ -12,9 +12,10 @@
     border-radius: var(--myfox-radius) !important;
 }
 
-/* Align Bookmarks Toolbar and Main Toolbar icons with the sidebar launcher */
+/* Align Bookmarks Toolbar and Main Toolbar icons with the sidebar launcher:
+   a bookmark's icon sits 2px into its button, the first toolbar button's 4px. */
 #PersonalToolbar {
-    padding-inline-start: 4px !important;
+    padding-inline-start: 6px !important;
 }
 
 #sidebar-button,

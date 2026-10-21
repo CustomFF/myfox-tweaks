@@ -34,9 +34,18 @@
    buttons and with the top of the sidebar card. */
 sidebar-main[myfox-plain-launcher] {
     margin-block-start: 4px !important;
-    margin-inline-start: 3px !important;
-    /* ...without moving the sidebar card beside it. */
-    margin-inline-end: -3px !important;
+    /* Its buttons under the first toolbar buttons (centered 17px in). The
+       column is as wide as that: its box clips what sticks out, and with a
+       negative end margin it cut off the selected button's fill. */
+    margin-inline-start: 5px !important;
+}
+
+/* The row of buttons starts with the toolbars' first buttons: with
+   vertical tabs the launcher is at the window's edge, so the row is 5px in
+   (without, the sidebar card it heads is in already). Read by the row's
+   padding in myfox/50-layout.js. */
+:root:has(#tabbrowser-tabs[orient="vertical"]) sidebar-main[custom-launcher="true"] {
+    --myfox-launcher-row-start: 5px;
 }
 
 /* With vertical tabs the row of buttons sits above the tabs, in the launcher
