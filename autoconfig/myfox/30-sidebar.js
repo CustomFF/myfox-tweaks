@@ -130,7 +130,8 @@
       }
 
       // View > Sidebar: Firefox labels an item by its l10n id only, which
-      // the extra panels don't have, so they were empty rows. Label them.
+      // the extra panels don't have, so they were empty rows. Label them,
+      // and make all of them radio items.
       // Firefox builds the menu later, in its order; if it already has,
       // replace the empty rows.
       if (sbCtrl.createMenuItem && !sbCtrl.myCreateMenuItemPatched) {
@@ -139,6 +140,13 @@
         sbCtrl.createMenuItem = function(commandID, sidebar) {
           let item = originalCreateMenuItem.call(this, commandID, sidebar);
           if (sidebar && sidebar.myfoxLabel) item.setAttribute("label", sidebar.myfoxLabel);
+          // One panel at a time: radio items, not checkboxes. A click on the
+          // chosen one still closes the panel (Firefox toggles any item that
+          // has a type; the launcher's menu drops the type and only shows).
+          if (item.getAttribute("type") === "checkbox") {
+            item.setAttribute("type", "radio");
+            item.setAttribute("name", "myfox-sidebar");
+          }
           return item;
         };
         let menu = doc.getElementById("viewSidebarMenu");
