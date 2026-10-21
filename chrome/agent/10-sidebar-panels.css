@@ -212,10 +212,11 @@ moz-button.menu-button {
     }
 }
 
-/* The bookmarks (and the old history) panel's tree: no dotted frame of the
-   system's (yellow on GTK) round its current row while it is focused; the
-   selected row is lit already. */
-:is(#bookmarks-view, #historyTree) > treechildren::-moz-tree-row(current, focus) {
+/* Trees (the bookmarks and the old history panel, the edit-bookmark panel's
+   folders, the Library): no dotted frame of the system's (yellow on GTK)
+   round the current row while the tree is focused; the selected row is lit
+   already. */
+treechildren::-moz-tree-row(current, focus) {
     outline: none !important;
 }
 
