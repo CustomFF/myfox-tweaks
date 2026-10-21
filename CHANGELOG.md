@@ -21,6 +21,7 @@
 - Tooltips keep their right edge on Wayland with a fractional scale, where it was cut off
 - The about:config bookmark on the bookmarks toolbar has an icon of tools instead of the gear, which the sidebar's customize button has too
 - The sidebar button's tooltip says "Show sidebar" while the sidebar is hidden; it always said "Hide sidebar"
+- View > Sidebar has the Downloads, Extensions and Firefox Translations panels by name; they were empty rows
 
 ## 159.6 — 2026-10-19
 

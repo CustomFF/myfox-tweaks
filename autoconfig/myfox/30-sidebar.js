@@ -104,11 +104,20 @@
             let map = originalSidebarsDesc.get.call(this);
             if (map) {
               for (let panel of EXTRA_SIDEBARS) {
-                if (map.has(panel.view)) continue;
+                let entry = map.get(panel.view);
+                if (entry) {
+                  entry.menuId ??= "menu_myfox_" + panel.name + "Sidebar";
+                  entry.myfoxLabel ??= t(panel.titleKey);
+                  continue;
+                }
                 map.set(panel.view, {
                   icon: panel.icon,
                   url: panel.url,
                   title: t(panel.titleKey),
+                  // View > Sidebar: the item's id (Firefox hides it by this
+                  // when the panel is switched off) and its label.
+                  menuId: "menu_myfox_" + panel.name + "Sidebar",
+                  myfoxLabel: t(panel.titleKey),
                   ...(panel.l10nId ? { sourceL10nEl: panel.l10nId } : {})
                 });
               }
@@ -118,6 +127,31 @@
           configurable: true,
           enumerable: true
         });
+      }
+
+      // View > Sidebar: Firefox labels an item by its l10n id only, which
+      // the extra panels don't have, so they were empty rows. Label them.
+      // Firefox builds the menu later, in its order; if it already has,
+      // replace the empty rows.
+      if (sbCtrl.createMenuItem && !sbCtrl.myCreateMenuItemPatched) {
+        sbCtrl.myCreateMenuItemPatched = true;
+        const originalCreateMenuItem = sbCtrl.createMenuItem;
+        sbCtrl.createMenuItem = function(commandID, sidebar) {
+          let item = originalCreateMenuItem.call(this, commandID, sidebar);
+          if (sidebar && sidebar.myfoxLabel) item.setAttribute("label", sidebar.myfoxLabel);
+          return item;
+        };
+        let menu = doc.getElementById("viewSidebarMenu");
+        if (menu && menu.querySelector('menuitem[id="undefined"]')) {
+          for (let stale of menu.querySelectorAll('menuitem[id="undefined"]')) stale.remove();
+          let map = sbCtrl.sidebars;
+          for (let panel of EXTRA_SIDEBARS) {
+            let sidebar = map && map.get(panel.view);
+            if (sidebar && !doc.getElementById(sidebar.menuId)) {
+              menu.appendChild(sbCtrl.createMenuItem(panel.view, sidebar));
+            }
+          }
+        }
       }
 
       // Make getTools include the extra panels
