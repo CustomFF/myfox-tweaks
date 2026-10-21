@@ -32,7 +32,6 @@
     "bookmarks.gallery": "Добавить букмарклеты",
 
     "toolbar.bookmarks.label": "Панель закладок",
-    "toolbar.bookmarks.tooltip": "Показать/скрыть панель закладок (Ctrl+Shift+B)",
 
     "tabs.unpin": "Открепить вкладку",
 

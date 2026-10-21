@@ -4,6 +4,25 @@
 (function (MyFox) {
   const { prefs, t, oncePerProfile, whenDelayedStartupDone } = MyFox;
 
+  // The bookmarks-toolbar toggle says what a click does, in Firefox's own
+  // words: those of its Bookmarks menu item ("Hide/Show bookmarks
+  // toolbar"), with the item's shortcut.
+  function nameBookmarksToggle(button, visible) {
+    try {
+      let doc = button.ownerDocument;
+      doc.l10n.formatMessages([{
+        id: "bookmarks-tools-toolbar-visibility-menuitem",
+        args: { isVisible: visible },
+      }]).then(([message]) => {
+        let label = message && message.attributes.find(a => a.name === "label");
+        if (!label) return;
+        let key = doc.getElementById("viewBookmarksToolbarKb");
+        let shortcut = key ? doc.defaultView.ShortcutUtils.prettifyShortcut(key) : "";
+        button.setAttribute("tooltiptext", shortcut ? `${label.value} (${shortcut})` : label.value);
+      }).catch(() => {});
+    } catch(e) {}
+  }
+
   // A new profile gets our navigation-bar layout once; a profile whose layout
   // Firefox has already saved keeps it (the user may have arranged it). Read
   // now, before Firefox saves a layout for this start.
@@ -71,7 +90,6 @@
             CustomizableUI.createWidget({
               id: "toggle-bookmarks-toolbar-button",
               label: t("toolbar.bookmarks.label"),
-              tooltiptext: t("toolbar.bookmarks.tooltip"),
               localized: false,
               onCreated(button) {
                 const win = button.ownerDocument.defaultView;
@@ -83,6 +101,7 @@
                 const personalToolbar = button.ownerDocument.getElementById("PersonalToolbar");
                 if (personalToolbar) {
                   button.toggleAttribute("checked", !personalToolbar.collapsed);
+                  nameBookmarksToggle(button, !personalToolbar.collapsed);
                 }
 
                 button.addEventListener("command", (e) => {
@@ -132,6 +151,7 @@
           const btn = doc.getElementById("toggle-bookmarks-toolbar-button");
           if (btn) {
             btn.toggleAttribute("checked", !personalToolbar.collapsed);
+            nameBookmarksToggle(btn, !personalToolbar.collapsed);
           }
         };
 

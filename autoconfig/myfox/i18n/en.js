@@ -35,7 +35,6 @@
     "bookmarks.gallery": "Add bookmarklets",
 
     "toolbar.bookmarks.label": "Bookmarks Toolbar",
-    "toolbar.bookmarks.tooltip": "Show/hide bookmarks toolbar (Ctrl+Shift+B)",
 
     "tabs.unpin": "Unpin Tab",
 

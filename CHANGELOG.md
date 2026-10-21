@@ -23,6 +23,7 @@
 - The sidebar button's tooltip says "Show sidebar" while the sidebar is hidden; it always said "Hide sidebar"
 - View > Sidebar has the Downloads, Extensions and Firefox Translations panels by name; they were empty rows
 - View > Sidebar has radio items instead of checkboxes: one panel shows at a time
+- The bookmarks toolbar button's tooltip says "Show bookmarks toolbar" or "Hide bookmarks toolbar", in Firefox's own words and language
 
 ## 159.6 — 2026-10-19
 
