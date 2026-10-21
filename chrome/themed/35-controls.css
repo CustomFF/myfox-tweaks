@@ -173,3 +173,18 @@
         opacity: 0.5 !important;
     }
 }
+
+@-moz-document url-prefix("chrome://") {
+    /* Plain text fields of the older windows (the Library, Page Info, the
+       dialogs): the design system's height, radius and quiet border, not
+       Nova's 12px rounding and bright frame. Not the browser window's own:
+       its fields (the address bar, the find bar) have their own looks. */
+    :root:not([windowtype="navigator:browser"]) input:not([type="radio" i], [type="checkbox" i], [type="range" i], [type="color" i], [type="file" i], [type="button" i], [type="submit" i], [type="reset" i], [type="image" i]) {
+        box-sizing: border-box !important;
+        height: 26px !important;
+        min-height: 26px !important;
+        padding-block: 0 !important;
+        border-radius: var(--myfox-radius) !important;
+        border-color: var(--myfox-line-color) !important;
+    }
+}

@@ -13,6 +13,7 @@
 - The edit-bookmark panel's folder drop-down is like the other drop-downs: the button's fill, no outline
 - Trees (the edit-bookmark panel's folders, the Library, Page Info) have no dotted frame round the current row
 - The selected row of those trees is lit with a quiet fill instead of the system's accent
+- Text fields of the Library and the other older windows are 26px high with the small corner radius and a quiet border, instead of Nova's rounded ones
 
 ## 159.6 — 2026-10-19
 
