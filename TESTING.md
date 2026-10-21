@@ -83,7 +83,7 @@ MYFOX_DDBLM_LOCAL=/path/to/ddblm-checkout <however you apply tweaks>   # to test
 
 - [ ] on a throwaway profile, follow `README.md`'s steps 1-4 exactly — the
       tweaks work
-- [ ] skip step 3 (the `.myfox` marker) — the tweaks do **not** apply; no
+- [ ] skip the `.myfox` marker in step 3 — the tweaks do **not** apply; no
       error, just silently inert (by design — see `autoconfig/myfox.cfg`'s
       guard)
 

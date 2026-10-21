@@ -1,90 +1,79 @@
+[![Русский](https://img.shields.io/badge/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9-blue?style=flat&logo=readme&logoColor=white)](README.ru.md)
+[![MyFox tweaks](https://img.shields.io/github/v/release/CustomFF/myfox-tweaks?style=flat&label=MyFox%20tweaks)](https://github.com/CustomFF/myfox-tweaks/releases/latest)
+[![MyFox Light](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FCustomFF%2Fmyfox-tweaks%2Fmaster%2Fthemes%2Fmyfox-light%2Fmanifest.json&query=%24.version&prefix=v&label=MyFox%20Light&style=flat)](https://github.com/CustomFF/myfox-tweaks/releases?q=themes&expanded=true)
+[![MyFox Dark](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FCustomFF%2Fmyfox-tweaks%2Fmaster%2Fthemes%2Fmyfox-dark%2Fmanifest.json&query=%24.version&prefix=v&label=MyFox%20Dark&style=flat)](https://github.com/CustomFF/myfox-tweaks/releases?q=themes&expanded=true)
+
 # MyFox tweaks
 
-Firefox UI tweaks — floating "card" tabs, rounded corners, a reworked sidebar,
-dark/light themes — as plain files, no installer required. [MyFox](https://github.com/CustomFF/myfox)
-applies these automatically, but every file here also works by hand, including
-on a Firefox you already have installed.
+MyFox tweaks are my styles and settings for the Firefox interface.
 
-## Apply by hand
+I started with a few edits in userChrome.css: some found online, some written myself. With each
+new Firefox something inside got renamed, the styles broke, I fixed them and added more, and
+over time the edits grew into a whole set.
 
-Take the files from `myfox-tweaks.tar.gz` of the latest
-[release](https://github.com/CustomFF/myfox-tweaks/releases/latest), not from a
-clone: the archive also carries the changelog that `about:myfox` shows, and
-its version. A copy from the repository works too, but `about:myfox` then
-calls itself a development copy and links to the changelog on GitHub.
+Now my Firefox is the way I want it. Tabs look like tabs again, not pill buttons. Downloads,
+extensions, passwords and translations live in the sidebar. Menus and panels are compact and in
+the theme's colors. AI features, telemetry and ads on the new tab page are off from the first
+start, but they are ordinary settings you can turn back on.
 
-Two destinations: the Firefox **install** (the directory with the `firefox`
-binary) and the **profile** (`about:support` → "Profile Folder").
+<p>
+  <a href="screenshots/en-light.png"><img src="screenshots/en-light.png" alt="Firefox without and with MyFox tweaks, light theme"></a>
+</p>
+<p>
+  <a href="screenshots/en-dark.png"><img src="screenshots/en-dark.png" alt="Firefox without and with MyFox tweaks, dark theme"></a>
+</p>
 
-1. Copy into the install directory:
-   - `autoconfig/autoconfig.js` → `<install>/defaults/pref/autoconfig.js`
-   - `autoconfig/myfox.cfg` → `<install>/myfox.cfg`
-   - `autoconfig/myfox/` → `<install>/myfox/`
-2. Copy into the profile directory:
-   - `chrome/` → `<profile>/chrome/`
-3. Create an empty file `<profile>/.myfox`. **Required** — `myfox.cfg` checks
-   for this marker first and does nothing at all without it (so tweaks never
-   leak into a profile you didn't mean to touch).
+## Installing
+
+### Manual
+
+1. Download `myfox-tweaks.tar.gz` from the [latest release](https://github.com/CustomFF/myfox-tweaks/releases/latest)
+   and unpack it.
+2. Copy `myfox.cfg` and the `myfox` folder from `autoconfig` into the Firefox install folder,
+   and `autoconfig.js` into `defaults/pref` inside it.
+3. Copy the `chrome` folder into the profile and create an empty file named `.myfox` there.
 4. Restart Firefox.
 
-To also install a theme, copy its signed `.xpi` (from this repo's
-[Releases](https://github.com/CustomFF/myfox-tweaks/releases) — `build/signed/`
-if building locally, see "Developing" below) into `<profile>/extensions/<id>.xpi`:
-`myfox-dark-theme@daydve.github.io.xpi` or `myfox-light-theme@daydve.github.io.xpi`.
+Many of the interface changes are made for the MyFox themes, so they need to be installed too.
+The themes are in the [Signed themes](https://github.com/CustomFF/myfox-tweaks/releases) releases
+and are installed in about:addons: the gear menu → "Install Add-on From File…".
 
-Firefox reads these files only at startup. With the tweaks active,
-`firefox --myfox-restart` asks the Firefox already running that profile to
-restart the way about:profiles' "Restart" does, restoring the open tabs; if
-Firefox isn't running, it just starts as usual.
+#### Finding the install folder
 
-To remove everything: delete `<profile>/.myfox` and `<profile>/chrome/`,
-restart.
+1. Open about:support.
+2. The "Application Binary" row shows the path to the Firefox file.
+3. The install folder is the folder that file is in.
 
-## Layout
+If the path starts with `/snap/`, Firefox was installed from snap. Installing the tweaks into it
+won't work: a snap's install folder is read-only.
 
-| Path | What |
-|---|---|
-| `autoconfig/` | Privileged JS (`myfox.cfg` + `myfox/*.js`) — prefs, sidebar panels, theme activation. Firefox's Autoconfig mechanism. |
-| `chrome/` | CSS (`userChrome.css` + `user/`, and `agent/`/`author/` registered by `myfox/10-agent-sheets.js`, `themed/` too while a MyFox theme is on) — the actual visual tweaks. |
-| `themes/` | Source for the two bundled theme add-ons (see `themes/README.md`). |
-| `assets/` | Misc assets the installer bundles (not theme `.xpi`s — those come from Releases, see above). |
-| `scripts/` | `build-themes.sh`/`sign-themes.sh` (AMO signing — see below), `firefox_rdp_proxy.py` (dev tool, see below). |
+If the path starts with `/app/`, Firefox was installed from flatpak, and the path is shown from
+inside its sandbox. The real install folder is:
 
-## Developing
+- `/var/lib/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox` for an install for
+  all users; copying there needs sudo;
+- `~/.local/share/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox` for an
+  install for yourself only.
 
-Building/signing themes needs Node (`npx web-ext`) and an AMO API key:
+After every update of a flatpak Firefox, the files from `autoconfig` have to be copied again.
 
-```bash
-scripts/build-themes.sh          # unsigned .xpi -> build/themes/ (dev only)
-scripts/sign-themes.sh           # signed .xpi -> build/signed/ (needs AMO_JWT_ISSUER/AMO_JWT_SECRET)
-```
+I suggest installing Firefox from the archive on
+[Mozilla's server](https://ftp.mozilla.org/pub/firefox/releases/) instead of snap or flatpak. It
+is an official way too. A Firefox installed from the official archive also updates itself.
 
-The `.github/workflows/themes.yml` workflow does the same in CI (manual
-trigger, or automatically when `themes/**` changes) and publishes the
-signed `.xpi`s as a GitHub Release.
+#### Finding the profile folder
 
-`scripts/firefox_rdp_proxy.py` lets you hot-reload CSS/JS changes against a
-running Firefox without restarting it — see its own `--help`.
+1. Open about:support.
+2. The "Profile Directory" row shows the path to the profile. The "Open Directory" button opens
+   it.
 
-## Releases
+### Automatic
 
-The tweaks are released separately from the themes, with tags
-`<Firefox beta major>.<patch>` (e.g. `158.0`). Each release has two files:
+Through [MyFox](https://github.com/CustomFF/myfox).
 
-- `myfox-tweaks.tar.gz`: `autoconfig/` and `chrome/` at the archive root
-- `changelog.json`: every released version from `CHANGELOG.md`, newest first
+## Removing
 
-MyFox relies on this layout. Change it only together with MyFox.
-
-To release a version:
-
-1. Run `scripts/changelog_to_json.py --next` to get the next version number.
-2. Add a `## <version> — <YYYY-MM-DD>` section to the top of `CHANGELOG.md`,
-   with user-facing lines in English, and commit it.
-3. `git tag <version> && git push origin <version>`.
-
-The `.github/workflows/tweaks.yml` workflow fails if `CHANGELOG.md` has no
-section for the tag. It warns if the tag's major isn't the current Firefox
-beta. Then it builds the files (`scripts/build-tweaks-dist.sh`) and creates
-the release. To test it without releasing, run it manually with `dry_run`;
-the files are attached to the run instead.
+Delete the `.myfox` file and the `chrome/` folder from the profile folder, then restart Firefox.
+Without `.myfox` the files in the install folder do nothing, but you can delete them as well.
+The settings the tweaks made on the first start stay as ordinary Firefox settings, and the theme
+can be changed in about:addons.
