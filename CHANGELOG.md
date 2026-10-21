@@ -20,6 +20,7 @@
 - The sidebar's buttons start under the first buttons of the navigation and bookmarks toolbars, in a column beside the sidebar or in a row above it, with horizontal or vertical tabs alike; the column no longer cuts off the selected button's fill
 - Tooltips keep their right edge on Wayland with a fractional scale, where it was cut off
 - The about:config bookmark on the bookmarks toolbar has an icon of tools instead of the gear, which the sidebar's customize button has too
+- The sidebar button's tooltip says "Show sidebar" while the sidebar is hidden; it always said "Hide sidebar"
 
 ## 159.6 — 2026-10-19
 

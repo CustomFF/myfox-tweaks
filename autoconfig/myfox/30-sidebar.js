@@ -186,6 +186,21 @@
         this.updateToolbarButton();
       };
     }
+
+    // The button opens and closes the sidebar panel (above), so it is named
+    // after the panel: Firefox names it after the launcher, which here is
+    // always shown, and it said "Hide sidebar" with the panel hidden too.
+    if (sbCtrl && !sbCtrl.originalUpdateToolbarButton) {
+      sbCtrl.originalUpdateToolbarButton = sbCtrl.updateToolbarButton;
+      sbCtrl.updateToolbarButton = function(toolbarButton = this.toolbarButton) {
+        this.originalUpdateToolbarButton(toolbarButton);
+        if (!toolbarButton || this.inSingleTabWindow || !this.sidebarRevampEnabled) return;
+        toolbarButton.dataset.l10nId = this.isOpen
+          ? "sidebar-widget-hide-sidebar2"
+          : "sidebar-widget-show-sidebar2";
+      };
+      sbCtrl.updateToolbarButton();
+    }
   }
   MyFox.windowInits.push(initWindow);
 })(globalThis.MyFox);
