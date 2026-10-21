@@ -15,6 +15,13 @@ menupopup {
     --panel-border-color: var(--myfox-panel-border) !important;
     /* Items edge to edge: room above and below them only. */
     --panel-padding: 4px 0 !important;
+    /* A menu is the color of the panels: one opened from a panel (the
+       translation offer's settings) merged into it under Firefox's faint
+       4px shadow. The tab previews' deeper one, with a thin one all round
+       for the left and top, which the offset one hardly reaches, and room
+       for it: the popup window is only as big as the menu plus this margin. */
+    --panel-box-shadow: var(--myfox-shadow-small), 0 0 3px rgba(0, 0, 0, 0.3) !important;
+    --panel-box-shadow-margin: 10px !important;
 }
 
 /* An item under the pointer: a fill of the text color, as a panel's item

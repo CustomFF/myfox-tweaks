@@ -7,6 +7,7 @@
 - With the sidebar's buttons in a row above the vertical tabs, a dragged tab stays under the pointer instead of jumping up the column
 - about:myfox's "System integration" setting is called "Shell integration", as in MyFox
 - Checkbox and radio items of menus have the small flat checkboxes and radio buttons of the browser's pages instead of the system's large framed ones
+- Menus cast a deeper shadow, all round, so one opened from a panel (the translation offer's settings) no longer merges into it
 
 ## 159.6 — 2026-10-19
 
