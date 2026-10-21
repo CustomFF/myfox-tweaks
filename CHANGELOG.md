@@ -9,6 +9,7 @@
 - Checkbox and radio items of menus have the small flat checkboxes and radio buttons of the browser's pages instead of the system's large framed ones
 - Menus cast a deeper shadow, all round, so one opened from a panel (the translation offer's settings) no longer merges into it
 - The drop-downs of the window's panels (the translation panels, the site's HTTPS-Only setting, the camera, microphone and screen prompts) have no outline, as the drop-downs of the browser's pages
+- Checkboxes and radio buttons of the window's panels and of the older dialogs (Page Info) are small and flat, as in the browser's pages, instead of the system's
 
 ## 159.6 — 2026-10-19
 

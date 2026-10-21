@@ -94,14 +94,16 @@
 
     /* Checkboxes: drawn as the toggles are, not by the system. A 12px square
        with the toggle's radius, no frame. Off: the toggle's gray. On (or
-       mixed): the accent, with a mark of the toggle knob's color. */
+       mixed): the accent, with a mark of the toggle knob's color. The older
+       checkbox (XUL: the window's panels, the dialogs) gets it on its box. */
     /* The shared input styles center the box on the label's line by this
        height (16px). */
     moz-checkbox,
     moz-radio {
         --input-height: 12px !important;
     }
-    input[type="checkbox"] {
+    input[type="checkbox"],
+    .checkbox-check {
         appearance: none !important;
         width: 12px !important;
         height: 12px !important;
@@ -111,29 +113,36 @@
         border-radius: 3px !important;
         background: color-mix(in srgb, currentColor 22%, transparent) !important;
     }
-    input[type="checkbox"]:not(:checked, :indeterminate):enabled:hover {
+    input[type="checkbox"]:not(:checked, :indeterminate):enabled:hover,
+    checkbox:not([checked], [disabled]):hover > .checkbox-check {
         background: color-mix(in srgb, currentColor 30%, transparent) !important;
     }
-    input[type="checkbox"]:not(:checked, :indeterminate):enabled:hover:active {
+    input[type="checkbox"]:not(:checked, :indeterminate):enabled:hover:active,
+    checkbox:not([checked], [disabled]):hover:active > .checkbox-check {
         background: color-mix(in srgb, currentColor 38%, transparent) !important;
     }
-    input[type="checkbox"]:is(:checked, :indeterminate) {
+    input[type="checkbox"]:is(:checked, :indeterminate),
+    checkbox[checked] > .checkbox-check {
         background: center / 12px no-repeat var(--myfox-checkbox-mark), var(--myfox-accent) !important;
         --myfox-checkbox-mark: light-dark(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.8 6.2 5 8.4 9.2 3.6' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.8 6.2 5 8.4 9.2 3.6' fill='none' stroke='%231c1e20' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"));
     }
     input[type="checkbox"]:indeterminate {
         --myfox-checkbox-mark: light-dark(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6h6' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6h6' fill='none' stroke='%231c1e20' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"));
     }
-    input[type="checkbox"]:is(:checked, :indeterminate):enabled:hover {
+    input[type="checkbox"]:is(:checked, :indeterminate):enabled:hover,
+    checkbox[checked]:not([disabled]):hover > .checkbox-check {
         background-color: color-mix(in srgb, var(--myfox-accent) 85%, currentColor) !important;
     }
-    input[type="checkbox"]:disabled {
+    input[type="checkbox"]:disabled,
+    checkbox[disabled] > .checkbox-check {
         opacity: 0.5 !important;
     }
 
     /* Radio buttons: the checkboxes' circle. Off: the same gray. On: the
-       accent, with a dot of the toggle knob's color. */
-    input[type="radio"] {
+       accent, with a dot of the toggle knob's color. The older radio button
+       (XUL) gets it on its circle. */
+    input[type="radio"],
+    .radio-check {
         appearance: none !important;
         width: 12px !important;
         height: 12px !important;
@@ -143,19 +152,24 @@
         border-radius: 50% !important;
         background: color-mix(in srgb, currentColor 22%, transparent) !important;
     }
-    input[type="radio"]:not(:checked):enabled:hover {
+    input[type="radio"]:not(:checked):enabled:hover,
+    radio:not([selected], [disabled]):hover > .radio-check {
         background: color-mix(in srgb, currentColor 30%, transparent) !important;
     }
-    input[type="radio"]:not(:checked):enabled:hover:active {
+    input[type="radio"]:not(:checked):enabled:hover:active,
+    radio:not([selected], [disabled]):hover:active > .radio-check {
         background: color-mix(in srgb, currentColor 38%, transparent) !important;
     }
-    input[type="radio"]:checked {
+    input[type="radio"]:checked,
+    radio[selected] > .radio-check {
         background: radial-gradient(circle, light-dark(#ffffff, #1c1e20) 2.5px, var(--myfox-accent) 3px) !important;
     }
-    input[type="radio"]:checked:enabled:hover {
+    input[type="radio"]:checked:enabled:hover,
+    radio[selected]:not([disabled]):hover > .radio-check {
         background: radial-gradient(circle, light-dark(#ffffff, #1c1e20) 2.5px, color-mix(in srgb, var(--myfox-accent) 85%, currentColor) 3px) !important;
     }
-    input[type="radio"]:disabled {
+    input[type="radio"]:disabled,
+    radio[disabled] > .radio-check {
         opacity: 0.5 !important;
     }
 }
