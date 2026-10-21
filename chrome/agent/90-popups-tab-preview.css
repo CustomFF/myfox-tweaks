@@ -1,4 +1,5 @@
-/* Popups: tab hover preview, identity/permissions panel, translations offer.
+/* Popups: tab hover preview, identity/permissions panel, translations offer,
+   tooltips.
    Agent sheet (registered by myfox.cfg): reaches into shadow DOM and beats
    the documents' own styles. Load order is by file name. */
 
@@ -68,4 +69,31 @@
 }
 .translations-panel-footer {
     margin: 0 8px 8px !important;
+}
+
+/* Tooltips, all of them alike: Firefox's own (the one it makes for
+   tooltiptext and title, which only agent sheets reach), the window's and
+   the sidebar's. On GTK they were drawn natively (the system's colors, a
+   bright frame, a ~15px font) and the window's ones in the system's menu
+   colors. The sidebar's colors of the theme, which the sidebar's documents
+   know too, a quiet frame, the menu text size.
+   Firefox's own tooltip inherits none of the document's variables: it takes
+   the fallbacks, the system's tooltip colors, which
+   myfox/77-tooltip-colors.js sets to the same theme colors.
+   The visible box is 2px in from the tooltip's window, its frame an outline
+   inside a transparent border: on Wayland with a fractional scale the window
+   is rounded to whole pixels and lost the frame's right edge. */
+tooltip {
+    appearance: none !important;
+    background-color: var(--sidebar-background-color, InfoBackground) !important;
+    background-clip: padding-box !important;
+    color: var(--sidebar-text-color, InfoText) !important;
+    border: 2px solid transparent !important;
+    outline: 1px solid color-mix(in srgb, var(--sidebar-text-color, InfoText) 25%, var(--sidebar-background-color, InfoBackground)) !important;
+    outline-offset: -3px !important;
+    border-radius: calc(var(--myfox-radius, 5px) + 2px) !important;
+    font: message-box !important;
+    font-size: var(--myfox-font-size, 12px) !important;
+    line-height: normal !important;
+    padding: 5px 9px !important;
 }

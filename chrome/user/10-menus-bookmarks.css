@@ -1,4 +1,4 @@
-/* Firefox View spacer, icon-only bookmark entries, popup menu rows, tooltips.
+/* Firefox View spacer, icon-only bookmark entries, popup menu rows.
    User sheet, imported by ../userChrome.css. */
 
 /* The Firefox View button itself is not present, but its 40px titlebar-spacer
@@ -70,23 +70,4 @@ panel,
 /* The add/edit-bookmark panel's fields and buttons. */
 #editBookmarkPanel :is(input, menulist, button) {
     border-radius: var(--myfox-radius) !important;
-}
-
-/* Tooltips: on GTK they are drawn natively (black, 80% opaque, the system's
-   ~15px font), which looks heavy next to the 12px menus. Use the popup
-   surface and the menu text size instead.
-   The visible box is 2px in from the tooltip's window, its frame an outline
-   inside a transparent border: on Wayland with a fractional scale the window
-   is rounded to whole pixels and lost the frame's right edge. */
-tooltip {
-    appearance: none !important;
-    background-color: var(--arrowpanel-background, Menu) !important;
-    background-clip: padding-box !important;
-    color: var(--arrowpanel-color, MenuText) !important;
-    border: 2px solid transparent !important;
-    outline: 1px solid var(--arrowpanel-border-color, ThreeDShadow) !important;
-    outline-offset: -3px !important;
-    border-radius: calc(var(--myfox-radius) + 2px) !important;
-    font-size: var(--myfox-font-size) !important;
-    padding: 5px 9px !important;
 }
