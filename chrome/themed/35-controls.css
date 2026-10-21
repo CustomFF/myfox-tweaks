@@ -37,14 +37,12 @@
     }
 
     /* One height for text buttons, fields and selects (icon buttons keep
-       their own square sizes). */
-    moz-button:not([type~="icon"]) {
+       their own square sizes). In :where(), so that any element's own size
+       in ../agent/ wins: these sheets load after those. */
+    :where(moz-button:not([type~="icon"])) {
         --button-min-height: 26px !important;
     }
-    moz-input-text,
-    moz-input-search,
-    moz-input-password,
-    moz-select {
+    :where(moz-input-text, moz-input-search, moz-input-password, moz-select) {
         --input-text-min-height: 26px !important;
     }
 
