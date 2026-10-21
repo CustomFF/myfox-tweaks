@@ -25,6 +25,7 @@
 - View > Sidebar has radio items instead of checkboxes: one panel shows at a time
 - The bookmarks toolbar button's tooltip says "Show bookmarks toolbar" or "Hide bookmarks toolbar", in Firefox's own words and language
 - The bookmarks toolbar button has a new icon, outlined like the other toolbar icons, instead of a filled one
+- The sidebar and bookmarks toolbar buttons, while on, have a quieter fill, brighter under the pointer
 
 ## 159.6 — 2026-10-19
 

@@ -70,11 +70,15 @@
     border-inline-end: var(--border-width) solid var(--chrome-content-separator-color) !important;
 }
 
-/* Make sidebar-button look pressed/active when sidebar is open */
-body:has(#sidebar-box:not([hidden])) #sidebar-button .toolbarbutton-badge-stack {
-    background-color: var(--toolbarbutton-active-background, color-mix(in srgb, currentColor 25%, transparent)) !important;
+/* The sidebar button while the sidebar is open, and the bookmarks toolbar's
+   toggle while the toolbar shows: a quiet fill, quieter than Firefox's
+   pressed one, and brighter under the pointer. */
+body:has(#sidebar-box:not([hidden])) #sidebar-button .toolbarbutton-badge-stack,
+#toggle-bookmarks-toolbar-button[checked] > .toolbarbutton-icon {
+    background-color: color-mix(in srgb, currentColor 18%, transparent) !important;
 }
 
-body:has(#sidebar-box:not([hidden])) #sidebar-button:hover .toolbarbutton-badge-stack {
-    background-color: var(--toolbarbutton-hover-background, color-mix(in srgb, currentColor 35%, transparent)) !important;
+body:has(#sidebar-box:not([hidden])) #sidebar-button:hover .toolbarbutton-badge-stack,
+#toggle-bookmarks-toolbar-button[checked]:hover > .toolbarbutton-icon {
+    background-color: color-mix(in srgb, currentColor 28%, transparent) !important;
 }
