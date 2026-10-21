@@ -219,6 +219,13 @@ moz-button.menu-button {
 treechildren::-moz-tree-row(current, focus) {
     outline: none !important;
 }
+/* The Library and Page Info: light or dark with the browser's theme. They
+   are told which (prefers-color-scheme follows the theme) but don't say they
+   can be either, so they kept the system's colors whatever the theme was. */
+:root:is([windowtype="Places:Organizer"], [windowtype="Browser:page-info"]) {
+    color-scheme: light dark !important;
+}
+
 /* The Library's toolbar: the window's colors, not the system's title bar
    ones (-moz-headerbar, from the GTK theme, light even when the window
    manager draws dark title bars), which made a light strip at the top of a
