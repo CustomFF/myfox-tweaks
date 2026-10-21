@@ -54,7 +54,7 @@
     "aboutpage.appearance.desc": "Тема браузера и оформление сайтов",
     "aboutpage.appearance.light": "Светлое",
     "aboutpage.appearance.dark": "Тёмное",
-    "aboutpage.command.label": "Системная интеграция",
+    "aboutpage.command.label": "Интеграция с оболочкой",
     "aboutpage.command.desc": "Команда {0} в терминале и в скриптах открывает Firefox, установленный MyFox",
     "aboutpage.command.blocked": "Не включить: {0} — чужой файл, а {1} уже занят. Сначала уберите один из них.",
     "aboutpage.command.savedBackup": "По пути {0} был файл. Он сохранён как {1}.",

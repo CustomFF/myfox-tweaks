@@ -5,6 +5,7 @@
 - The search engine button at the start of the address bar fits inside the bar again; since 159.4 it stuck out below it
 - In the vertical tab column, a background tab's ear is solid: a tab group's color no longer shows through it
 - With the sidebar's buttons in a row above the vertical tabs, a dragged tab stays under the pointer instead of jumping up the column
+- about:myfox's "System integration" setting is called "Shell integration", as in MyFox
 
 ## 159.6 — 2026-10-19
 

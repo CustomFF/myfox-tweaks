@@ -57,7 +57,7 @@
     "aboutpage.appearance.desc": "The browser's theme and the websites' appearance",
     "aboutpage.appearance.light": "Light",
     "aboutpage.appearance.dark": "Dark",
-    "aboutpage.command.label": "System integration",
+    "aboutpage.command.label": "Shell integration",
     "aboutpage.command.desc": "The {0} command in a terminal and in scripts opens the Firefox MyFox installed",
     "aboutpage.command.blocked": "Can't be switched on: {0} isn't MyFox's, and {1} is already there. Move one of them away first.",
     "aboutpage.command.savedBackup": "There was a file at {0}. It has been kept as {1}.",
