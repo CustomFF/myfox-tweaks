@@ -6,6 +6,7 @@
 - In the vertical tab column, a background tab's ear is solid: a tab group's color no longer shows through it
 - With the sidebar's buttons in a row above the vertical tabs, a dragged tab stays under the pointer instead of jumping up the column
 - about:myfox's "System integration" setting is called "Shell integration", as in MyFox
+- Checkbox and radio items of menus have the small flat checkboxes and radio buttons of the browser's pages instead of the system's large framed ones
 
 ## 159.6 — 2026-10-19
 
