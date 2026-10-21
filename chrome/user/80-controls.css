@@ -14,21 +14,19 @@
     }
 
     /* Fields: a quiet border, no glow when focused. */
-    #editBookmarkPanel :is(input, menulist) {
+    #editBookmarkPanel input {
         border: 1px solid var(--myfox-line-color) !important;
         outline: none !important;
         box-shadow: none !important;
     }
-    #editBookmarkPanel :is(input:focus, menulist:focus, menulist[open], menulist[focused]) {
+    #editBookmarkPanel input:focus {
         border: var(--myfox-focus-border) !important;
         outline: none !important;
         box-shadow: none !important;
     }
 
-    /* A drop-down is a field: the same background as the text fields. */
-    #editBookmarkPanel menulist {
-        background-color: Field !important;
-    }
+    /* The drop-down is as the others are (../themed/35-controls.css): the
+       button's fill, no outline. */
 
     /* Buttons: no outline; a subtle fill (the default button keeps its accent). */
     panel :is(button.footer-button:not([default]), button.panel-button) {
