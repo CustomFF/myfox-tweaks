@@ -219,6 +219,18 @@ moz-button.menu-button {
 treechildren::-moz-tree-row(current, focus) {
     outline: none !important;
 }
+/* The selected row of those other than the sidebar's (which take the
+   theme's sidebar highlight): a quiet fill of the text color, as a menu's
+   item under the pointer has, not the system's accent with its own text
+   color. A touch deeper than the fill of a row under the pointer. */
+:not(#bookmarks-view, #historyTree) > treechildren::-moz-tree-row(selected) {
+    background-color: color-mix(in srgb, currentColor 20%, transparent) !important;
+}
+:not(#bookmarks-view, #historyTree) > treechildren::-moz-tree-image(selected),
+:not(#bookmarks-view, #historyTree) > treechildren::-moz-tree-twisty(selected),
+:not(#bookmarks-view, #historyTree) > treechildren::-moz-tree-cell-text(selected) {
+    color: inherit !important;
+}
 
 /* Synced-tabs sidebar: its empty-state card starts right under the search
    box; the history panel's card sits 9px lower. Match the two. */

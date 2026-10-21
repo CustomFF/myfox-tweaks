@@ -12,6 +12,7 @@
 - Checkboxes and radio buttons of the window's panels and of the older dialogs (Page Info) are small and flat, as in the browser's pages, instead of the system's
 - The edit-bookmark panel's folder drop-down is like the other drop-downs: the button's fill, no outline
 - Trees (the edit-bookmark panel's folders, the Library, Page Info) have no dotted frame round the current row
+- The selected row of those trees is lit with a quiet fill instead of the system's accent
 
 ## 159.6 — 2026-10-19
 
