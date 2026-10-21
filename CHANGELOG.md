@@ -19,6 +19,7 @@
 - Under a MyFox theme the Library and Page Info take the theme's colors (the Library's folders the sidebar's, Page Info's sections a tab strip), and their fields, buttons and lists the controls' look, with no frames
 - The sidebar's buttons start under the first buttons of the navigation and bookmarks toolbars, in a column beside the sidebar or in a row above it, with horizontal or vertical tabs alike; the column no longer cuts off the selected button's fill
 - Tooltips keep their right edge on Wayland with a fractional scale, where it was cut off
+- The about:config bookmark on the bookmarks toolbar has an icon of tools instead of the gear, which the sidebar's customize button has too
 
 ## 159.6 — 2026-10-19
 

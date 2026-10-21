@@ -29,8 +29,11 @@
     }
 }
 
+/* Tools, not Firefox's gear: the sidebar's customize button below it is a
+   gear too. By the resource:// address of the tweaks' modules (from file://
+   the icon would not take the toolbar's text color). */
 .bookmark-item[myfox-role="advanced"] image {
-    background-image: url("chrome://global/skin/icons/settings.svg") !important;
+    background-image: url("resource://myfox/icons/about-config.svg") !important;
 }
 
 /* The profile's chrome/panel-icons/ (copied there from ddblm), by its
