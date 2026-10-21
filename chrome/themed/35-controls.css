@@ -178,8 +178,9 @@
     /* Plain text fields of the older windows (the Library, Page Info, the
        dialogs): the design system's height, radius and quiet border, not
        Nova's 12px rounding and bright frame. Not the browser window's own:
-       its fields (the address bar, the find bar) have their own looks. */
-    :root:not([windowtype="navigator:browser"]) input:not([type="radio" i], [type="checkbox" i], [type="range" i], [type="color" i], [type="file" i], [type="button" i], [type="submit" i], [type="reset" i], [type="image" i]) {
+       its fields (the address bar, the find bar) have their own looks. Nor
+       Page Info's values, fields that read as text, as dense as text. */
+    :root:not([windowtype="navigator:browser"]) input:not([windowtype="Browser:page-info"] td > input):not([type="radio" i], [type="checkbox" i], [type="range" i], [type="color" i], [type="file" i], [type="button" i], [type="submit" i], [type="reset" i], [type="image" i]) {
         box-sizing: border-box !important;
         height: 26px !important;
         min-height: 26px !important;
