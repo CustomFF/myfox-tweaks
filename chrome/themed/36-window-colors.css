@@ -1,0 +1,108 @@
+/* The Library and Page Info in the MyFox theme's colors, which
+   myfox/76-window-colors.js copies onto their root (and marks it so) from a
+   browser window. Agent sheet of themed/: only while a MyFox theme is on.
+   The Library is laid out as the browser window is: the folders the color
+   of the sidebar, the rest of the toolbar. Page Info's row of sections is
+   the tab strip, the section shown its selected tab. No frames: a field or
+   a list is told from the window by its fill, as the address bar is.
+   Matched by the root's mark alone, not by @-moz-document with these
+   windows' addresses: a window opened after a theme switch missed rules
+   kept to its address. */
+
+:root[myfox-theme-colors] {
+    background-color: var(--toolbar-background-color) !important;
+    color: var(--toolbar-text-color) !important;
+    /* The design system's fields (the Library's search box). */
+    --input-background-color: var(--toolbar-field-background-color) !important;
+    --input-text-color: var(--toolbar-field-text-color) !important;
+    --input-border-color: var(--toolbar-field-border-color) !important;
+    --input-text-border-color: var(--toolbar-field-border-color) !important;
+
+    /* Trees and their column headers sit on the window, in its text color. */
+    tree,
+    #placesView,
+    #placesView > splitter,
+    #permList {
+        background-color: transparent !important;
+        color: inherit !important;
+    }
+    treecol,
+    .tree-columnpicker-button {
+        background-color: transparent !important;
+        color: inherit !important;
+    }
+
+    /* Text fields: the address bar's colors and border (the theme's is the
+       field's own color), the thin accent one when focused; read-only
+       ones too (the Library's, for a built-in folder or a history entry).
+       But Page Info's values are fields that read as text: they stay on the
+       window, focused or not (all read-only, but for the image's type, which
+       Firefox left editable). */
+    input:not([type="radio" i], [type="checkbox" i], [type="range" i], [type="color" i], [type="file" i], [type="button" i], [type="submit" i], [type="reset" i], [type="image" i]) {
+        background-color: var(--toolbar-field-background-color) !important;
+        color: var(--toolbar-field-text-color) !important;
+        border: 1px solid var(--toolbar-field-border-color) !important;
+        outline: none !important;
+        box-shadow: none !important;
+
+        &:focus {
+            border: var(--myfox-focus-border) !important;
+        }
+    }
+    &[windowtype="Browser:page-info"] td > input,
+    &[windowtype="Browser:page-info"] td > input:focus {
+        background-color: transparent !important;
+        border-color: transparent !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Buttons: the controls' look (../themed/35-controls.css), not the
+       system's framed ones. */
+    button:not(.tree-columnpicker-button) {
+        appearance: none !important;
+        min-height: 26px !important;
+        border: 1px solid transparent !important;
+        border-radius: var(--myfox-radius) !important;
+        background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
+        color: inherit !important;
+
+        &:not([disabled]):hover {
+            background-color: color-mix(in srgb, currentColor 20%, transparent) !important;
+        }
+        &:not([disabled]):hover:active,
+        &[open] {
+            background-color: color-mix(in srgb, currentColor 28%, transparent) !important;
+        }
+        &[disabled] {
+            opacity: 0.5 !important;
+        }
+    }
+
+    /* The Library's folders: the sidebar. */
+    #placesList {
+        background-color: var(--sidebar-background-color) !important;
+        color: var(--sidebar-text-color) !important;
+    }
+
+    /* Page Info's sections: the tab strip and its selected tab. */
+    #topBar {
+        background-color: var(--lwt-accent-color) !important;
+        color: var(--lwt-text-color) !important;
+    }
+    #viewGroup > radio[selected] {
+        background-color: var(--tab-background-color-selected) !important;
+        color: var(--tab-text-color-selected) !important;
+    }
+
+    /* The lists (the Library's bookmarks, Page Info's) and Page Info's
+       media preview: boxes of the field color, rounded, no frame. Not the
+       Library's folders, which are the sidebar. */
+    #placeContent,
+    &[windowtype="Browser:page-info"] :is(tree, #permList, #imagecontainerbox) {
+        background-color: var(--toolbar-field-background-color) !important;
+        border: none !important;
+        border-radius: var(--myfox-radius) !important;
+        overflow: clip !important;
+    }
+}

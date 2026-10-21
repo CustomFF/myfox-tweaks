@@ -16,6 +16,7 @@
 - Text fields of the Library and the other older windows are 26px high with the small corner radius and a quiet border, instead of Nova's rounded ones
 - The Library's toolbar takes the window's colors instead of the system's title bar ones, which made a light strip at the top of a dark window
 - The Library and Page Info are light or dark with the browser's theme, not with the system's
+- Under a MyFox theme the Library and Page Info take the theme's colors (the Library's folders the sidebar's, Page Info's sections a tab strip), and their fields, buttons and lists the controls' look, with no frames
 
 ## 159.6 — 2026-10-19
 
