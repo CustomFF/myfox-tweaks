@@ -70,11 +70,15 @@
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
         overflow: visible !important;
     }
+    /* The ear is that far color as it shows on the column, but solid: a
+       see-through one showed what it lies over (a tab group's color). */
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) {
         --myfox-tab-fade-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-tab-fade), transparent);
+        --myfox-tab-ear-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-tab-fade), var(--myfox-strip-color));
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned]:not([selected], [multiselected], [dragtarget]) {
         --myfox-tab-fade-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-pinned-tab-fade), transparent);
+        --myfox-tab-ear-color: color-mix(in srgb, var(--tab-background-color-selected) var(--myfox-pinned-tab-fade), var(--myfox-strip-color));
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]) > .tab-stack > .tab-background {
         position: relative !important;
@@ -168,7 +172,7 @@
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before,
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {
         inset-inline-end: 0 !important;
-        background: var(--myfox-tab-fade-color) !important;
+        background: var(--myfox-tab-ear-color) !important;
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background::before,
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget]) > .tab-stack > .tab-background::after {

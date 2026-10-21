@@ -3,6 +3,7 @@
 ## Unreleased
 
 - The search engine button at the start of the address bar fits inside the bar again; since 159.4 it stuck out below it
+- In the vertical tab column, a background tab's ear is solid: a tab group's color no longer shows through it
 
 ## 159.6 — 2026-10-19
 
