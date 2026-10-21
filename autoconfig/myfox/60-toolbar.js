@@ -94,7 +94,7 @@
               onCreated(button) {
                 const win = button.ownerDocument.defaultView;
                 button.setAttribute("class", "toolbarbutton-1 chromeclass-toolbar-additional");
-                button.style.listStyleImage = "url('chrome://browser/skin/places/bookmarksToolbar.svg')";
+                button.style.listStyleImage = "url('resource://myfox/icons/bookmarks-toolbar.svg')";
                 button.style.fill = "currentColor";
                 button.style.mozContextProperties = "fill, fill-opacity, stroke, stroke-opacity";
 

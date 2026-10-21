@@ -1,0 +1,25 @@
+<svg version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+<style>
+path:not([stroke]), circle, rect, polygon {
+  fill: context-fill black;
+}
+path[stroke] {
+  fill: none;
+  stroke: context-fill black;
+}
+line, [stroke] {
+  stroke: context-fill black;
+}
+@media (prefers-color-scheme: dark) {
+  path:not([stroke]), circle, rect, polygon {
+    fill: context-fill white;
+  }
+  path[stroke] {
+    fill: none;
+    stroke: context-fill white;
+  }
+  line, [stroke] {
+    stroke: context-fill white;
+  }
+}
+</style><path d="m4.6621 3.201v18.395a0.56475 0.56475 28.389 0 0 0.87417 0.47244l6.5575-4.2947 6.5685 4.2899a0.56561 0.56561 151.57 0 0 0.87489-0.47356v-18.389a1.9862 1.9862 45 0 0-1.9862-1.9862h-10.903a1.9862 1.9862 135 0 0-1.9862 1.9862zm3.5363 0.013849h7.8024a1.5363 1.5363 45 0 1 1.5363 1.5363v14.188l-4.1571-2.7147a2.35 2.35 179.97 0 0-2.5718 0.0013l-4.1462 2.7134v-14.188a1.5363 1.5363 135 0 1 1.5363-1.5363z" stop-color="#000000" stroke-linecap="round" style="paint-order:markers stroke fill"/></svg>
