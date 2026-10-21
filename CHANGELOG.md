@@ -14,6 +14,7 @@
 - Trees (the edit-bookmark panel's folders, the Library, Page Info) have no dotted frame round the current row
 - The selected row of those trees is lit with a quiet fill instead of the system's accent
 - Text fields of the Library and the other older windows are 26px high with the small corner radius and a quiet border, instead of Nova's rounded ones
+- The Library's toolbar takes the window's colors instead of the system's title bar ones, which made a light strip at the top of a dark window
 
 ## 159.6 — 2026-10-19
 

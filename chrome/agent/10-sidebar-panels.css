@@ -219,6 +219,15 @@ moz-button.menu-button {
 treechildren::-moz-tree-row(current, focus) {
     outline: none !important;
 }
+/* The Library's toolbar: the window's colors, not the system's title bar
+   ones (-moz-headerbar, from the GTK theme, light even when the window
+   manager draws dark title bars), which made a light strip at the top of a
+   dark window. */
+#placesToolbar {
+    background-color: transparent !important;
+    color: inherit !important;
+}
+
 /* The selected row of those other than the sidebar's (which take the
    theme's sidebar highlight): a quiet fill of the text color, as a menu's
    item under the pointer has, not the system's accent with its own text
