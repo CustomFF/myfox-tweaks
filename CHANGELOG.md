@@ -8,6 +8,7 @@
 - about:myfox's "System integration" setting is called "Shell integration", as in MyFox
 - Checkbox and radio items of menus have the small flat checkboxes and radio buttons of the browser's pages instead of the system's large framed ones
 - Menus cast a deeper shadow, all round, so one opened from a panel (the translation offer's settings) no longer merges into it
+- The drop-downs of the window's panels (the translation panels, the site's HTTPS-Only setting, the camera, microphone and screen prompts) have no outline, as the drop-downs of the browser's pages
 
 ## 159.6 — 2026-10-19
 

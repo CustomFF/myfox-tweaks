@@ -47,8 +47,12 @@
     }
 
     /* Drop-downs are button-like: the same fill, no outline. Set on the
-       element itself: the component declares its own tokens on :host. */
-    moz-select {
+       element itself: the component declares its own tokens on :host. The
+       older drop-downs (menulist: the translation panels, the site's
+       HTTPS-Only setting, the camera and microphone prompts) read the same
+       tokens. */
+    moz-select,
+    menulist:not([native]) {
         --select-border: 1px solid transparent !important;
     }
 
