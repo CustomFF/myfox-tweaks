@@ -90,6 +90,11 @@
         background-color: var(--lwt-accent-color) !important;
         color: var(--lwt-text-color) !important;
     }
+    /* The others in the strip's text color: Firefox gives them the
+       system's field text color, white on a light theme here. */
+    #viewGroup > radio {
+        color: inherit !important;
+    }
     #viewGroup > radio[selected] {
         background-color: var(--tab-background-color-selected) !important;
         color: var(--tab-text-color-selected) !important;
