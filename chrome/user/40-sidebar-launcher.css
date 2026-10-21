@@ -38,3 +38,12 @@ sidebar-main[myfox-plain-launcher] {
     /* ...without moving the sidebar card beside it. */
     margin-inline-end: -3px !important;
 }
+
+/* With vertical tabs the row of buttons sits above the tabs, in the launcher
+   that holds them. Firefox places a dragged tab (position: absolute) by its
+   offset from the top of the tab strip, but its containing block was the
+   launcher, which starts at the row: the tab jumped up by the row's height
+   and more. The tab strip is its containing block instead. */
+sidebar-main[custom-launcher="true"] #tabbrowser-tabs[orient="vertical"] {
+    position: relative !important;
+}
