@@ -32,6 +32,7 @@
 - The settings' boxes have no frames: a row on its own is a filled plate, a group one filled plate with plain rows
 - The settings' file types table reads as a table: a header row of its own fill, two columns of different fills, the action menus centered, a darker row under the pointer
 - The website appearance tiles in the settings look like about:myfox's: no frame but the chosen one's 2px accent one, and rounder
+- Drop-down lists of the browser's pages (the settings' menus, about:addons' gear menu, the search engine picker) look like the menus: rows edge to edge, no frame, the menus' shadow; a drop-down is no longer framed while hovered or open
 - The passwords' add form has no frame round it, as the other cards
 
 ## 159.6 — 2026-10-19

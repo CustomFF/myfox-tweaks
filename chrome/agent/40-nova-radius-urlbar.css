@@ -164,11 +164,17 @@ moz-button.searchmode-switcher {
    own :host token rules, so a light-DOM rule on the host elements wins. */
 panel-list {
     --panel-list-border-radius: var(--myfox-radius) !important;
+    /* As the menus: no frame, and their shadow (../user/82-menu-rows.css). */
+    --panel-list-border-color: transparent !important;
+    --panel-list-box-shadow: var(--myfox-shadow-small), 0 0 3px rgba(0, 0, 0, 0.3) !important;
 }
 panel-list,
 panel-item {
     --panel-item-button-border-radius: 0px !important;
     --panel-item-button-padding: 4px 8px !important;
+    /* Rows edge to edge, as the menus' (Nova sets them 8px in). */
+    --panel-item-button-margin: 0 !important;
+    --panel-menuitem-margin: 0 !important;
 }
 /* Same text size and row density as the context menu (about:addons' gear
    menu otherwise inherits the page's 14px and roomy 8px row padding). */

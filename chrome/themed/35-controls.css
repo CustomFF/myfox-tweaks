@@ -63,6 +63,8 @@
     moz-select,
     menulist:not([native]) {
         --select-border: 1px solid transparent !important;
+        /* Nor when hovered or open (Nova frames it then). */
+        --select-border-color-hover: transparent !important;
     }
 
     /* Focus: the same thin accent border, not the design system's glowing ring. */
