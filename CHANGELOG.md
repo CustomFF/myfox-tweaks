@@ -10,6 +10,7 @@
 - The sidebar password card's alerts: the row's label in the warning color, a breached site's in red, and the alert bar a row of the card with a quiet tint (red for a breach) instead of a full-width block; the alerts view's messages are quiet tints too
 - The passwords sidebar's ... menu has "Remove found passwords (N)…" while something is searched for: it removes the logins found, after a confirmation
 - The passwords sidebar's ... menu has "Select several": the cards get checkboxes, a bar above the list says how many are selected, with Select all, Clear selection and Remove (after a confirmation)
+- While something is searched for, the passwords sidebar says how many logins were found
 
 ## 159.7 — 2026-10-22
 

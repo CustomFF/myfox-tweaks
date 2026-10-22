@@ -10,6 +10,7 @@
     "passwords.removeFoundTitle": "Удалить найденные пароли?",
     "passwords.removeFoundMessage": "Будут удалены найденные пароли: {0}. Отменить это нельзя.",
     "passwords.removeButton": "Удалить",
+    "passwords.found": "Найдено: {0}",
     "passwords.selectSeveral": "Выбрать несколько",
     "passwords.select": "Выбрать",
     "passwords.selected": "Выбрано: {0}",

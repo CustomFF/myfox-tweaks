@@ -13,6 +13,7 @@
     "passwords.removeFoundTitle": "Remove found passwords?",
     "passwords.removeFoundMessage": "The passwords found by the search will be removed: {0}. This can't be undone.",
     "passwords.removeButton": "Remove",
+    "passwords.found": "Found: {0}",
     "passwords.selectSeveral": "Select several",
     "passwords.select": "Select",
     "passwords.selected": "Selected: {0}",

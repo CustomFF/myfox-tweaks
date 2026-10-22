@@ -389,6 +389,27 @@
     return true;
   }
 
+  // While something is searched for, how many logins were found, under the
+  // All / Alerts row (the panel says it nowhere; All (N) has the total).
+  function updateFoundCount(megalist) {
+    let root = megalist.shadowRoot;
+    let row = root.querySelector(".second-row");
+    if (!row) return;
+    let doc = megalist.ownerDocument;
+    let el = root.querySelector(".myfox-pw-found");
+    let searching = !!(megalist.searchText || "").trim();
+    if (!searching) {
+      if (el) el.remove();
+      return;
+    }
+    if (!el) {
+      el = doc.createElementNS(HTML, "span");
+      el.className = "myfox-pw-found";
+      row.after(el);
+    }
+    el.textContent = t("passwords.found", (megalist.records || []).length);
+  }
+
   // Our items in the panel's ... menu, after Firefox's "Remove all":
   // "Remove found passwords (N)…" while something is searched for (it
   // removes just the logins found, the ones the list shows, after a
@@ -462,6 +483,14 @@
           scan();
           new sbWin.MutationObserver(scan).observe(root, { childList: true, subtree: true });
           try { addMenuItems(sbWin, megalist); } catch(e) {}
+          try {
+            let updated = megalist.updated;
+            megalist.updated = function(...args) {
+              if (updated) updated.apply(this, args);
+              updateFoundCount(megalist);
+            };
+            updateFoundCount(megalist);
+          } catch(e) {}
           return true;
         };
         if (!attach()) {
