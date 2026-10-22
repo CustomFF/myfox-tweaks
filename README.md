@@ -38,6 +38,13 @@ Many of the interface changes are made for the MyFox themes, so they need to be 
 The themes are in the [Signed themes](https://github.com/CustomFF/myfox-tweaks/releases) releases
 and are installed in about:addons: the gear menu → "Install Add-on From File…".
 
+The bookmarklets' icons on the bookmarks toolbar come from
+[ddblm](https://github.com/CustomFF/ddblm), which MyFox fetches by itself. By hand, copy its
+[`docs/blm_panel.css`](https://github.com/CustomFF/ddblm/blob/master/docs/blm_panel.css) into the
+profile's `chrome` folder and its [`icons`](https://github.com/CustomFF/ddblm/tree/master/icons)
+folder there as `chrome/panel-icons`, then restart Firefox. Without them the bookmarklets have no
+icons, and the "Add bookmarklets" bookmark, an icon with no label, is an empty button.
+
 #### Finding the install folder
 
 1. Open about:support.

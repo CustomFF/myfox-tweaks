@@ -38,6 +38,13 @@ MyFox tweaks — мои стили и настройки для интерфей
 нужно установить. Темы скачиваются из релизов [Signed themes](https://github.com/CustomFF/myfox-tweaks/releases)
 и ставятся в about:addons: меню с шестерёнкой → «Установить дополнение из файла…».
 
+Значки букмарклетов на панели закладок берутся из [ddblm](https://github.com/CustomFF/ddblm),
+MyFox скачивает их сам. Вручную скопируйте оттуда
+[`docs/blm_panel.css`](https://github.com/CustomFF/ddblm/blob/master/docs/blm_panel.css) в папку
+`chrome` профиля, а папку [`icons`](https://github.com/CustomFF/ddblm/tree/master/icons) — туда же
+под именем `chrome/panel-icons`, и перезапустите Firefox. Без них у букмарклетов нет значков, а
+закладка «Добавить букмарклеты» — значок без подписи — превращается в пустую кнопку.
+
 #### Как найти папку установки
 
 1. Откройте about:support.
