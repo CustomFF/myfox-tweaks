@@ -330,7 +330,8 @@
       return;
     }
     if (!bar) {
-      let anchor = root.querySelector(".second-row");
+      // Under the search's count, if there is one.
+      let anchor = root.querySelector(".myfox-pw-found") || root.querySelector(".second-row");
       if (!anchor) return;
       bar = doc.createElementNS(HTML, "div");
       bar.className = "myfox-pw-selectbar";
