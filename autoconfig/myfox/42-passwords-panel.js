@@ -152,6 +152,38 @@
     }
     patchMegalistHeights(card.constructor);
 
+    // Selecting several logins (see "Select several" below): a checkbox in
+    // the pencil's corner; a click anywhere on the card ticks it. Kept in
+    // step with the login the card shows, as the list reuses its cards.
+    let megalist = card.getRootNode().host;
+    let box = doc.createElementNS(HTML, "input");
+    box.type = "checkbox";
+    box.className = "myfox-pw-select";
+    box.setAttribute("aria-label", t("passwords.select"));
+    root.append(box);
+    box.addEventListener("click", e => e.stopPropagation());
+    box.addEventListener("change", () => {
+      let state = selectState(megalist);
+      let guid = card.origin && card.origin.guid;
+      if (box.checked) state.guids.add(guid);
+      else state.guids.delete(guid);
+      syncCard(card, state);
+      updateSelectBar(megalist);
+    });
+    root.addEventListener("click", e => {
+      let state = selectState(megalist);
+      if (!state.on || !e.isTrusted || e.composedPath().includes(box)) return;
+      e.stopPropagation();
+      e.preventDefault();
+      box.click();
+    }, true);
+    let updated = card.updated;
+    card.updated = function(...args) {
+      if (updated) updated.apply(this, args);
+      syncCard(card, selectState(megalist));
+    };
+    syncCard(card, selectState(megalist));
+
     function decorateParts() {
       // Each button calls the handler Firefox gives its row (the card's: it
       // asks for the primary password first where it has to), and goes no
@@ -247,49 +279,155 @@
     }
   }
 
-  // "Remove found passwords (N)…" in the panel's ... menu, after Firefox's
-  // "Remove all": while something is searched for, it removes just the
-  // logins found (the ones the list shows), after a confirmation. Hidden
-  // without a search. Put in again when the menu opens, should Firefox
-  // render the menu anew.
-  function addRemoveFound(sbWin, megalist) {
-    let root = megalist.shadowRoot;
-    let doc = sbWin.document;
-    const update = () => {
-      let removeAll = root.querySelector('panel-item[action="remove-all-logins"]');
-      if (!removeAll) return;
-      let item = root.querySelector('panel-item[action="myfox-remove-found"]');
-      if (!item) {
-        item = doc.createElement("panel-item");
-        item.setAttribute("action", "myfox-remove-found");
-        item.addEventListener("click", () => removeFound(sbWin, megalist));
-        removeAll.after(item);
-      }
-      let found = (megalist.records || []).length;
-      item.textContent = t("passwords.removeFound", found);
-      item.hidden = !(megalist.searchText || "").trim() || !found;
-    };
-    root.addEventListener("click", e => {
-      if (e.composedPath().some(n => n.id === "more-options-menubutton")) update();
-    }, true);
-    update();
+  // Selecting several logins to remove them at once. "Select several" in
+  // the ... menu turns it on: the cards get checkboxes (in the pencil's
+  // corner) and a bar above the list says how many are selected, with
+  // Select all (the logins the list shows), Clear selection, Remove (after
+  // a confirmation) and a button that turns it off. Selected by login, so
+  // a selection outlives searching and scrolling.
+  function selectState(megalist) {
+    if (!megalist.myfoxSelect) megalist.myfoxSelect = { on: false, guids: new Set() };
+    return megalist.myfoxSelect;
   }
 
-  async function removeFound(sbWin, megalist) {
-    let guids = new Set((megalist.records || []).map(r => r.origin && r.origin.guid).filter(Boolean));
-    if (!guids.size) return;
+  function syncCard(card, state) {
+    let root = card.shadowRoot;
+    let box = root && root.querySelector(".myfox-pw-select");
+    if (!box) return;
+    box.hidden = !state.on;
+    box.checked = state.on && state.guids.has(card.origin && card.origin.guid);
+    card.toggleAttribute("myfox-selecting", state.on);
+    card.toggleAttribute("myfox-selected", box.checked);
+    let edit = root.querySelector(".edit-line-container");
+    if (edit) edit.toggleAttribute("myfox-selecting", state.on);
+  }
+
+  function setSelecting(megalist, on) {
+    let state = selectState(megalist);
+    state.on = on;
+    state.guids.clear();
+    for (let card of megalist.shadowRoot.querySelectorAll("password-card")) syncCard(card, state);
+    updateSelectBar(megalist);
+  }
+
+  function makeBarButton(doc, label, onClick) {
+    let button = doc.createElementNS(HTML, "button");
+    button.className = "myfox-pw-selectbar-button";
+    button.textContent = label;
+    button.addEventListener("click", onClick);
+    return button;
+  }
+
+  // The bar, under the All / Alerts row; made again if Firefox renders the
+  // panel anew.
+  function updateSelectBar(megalist) {
+    let state = selectState(megalist);
+    let root = megalist.shadowRoot;
+    let doc = megalist.ownerDocument;
+    let bar = root.querySelector(".myfox-pw-selectbar");
+    if (!state.on) {
+      if (bar) bar.remove();
+      return;
+    }
+    if (!bar) {
+      let anchor = root.querySelector(".second-row");
+      if (!anchor) return;
+      bar = doc.createElementNS(HTML, "div");
+      bar.className = "myfox-pw-selectbar";
+      let count = doc.createElementNS(HTML, "span");
+      count.className = "myfox-pw-selectcount";
+      let close = makeBarButton(doc, "", () => setSelecting(megalist, false));
+      close.classList.add("myfox-pw-selectbar-close");
+      close.title = t("common.close");
+      close.setAttribute("aria-label", t("common.close"));
+      let remove = makeBarButton(doc, t("passwords.removeSelected"), () => removeSelected(megalist));
+      remove.classList.add("myfox-pw-selectbar-remove");
+      bar.append(
+        count, remove, close,
+        makeBarButton(doc, t("passwords.selectAll"), () => {
+          for (let record of megalist.records || []) {
+            if (record.origin && record.origin.guid) state.guids.add(record.origin.guid);
+          }
+          for (let card of root.querySelectorAll("password-card")) syncCard(card, state);
+          updateSelectBar(megalist);
+        }),
+        makeBarButton(doc, t("passwords.selectNone"), () => {
+          state.guids.clear();
+          for (let card of root.querySelectorAll("password-card")) syncCard(card, state);
+          updateSelectBar(megalist);
+        })
+      );
+      anchor.after(bar);
+    }
+    bar.querySelector(".myfox-pw-selectcount").textContent = t("passwords.selected", state.guids.size);
+    bar.querySelector(".myfox-pw-selectbar-remove").disabled = !state.guids.size;
+  }
+
+  async function removeSelected(megalist) {
+    let state = selectState(megalist);
+    if (await confirmRemove(megalist.ownerDocument.defaultView, new Set(state.guids),
+        "passwords.removeSelectedTitle", "passwords.removeSelectedMessage")) {
+      setSelecting(megalist, false);
+    }
+  }
+
+  // Asks, then removes the logins; true if they were.
+  async function confirmRemove(sbWin, guids, titleKey, messageKey) {
+    if (!guids.size) return false;
     let ok = Services.prompt.confirmEx(sbWin.top,
-      t("passwords.removeFoundTitle"), t("passwords.removeFoundMessage", guids.size),
+      t(titleKey), t(messageKey, guids.size),
       Services.prompt.BUTTON_POS_0 * Services.prompt.BUTTON_TITLE_IS_STRING +
       Services.prompt.BUTTON_POS_1 * Services.prompt.BUTTON_TITLE_CANCEL +
       Services.prompt.BUTTON_POS_1_DEFAULT,
-      t("passwords.removeFoundButton"), null, null, null, {}) === 0;
-    if (!ok) return;
+      t("passwords.removeButton"), null, null, null, {}) === 0;
+    if (!ok) return false;
     for (let login of await Services.logins.getAllLogins()) {
       if (guids.has(login.guid)) {
         try { await Services.logins.removeLoginAsync(login); } catch(e) {}
       }
     }
+    return true;
+  }
+
+  // Our items in the panel's ... menu, after Firefox's "Remove all":
+  // "Remove found passwords (N)…" while something is searched for (it
+  // removes just the logins found, the ones the list shows, after a
+  // confirmation), and "Select several". Put in again when the menu opens,
+  // should Firefox render the menu anew.
+  function addMenuItems(sbWin, megalist) {
+    let root = megalist.shadowRoot;
+    let doc = sbWin.document;
+    const item = (action, after, onClick) => {
+      let el = root.querySelector(`panel-item[action="${action}"]`);
+      if (!el) {
+        el = doc.createElement("panel-item");
+        el.setAttribute("action", action);
+        el.addEventListener("click", onClick);
+        after.after(el);
+      }
+      return el;
+    };
+    const update = () => {
+      let removeAll = root.querySelector('panel-item[action="remove-all-logins"]');
+      if (!removeAll) return;
+      let found = (megalist.records || []).length;
+      let removeFound = item("myfox-remove-found", removeAll, () =>
+        confirmRemove(sbWin, new Set((megalist.records || []).map(r => r.origin && r.origin.guid).filter(Boolean)),
+          "passwords.removeFoundTitle", "passwords.removeFoundMessage"));
+      removeFound.textContent = t("passwords.removeFound", found);
+      removeFound.hidden = !(megalist.searchText || "").trim() || !found;
+      let select = item("myfox-select", removeFound, () => setSelecting(megalist, true));
+      select.textContent = t("passwords.selectSeveral");
+      select.hidden = selectState(megalist).on || !found;
+    };
+    root.addEventListener("click", e => {
+      if (e.composedPath().some(n => n.id === "more-options-menubutton")) update();
+    }, true);
+    // Escape leaves selecting.
+    root.addEventListener("keydown", e => {
+      if (e.key === "Escape" && selectState(megalist).on) setSelecting(megalist, false);
+    });
+    update();
   }
 
   function decorateCards(sbWin) {
@@ -307,6 +445,9 @@
           let root = megalist && megalist.shadowRoot;
           if (!root) return false;
           const scan = () => {
+            if (megalist.myfoxSelect && megalist.myfoxSelect.on && !root.querySelector(".myfox-pw-selectbar")) {
+              updateSelectBar(megalist);
+            }
             for (let card of root.querySelectorAll("password-card")) {
               if (card.myfoxButtons) continue;
               Promise.resolve(card.updateComplete).then(() => {
@@ -320,7 +461,7 @@
           };
           scan();
           new sbWin.MutationObserver(scan).observe(root, { childList: true, subtree: true });
-          try { addRemoveFound(sbWin, megalist); } catch(e) {}
+          try { addMenuItems(sbWin, megalist); } catch(e) {}
           return true;
         };
         if (!attach()) {

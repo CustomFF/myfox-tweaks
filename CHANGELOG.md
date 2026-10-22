@@ -9,6 +9,7 @@
 - about:logins' list starts level with the login's card, its rows denser, 2px apart; a login with an alert is tinted, a breached site red, a vulnerable password or no username orange; the breach alert is a quiet tint instead of a framed red block
 - The sidebar password card's alerts: the row's label in the warning color, a breached site's in red, and the alert bar a row of the card with a quiet tint (red for a breach) instead of a full-width block; the alerts view's messages are quiet tints too
 - The passwords sidebar's ... menu has "Remove found passwords (N)…" while something is searched for: it removes the logins found, after a confirmation
+- The passwords sidebar's ... menu has "Select several": the cards get checkboxes, a bar above the list says how many are selected, with Select all, Clear selection and Remove (after a confirmation)
 
 ## 159.7 — 2026-10-22
 
