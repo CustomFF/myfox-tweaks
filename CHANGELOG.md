@@ -1,15 +1,18 @@
 # Changelog
 
-## Unreleased
+## 159.7 — 2026-10-22
 
 - The search engine button at the start of the address bar fits inside the bar again; since 159.4 it stuck out below it
 - In the vertical tab column, a background tab's ear is solid: a tab group's color no longer shows through it
 - With the sidebar's buttons in a row above the vertical tabs, a dragged tab stays under the pointer instead of jumping up the column
 - about:myfox's "System integration" setting is called "Shell integration", as in MyFox
+- Tooltips keep their right edge on Wayland with a fractional scale, where it was cut off
 - Checkbox and radio items of menus have the small flat checkboxes and radio buttons of the browser's pages instead of the system's large framed ones
 - Menus cast a deeper shadow, all round, so one opened from a panel (the translation offer's settings) no longer merges into it
 - The drop-downs of the window's panels (the translation panels, the site's HTTPS-Only setting, the camera, microphone and screen prompts) have no outline, as the drop-downs of the browser's pages
+- Drop-down lists of the browser's pages (the settings' menus, about:addons' gear menu, the search engine picker) look like the menus: rows edge to edge, no frame, the menus' shadow; a drop-down is no longer framed while hovered or open
 - Checkboxes and radio buttons of the window's panels and of the older dialogs (Page Info) are small and flat, as in the browser's pages, instead of the system's
+- Checkboxes and radio buttons of the browser's pages are centered on their label's line; they sat above its middle (the passwords sidebar's All / Alerts filter)
 - The edit-bookmark panel's folder drop-down is like the other drop-downs: the button's fill, no outline
 - Trees (the edit-bookmark panel's folders, the Library, Page Info) have no dotted frame round the current row
 - The selected row of those trees is lit with a quiet fill instead of the system's accent
@@ -18,21 +21,19 @@
 - The Library and Page Info are light or dark with the browser's theme, not with the system's
 - Under a MyFox theme the Library and Page Info take the theme's colors (the Library's folders the sidebar's, Page Info's sections a tab strip), and their fields, buttons and lists the controls' look, with no frames
 - The sidebar's buttons start under the first buttons of the navigation and bookmarks toolbars, in a column beside the sidebar or in a row above it, with horizontal or vertical tabs alike; the column no longer cuts off the selected button's fill
-- Tooltips keep their right edge on Wayland with a fractional scale, where it was cut off
-- The about:config bookmark on the bookmarks toolbar has an icon of tools instead of the gear, which the sidebar's customize button has too
 - The sidebar button's tooltip says "Show sidebar" while the sidebar is hidden; it always said "Hide sidebar"
 - View > Sidebar has the Downloads, Extensions and Firefox Translations panels by name; they were empty rows
 - View > Sidebar has radio items instead of checkboxes: one panel shows at a time
 - The bookmarks toolbar button's tooltip says "Show bookmarks toolbar" or "Hide bookmarks toolbar", in Firefox's own words and language
 - The bookmarks toolbar button has a new icon, outlined like the other toolbar icons, instead of a filled one
 - The sidebar and bookmarks toolbar buttons, while on, have a quieter fill, brighter under the pointer
+- The about:config bookmark on the bookmarks toolbar has an icon of tools instead of the gear, which the sidebar's customize button has too
 - Tooltips all look alike, Firefox's own ones for toolbar buttons too: the theme's sidebar colors with a quiet frame, the menu text size, instead of the system's colors, frame and font
 - Text fields of the browser's pages and panels (settings, the passwords' add form, the sidebar's search boxes) are filled, 26px high with the small radius, and show an accent frame when focused; newer Firefox had left them with Nova's rounded, framed look
 - Every text field has the same quiet frame (a fifth of the text color): the find bar, the bookmark panel, the Library, the downloads and translations panels, the pages' fields
 - The settings' boxes have no frames: a row on its own is a filled plate, a group one filled plate with plain rows
 - The settings' file types table reads as a table: a header row of its own fill, two columns of different fills, the action menus centered, a darker row under the pointer
 - The website appearance tiles in the settings look like about:myfox's: no frame but the chosen one's 2px accent one, and rounder
-- Drop-down lists of the browser's pages (the settings' menus, about:addons' gear menu, the search engine picker) look like the menus: rows edge to edge, no frame, the menus' shadow; a drop-down is no longer framed while hovered or open
 - The settings' search engine and website language lists are denser, their rows separate plates 2px apart
 - Keyboard focus shows on round close buttons and the settings' menu: the ring is inside a close button (in a panel's corner it was cut off), square on a menu item instead of a pill, and double on the selected item, the accent outside and the item's text color inside
 - The Downloads panel's close button is reached with Tab, as in the other panels; all of our panels share one title row
@@ -40,7 +41,6 @@
 - A password card in the sidebar is a small form: short labels (Site, User, Password) in a column aligned on their colons, the values after them, no site icon, the site as plain text instead of a link, the rows closer together
 - The password card's rows are no longer buttons: each row has its own buttons, shown while the pointer is on it (or the keyboard's focus in it): open and copy for the site (the full address), copy for the username, show and copy for the password; the card and the row under the pointer are lit
 - Editing a password is a pencil in the card's top-left corner, shown while the pointer is on the card, instead of a full-width Edit button under the password
-- Checkboxes and radio buttons of the browser's pages are centered on their label's line; they sat above its middle (the passwords sidebar's All / Alerts filter)
 
 ## 159.6 — 2026-10-19
 
