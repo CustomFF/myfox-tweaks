@@ -40,6 +40,7 @@
 - A password card in the sidebar is a small form: short labels (Site, User, Password) in a column aligned on their colons, the values after them, no site icon, the site as plain text instead of a link, the rows closer together
 - The password card's rows are no longer buttons: each row has its own buttons, shown while the pointer is on it (or the keyboard's focus in it): open and copy for the site (the full address), copy for the username, show and copy for the password; the card and the row under the pointer are lit
 - Editing a password is a pencil in the card's top-left corner, shown while the pointer is on the card, instead of a full-width Edit button under the password
+- Checkboxes and radio buttons of the browser's pages are centered on their label's line; they sat above its middle (the passwords sidebar's All / Alerts filter)
 
 ## 159.6 — 2026-10-19
 
