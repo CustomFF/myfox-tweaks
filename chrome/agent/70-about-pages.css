@@ -191,8 +191,83 @@ moz-message-bar {
 moz-promo {
     --promo-border-radius: var(--myfox-radius) !important;
 }
+/* The settings' boxes have no frames. A row on its own (Sign in, Manage
+   themes) is a filled plate; a group of rows is one filled plate, its rows
+   with no fill, frame, line or corners of their own. */
+moz-box-group,
+moz-box-item,
+moz-box-link,
+moz-box-button {
+    --box-border-color: transparent !important;
+    --box-button-background-color: color-mix(in srgb, currentColor 6%, transparent) !important;
+}
+moz-box-item {
+    background-color: color-mix(in srgb, currentColor 6%, transparent) !important;
+}
+moz-box-group {
+    outline: none !important;
+    background-color: color-mix(in srgb, currentColor 6%, transparent) !important;
+}
+moz-box-group > :is(moz-box-item, moz-box-link, moz-box-button) {
+    --box-border: none !important;
+    --box-border-radius: 0px !important;
+    --box-border-radius-inner: 0px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    --box-button-background-color: transparent !important;
+    background-color: transparent !important;
+}
+
+/* The file types table (General > Files and Applications) is a table: a
+   header row of its own fill, two columns told apart by their fill, the
+   action menus centered in theirs, as much air above the first row and
+   below the last as between rows, and a darker row under the pointer.
+   Its rows are laid out from outside: rules from here don't reach into
+   them (:host() doesn't match from an agent sheet). The action menu shows
+   at most 240px of its box. */
+#applicationsHandlersView {
+    background: linear-gradient(to right, color-mix(in srgb, currentColor 6%, transparent) calc(100% - 256px), color-mix(in srgb, currentColor 10%, transparent) calc(100% - 256px)) !important;
+
+    > moz-box-item {
+        --box-padding: 6px 8px 6px 12px !important;
+    }
+    > moz-box-item[slot="header"] + moz-box-item {
+        --box-padding: 12px 8px 6px 12px !important;
+    }
+    > moz-box-item:not([slot="header"]):last-child {
+        --box-padding: 6px 8px 12px 12px !important;
+    }
+    > moz-box-item:not([slot="header"]):hover {
+        background-color: rgba(0, 0, 0, 0.06) !important;
+    }
+    > moz-box-item > [slot="actions"] {
+        margin-inline-start: 14px !important;
+        width: 240px !important;
+    }
+    > moz-box-item[slot="header"] {
+        background-color: color-mix(in srgb, currentColor 8%, transparent) !important;
+        border-start-start-radius: var(--myfox-radius) !important;
+        border-start-end-radius: var(--myfox-radius) !important;
+
+        > label {
+            display: block !important;
+            text-align: center !important;
+        }
+        > label[slot="actions"] {
+            width: 240px !important;
+        }
+    }
+}
+
+/* The website appearance tiles: as about:myfox's, no frame but the
+   chosen one's, a 2px accent one, rounded 4px more than the picture in it. */
 moz-visual-picker-item {
-    --visual-picker-item-border-radius: var(--myfox-radius) !important;
+    --visual-picker-item-border-radius: calc(var(--myfox-radius) + 4px) !important;
+    --visual-picker-item-border-width-checked: 2px !important;
+    --border-color-selected: var(--myfox-accent) !important;
+}
+moz-visual-picker-item:not([checked]) {
+    --visual-picker-item-border-color: transparent !important;
 }
 
 /* New-tab page: one radius for the search field (Nova makes it a pill), less

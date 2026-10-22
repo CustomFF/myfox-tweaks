@@ -29,6 +29,9 @@
 - Tooltips all look alike, Firefox's own ones for toolbar buttons too: the theme's sidebar colors with a quiet frame, the menu text size, instead of the system's colors, frame and font
 - Text fields of the browser's pages and panels (settings, the passwords' add form, the sidebar's search boxes) are filled, 26px high with the small radius, and show an accent frame when focused; newer Firefox had left them with Nova's rounded, framed look
 - Every text field has the same quiet frame (a fifth of the text color): the find bar, the bookmark panel, the Library, the downloads and translations panels, the pages' fields
+- The settings' boxes have no frames: a row on its own is a filled plate, a group one filled plate with plain rows
+- The settings' file types table reads as a table: a header row of its own fill, two columns of different fills, the action menus centered, a darker row under the pointer
+- The website appearance tiles in the settings look like about:myfox's: no frame but the chosen one's 2px accent one, and rounder
 - The passwords' add form has no frame round it, as the other cards
 
 ## 159.6 — 2026-10-19
