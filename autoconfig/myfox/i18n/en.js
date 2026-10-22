@@ -5,6 +5,7 @@
 (function (MyFox) {
   MyFox.messages.en = {
     "common.clear": "Clear",
+    "common.close": "Close",
 
     "panel.downloads.title": "Downloads",
     "panel.addons.title": "Extensions",

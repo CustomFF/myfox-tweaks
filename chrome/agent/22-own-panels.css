@@ -1,5 +1,7 @@
-/* Panels built on a blank page (Extensions, Translations): the page layout, a
-   title row and a close button, matching the built-in panels' header.
+/* Our own sidebar panels: the title row and close button every one of them
+   has (Downloads, Extensions, Translations; built by createPanelTitleRow in
+   myfox/00-common.js), matching the built-in panels' header, and the page
+   layout of those built on a blank page (Extensions, Translations).
    Agent sheet (registered by myfox.cfg): reaches into shadow DOM and beats
    the documents' own styles. Load order is by file name. */
 
@@ -40,11 +42,16 @@
     .myfox-panel-title-row h4 {
         flex: 1 !important;
         margin: 0 !important;
+        padding: 0 !important;
         font-size: var(--myfox-font-size) !important;
         font-weight: 700 !important;
         line-height: 20px !important;
+        color: var(--sidebar-text-color, currentColor) !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
     }
-    #myfox-panel-close {
+    .myfox-panel-close {
         appearance: none !important;
         border: none !important;
         background: transparent !important;
@@ -62,11 +69,18 @@
         cursor: pointer !important;
         opacity: 0.7 !important;
     }
-    #myfox-panel-close:hover {
+    /* The focus ring inside the circle: outside it, at the panel's corner,
+       it lost its top and right to the edge. */
+    .myfox-panel-close:focus-visible {
+        outline: var(--myfox-focus-border) !important;
+        outline-offset: calc(-1 * var(--myfox-focus-width)) !important;
+        opacity: 1 !important;
+    }
+    .myfox-panel-close:hover {
         background: var(--button-bgcolor-hover, color-mix(in srgb, currentColor 12%, transparent)) !important;
         opacity: 1 !important;
     }
-    #myfox-panel-close img {
+    .myfox-panel-close img {
         width: 12px !important;
         height: 12px !important;
         -moz-context-properties: fill !important;

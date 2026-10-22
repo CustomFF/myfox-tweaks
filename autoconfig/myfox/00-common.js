@@ -181,6 +181,31 @@
     return luminance > 0.5 ? "dark" : "light";
   }
 
+  // The title row every panel of ours has (Downloads, Extensions,
+  // Translations): its title and a close button, an HTML button so Tab
+  // reaches it. Styled by chrome/agent/22-own-panels.css.
+  function createPanelTitleRow(sidebarDoc, sbCtrl, title) {
+    const HTML = "http://www.w3.org/1999/xhtml";
+    let titleRow = sidebarDoc.createElementNS(HTML, "div");
+    titleRow.className = "myfox-panel-title-row";
+    let h4 = sidebarDoc.createElementNS(HTML, "h4");
+    h4.textContent = title;
+    titleRow.appendChild(h4);
+    let closeBtn = sidebarDoc.createElementNS(HTML, "button");
+    closeBtn.className = "myfox-panel-close";
+    closeBtn.title = t("common.close");
+    closeBtn.setAttribute("aria-label", t("common.close"));
+    let closeImg = sidebarDoc.createElementNS(HTML, "img");
+    closeImg.src = "chrome://global/skin/icons/close.svg";
+    closeImg.alt = "";
+    closeBtn.appendChild(closeImg);
+    closeBtn.addEventListener("click", () => {
+      try { if (sbCtrl) sbCtrl.hide(); } catch(ex) {}
+    });
+    titleRow.appendChild(closeBtn);
+    return titleRow;
+  }
+
   // The skeleton of a panel built on a blank page (Extensions, Translations):
   // Firefox's theme stylesheet, the sidebar's colors, and a title row with a
   // close button. Returns the panel element (not attached yet) and a small
@@ -231,24 +256,12 @@
     }, { once: true });
 
     let panel = mk("div", id, "myfox-panel");
-    let titleRow = mk("div", null, "myfox-panel-title-row");
-    let h4 = mk("h4");
-    h4.textContent = title;
-    titleRow.appendChild(h4);
-    let closeBtn = mk("button", "myfox-panel-close");
-    let closeImg = mk("img");
-    closeImg.src = "chrome://global/skin/icons/close.svg";
-    closeBtn.appendChild(closeImg);
-    closeBtn.addEventListener("click", () => {
-      try { if (sbCtrl) sbCtrl.hide(); } catch(ex) {}
-    });
-    titleRow.appendChild(closeBtn);
-    panel.appendChild(titleRow);
+    panel.appendChild(createPanelTitleRow(sidebarDoc, sbCtrl, title));
     return { panel, mk, onThemeChange: fn => themeListeners.push(fn) };
   }
 
   Object.assign(MyFox, {
-    wrapSearchWithClear, createOwnPanel, themeScheme,
+    wrapSearchWithClear, createPanelTitleRow, createOwnPanel, themeScheme,
     t, oncePerProfile, whenDelayedStartupDone,
     runOnDOMContentLoaded, notifyLayoutChange, whenPlacesReady,
   });

@@ -1,7 +1,7 @@
 // Downloads sidebar: about:downloads has no header or footer of its own in a
 // sidebar, so build them. Styled by chrome/agent/20-downloads-sidebar.css.
 (function (MyFox) {
-  const { t, wrapSearchWithClear } = MyFox;
+  const { t, wrapSearchWithClear, createPanelTitleRow } = MyFox;
 
   // Builds the downloads sidebar's own header (title, close button,
   // search box) and footer ("Clear downloads") — about:downloads has none
@@ -14,26 +14,7 @@
     let header = sidebarDoc.createElementNS("http://www.w3.org/1999/xhtml", "div");
     header.id = "downloads-sidebar-header";
 
-    let titleRow = sidebarDoc.createElementNS("http://www.w3.org/1999/xhtml", "div");
-    titleRow.className = "downloads-sidebar-title-row";
-
-    let h4 = sidebarDoc.createElementNS("http://www.w3.org/1999/xhtml", "h4");
-    h4.textContent = t("panel.downloads.title");
-    titleRow.appendChild(h4);
-
-    let closeBtn = sidebarDoc.createXULElement("toolbarbutton");
-    closeBtn.id = "downloads-sidebar-close";
-    closeBtn.setAttribute("data-l10n-id", "close-button");
-    let img = sidebarDoc.createXULElement("image");
-    img.setAttribute("src", "chrome://global/skin/icons/close.svg");
-    closeBtn.appendChild(img);
-    closeBtn.addEventListener("click", function() {
-      try {
-        if (sbCtrl) sbCtrl.hide();
-      } catch(ex) {}
-    });
-    titleRow.appendChild(closeBtn);
-    header.appendChild(titleRow);
+    header.appendChild(createPanelTitleRow(sidebarDoc, sbCtrl, t("panel.downloads.title")));
 
     // Search input inside the header
     let searchContainer = sidebarDoc.createElementNS("http://www.w3.org/1999/xhtml", "div");

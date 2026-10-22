@@ -2,6 +2,7 @@
 (function (MyFox) {
   MyFox.messages.ru = {
     "common.clear": "Очистить",
+    "common.close": "Закрыть",
 
     "panel.downloads.title": "Загрузки",
     "panel.addons.title": "Расширения",

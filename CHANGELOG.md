@@ -35,6 +35,7 @@
 - Drop-down lists of the browser's pages (the settings' menus, about:addons' gear menu, the search engine picker) look like the menus: rows edge to edge, no frame, the menus' shadow; a drop-down is no longer framed while hovered or open
 - The settings' search engine list is denser, its rows separate plates 2px apart
 - Keyboard focus shows on round close buttons and the settings' menu: the ring is inside a close button (in a panel's corner it was cut off), square on a menu item instead of a pill, and double on the selected item, the accent outside and the item's text color inside
+- The Downloads panel's close button is reached with Tab, as in the other panels; all of our panels share one title row
 - The passwords' add form has no frame round it, as the other cards
 
 ## 159.6 — 2026-10-19

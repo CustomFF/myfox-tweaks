@@ -14,57 +14,6 @@
     background: transparent !important;
     border: none !important;
 }
-.downloads-sidebar-title-row {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    height: 20px !important;                /* Same header row as the built-in panels */
-    min-height: 20px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-.downloads-sidebar-title-row h4 {
-    font-size: var(--myfox-font-size) !important;             /* Matches standard h4 size */
-    font-weight: 700 !important;            /* Matches standard h4 weight (bold) */
-    color: var(--sidebar-text-color, currentColor) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: 20px !important;           /* Centers text vertically in the 20px header */
-    height: 20px !important;
-    flex: 1 !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-}
-#downloads-sidebar-close {
-    appearance: none !important;
-    border: none !important;
-    background: transparent !important;
-    width: 20px !important;                 /* Round like every other close button */
-    height: 20px !important;
-    min-width: 20px !important;
-    min-height: 20px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    cursor: pointer !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    opacity: 0.7 !important;
-}
-#downloads-sidebar-close:hover {
-    background: var(--button-bgcolor-hover, rgba(255,255,255,0.1)) !important;
-    opacity: 1 !important;
-}
-#downloads-sidebar-close image,
-#downloads-sidebar-close img {
-    width: 12px !important;
-    height: 12px !important;
-    -moz-context-properties: fill !important;
-    fill: currentColor !important;
-}
-
 /* Compact downloads list for sidebar */
 #contentAreaDownloadsView {
     padding: 4px !important;                 /* Matches Bookmarks root padding of 4px on all sides */
