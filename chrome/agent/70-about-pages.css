@@ -93,6 +93,23 @@ moz-box-item[id^="searchmode-"] {
         margin-block-start: 2px !important;
     }
 }
+/* The website languages list (Languages): the same, its rows (and the one
+   with the language picker) plates of their own, 2px apart. They sit right
+   in the group, so they are made plates again over the group's plain rows. */
+#websiteLanguageWrapper {
+    background-color: transparent !important;
+
+    > moz-box-item {
+        --box-padding: 3px 8px !important;
+        --box-border-radius: var(--myfox-radius) !important;
+        --box-border-radius-inner: var(--myfox-radius) !important;
+        border-radius: var(--myfox-radius) !important;
+        background-color: color-mix(in srgb, currentColor 6%, transparent) !important;
+    }
+    > moz-box-item + moz-box-item {
+        margin-block-start: 2px !important;
+    }
+}
 
 /* about:addons list: each add-on is a .card with 16px of bottom margin and
    11px of padding all round, and recommended ones stack a further 7px above
