@@ -14,19 +14,13 @@
   // measure cards, it sizes the not-yet-rendered chunks from constants
   // hardcoded in its script (215+13px per card). Our CSS makes the card
   // more compact (chrome/agent/60-password-manager.css), so keep the
-  // constants in sync — otherwise scrolling jumps on long lists. Done
-  // once when the panel loads, no polling.
-  function patchMegalistHeights(sbWin) {
-    try {
-      if (!sbWin || !/megalist/.test(sbWin.document.documentURI)) return;
-      sbWin.customElements.whenDefined("password-card").then(() => {
-        try {
-          let PC = sbWin.customElements.get("password-card");
-          PC.DEFAULT_PASSWORD_CARD_HEIGHT = MEGALIST_CARD_HEIGHT;
-          PC.WITH_ALERT_PASSWORD_CARD_HEIGHT = MEGALIST_CARD_HEIGHT + MEGALIST_ALERT_EXTRA_HEIGHT;
-        } catch(e) {}
-      });
-    } catch(e) {}
+  // constants in sync — otherwise scrolling jumps on long lists. Done once,
+  // when the first card is made ours (Firefox's cards keep Firefox's).
+  function patchMegalistHeights(PC) {
+    if (PC.myfoxHeights) return;
+    PC.myfoxHeights = true;
+    PC.DEFAULT_PASSWORD_CARD_HEIGHT = MEGALIST_CARD_HEIGHT;
+    PC.WITH_ALERT_PASSWORD_CARD_HEIGHT = MEGALIST_CARD_HEIGHT + MEGALIST_ALERT_EXTRA_HEIGHT;
   }
 
   // A card's rows are labeled with short words of ours, shown by
@@ -123,105 +117,135 @@
     }, 50);
   }
 
+  // A card is made ours only if every part of Firefox's we rely on is
+  // there; then it and those parts are marked myfox-card, and all our
+  // styles for it go by that mark. If Firefox changes the card, it stays
+  // Firefox's own, whole and working, instead of half ours.
   function decorateCard(card, copyLabel) {
     let root = card.shadowRoot;
     if (!root || card.myfoxButtons) return;
+    card.myfoxButtons = true;
     let origin = root.querySelector('login-line[linetype="origin"]');
     let username = root.querySelector('login-line[linetype="username"]');
     let concealed = root.querySelector("concealed-login-line");
     let password = concealed && concealed.shadowRoot && concealed.shadowRoot.querySelector("login-line");
     let reveal = concealed && concealed.shadowRoot && concealed.shadowRoot.querySelector(".reveal-button-container");
+    let editLine = root.querySelector(".edit-line-container");
     let lineOf = row => row && row.shadowRoot && row.shadowRoot.querySelector(".line-container");
-    if (!lineOf(origin) || !lineOf(username) || !password || !reveal) return;
-    card.myfoxButtons = true;
-    let doc = card.ownerDocument;
-
-    // Each button calls the handler Firefox gives its row (the card's: it
-    // asks for the primary password first where it has to), and goes no
-    // further: the row would take the click as its own.
-    const onClick = (button, fn) => button.addEventListener("click", e => {
-      e.stopPropagation();
-      fn();
-    });
-
-    let visit = makeButton(doc, "visit", VISIT_ICON);
-    onClick(visit, () => origin.onLineClick());
-    let copySite = makeButton(doc, "copy", COPY_ICON, copyLabel);
-    onClick(copySite, () => {
-      try {
-        let address = (card.origin && card.origin.href) || origin.value;
-        Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper).copyString(address);
-        showCopied(copySite, null);
-      } catch(ex) {}
-    });
-    lineOf(origin).append(visit, copySite);
-    moveTitle(origin, visit);
-
-    let copyUser = makeButton(doc, "copy", COPY_ICON, copyLabel);
-    onClick(copyUser, () => {
-      username.onLineClick();
-      showCopied(copyUser, username);
-    });
-    lineOf(username).append(copyUser);
-    moveTitle(username, null);
-
-    let copyPassword = makeButton(doc, "copy", COPY_ICON, copyLabel);
-    onClick(copyPassword, () => {
-      concealed.onLineClick();
-      showCopied(copyPassword, password);
-    });
-    reveal.after(copyPassword);
-    moveTitle(password, null);
-
-    // The pencil's tooltip is its own label ("Edit"), not "Edit password":
-    // the card is all about the one password. Kept so as Firefox localizes
-    // the button again.
-    let edit = root.querySelector(".edit-button");
-    if (edit) {
-      const retitle = () => {
-        let label = edit.textContent.trim();
-        if (label && edit.getAttribute("tooltiptext") !== label) edit.setAttribute("tooltiptext", label);
-      };
-      retitle();
-      new doc.defaultView.MutationObserver(retitle).observe(edit, { attributes: true, attributeFilter: ["tooltiptext"], childList: true, characterData: true, subtree: true });
+    let lines = [origin, username, password].map(lineOf);
+    let labelOf = (line, name) => line && line.querySelector(`label[data-l10n-id="contextual-manager-passwords-${name}-label"]`);
+    if (lines.some(l => !l) || !reveal || !reveal.querySelector(".reveal-button") ||
+        !editLine || !editLine.querySelector(".edit-button") ||
+        !labelOf(lines[0], "origin") || !labelOf(lines[1], "username") || !labelOf(lines[2], "password") ||
+        !lines[0].querySelector(".fav-icon") ||
+        [origin, username, concealed].some(row => typeof row.onLineClick != "function") ||
+        !card.origin || typeof card.origin.href != "string") {
+      return;
     }
+    let doc = card.ownerDocument;
+    let added = [];
+    try {
+      decorateParts();
+    } catch(e) {
+      for (let el of added) el.remove();
+      return;
+    }
+    for (let el of [card, origin, username, concealed, password, ...lines, reveal, editLine]) {
+      el.setAttribute("myfox-card", "");
+    }
+    patchMegalistHeights(card.constructor);
 
-    // Clicks and Enter on a row itself go nowhere; the buttons' go through.
-    const block = e => {
-      if (e.type === "keypress" && e.code !== "Enter" && e.code !== "Space") return;
-      let path = e.composedPath();
-      if (path.some(n => n.classList && (n.classList.contains("myfox-pw-btn") || n.classList.contains("reveal-button") || n.classList.contains("edit-button")))) return;
-      if (path.some(n => n.localName === "login-line")) {
+    function decorateParts() {
+      // Each button calls the handler Firefox gives its row (the card's: it
+      // asks for the primary password first where it has to), and goes no
+      // further: the row would take the click as its own.
+      const onClick = (button, fn) => button.addEventListener("click", e => {
         e.stopPropagation();
-        e.preventDefault();
-      }
-    };
-    root.addEventListener("click", block, true);
-    root.addEventListener("keypress", block, true);
+        fn();
+      });
 
-    // The buttons show with the focus from the keyboard in their row (and
-    // the pencil with it anywhere in the card): the card and the row it's in
-    // are marked myfox-focus. Not :focus-within, which a click leaves on
-    // (nor :focus-visible, which a clicked value's field has as well).
-    const win = doc.defaultView;
-    let byPointer = false;
-    doc.addEventListener("pointerdown", () => byPointer = true, true);
-    doc.addEventListener("keydown", () => byPointer = false, true);
-    const markFocus = () => {
-      let focused = doc.activeElement;
-      while (focused && focused.shadowRoot && focused.shadowRoot.activeElement) {
-        focused = focused.shadowRoot.activeElement;
+      let visit = makeButton(doc, "visit", VISIT_ICON);
+      onClick(visit, () => origin.onLineClick());
+      let copySite = makeButton(doc, "copy", COPY_ICON, copyLabel);
+      onClick(copySite, () => {
+        try {
+          let address = (card.origin && card.origin.href) || origin.value;
+          Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper).copyString(address);
+          showCopied(copySite, null);
+        } catch(ex) {}
+      });
+      lineOf(origin).append(visit, copySite);
+        added.push(visit, copySite);
+      moveTitle(origin, visit);
+
+      let copyUser = makeButton(doc, "copy", COPY_ICON, copyLabel);
+      onClick(copyUser, () => {
+        username.onLineClick();
+        showCopied(copyUser, username);
+      });
+      lineOf(username).append(copyUser);
+        added.push(copyUser);
+      moveTitle(username, null);
+
+      let copyPassword = makeButton(doc, "copy", COPY_ICON, copyLabel);
+      onClick(copyPassword, () => {
+        concealed.onLineClick();
+        showCopied(copyPassword, password);
+      });
+      reveal.after(copyPassword);
+        added.push(copyPassword);
+      moveTitle(password, null);
+
+      // The pencil's tooltip is its own label ("Edit"), not "Edit password":
+      // the card is all about the one password. Kept so as Firefox localizes
+      // the button again.
+      let edit = root.querySelector(".edit-button");
+      if (edit) {
+        const retitle = () => {
+          let label = edit.textContent.trim();
+          if (label && edit.getAttribute("tooltiptext") !== label) edit.setAttribute("tooltiptext", label);
+        };
+        retitle();
+        new doc.defaultView.MutationObserver(retitle).observe(edit, { attributes: true, attributeFilter: ["tooltiptext"], childList: true, characterData: true, subtree: true });
       }
-      let chain = [];
-      if (focused && !byPointer) {
-        for (let n = focused; n; n = n.getRootNode().host) chain.push(n);
-      }
-      for (let el of [card, origin, username, concealed]) {
-        el.toggleAttribute("myfox-focus", chain.includes(el));
-      }
-    };
-    root.addEventListener("focusin", markFocus);
-    root.addEventListener("focusout", () => win.setTimeout(markFocus, 0));
+
+      // Clicks and Enter on a row itself go nowhere; the buttons' go through.
+      const block = e => {
+        if (e.type === "keypress" && e.code !== "Enter" && e.code !== "Space") return;
+        let path = e.composedPath();
+        if (path.some(n => n.classList && (n.classList.contains("myfox-pw-btn") || n.classList.contains("reveal-button") || n.classList.contains("edit-button")))) return;
+        if (path.some(n => n.localName === "login-line")) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+      };
+      root.addEventListener("click", block, true);
+      root.addEventListener("keypress", block, true);
+
+      // The buttons show with the focus from the keyboard in their row (and
+      // the pencil with it anywhere in the card): the card and the row it's in
+      // are marked myfox-focus. Not :focus-within, which a click leaves on
+      // (nor :focus-visible, which a clicked value's field has as well).
+      const win = doc.defaultView;
+      let byPointer = false;
+      doc.addEventListener("pointerdown", () => byPointer = true, true);
+      doc.addEventListener("keydown", () => byPointer = false, true);
+      const markFocus = () => {
+        let focused = doc.activeElement;
+        while (focused && focused.shadowRoot && focused.shadowRoot.activeElement) {
+          focused = focused.shadowRoot.activeElement;
+        }
+        let chain = [];
+        if (focused && !byPointer) {
+          for (let n = focused; n; n = n.getRootNode().host) chain.push(n);
+        }
+        for (let el of [card, origin, username, concealed]) {
+          el.toggleAttribute("myfox-focus", chain.includes(el));
+        }
+      };
+      root.addEventListener("focusin", markFocus);
+      root.addEventListener("focusout", () => win.setTimeout(markFocus, 0));
+    }
   }
 
   function decorateCards(sbWin) {
@@ -265,7 +289,6 @@
   }
 
   MyFox.sidebarHooks.push(({ sidebar }) => {
-    patchMegalistHeights(sidebar.contentWindow);
     setLabels(sidebar.contentWindow);
     decorateCards(sidebar.contentWindow);
   });
