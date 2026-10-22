@@ -6,6 +6,7 @@
 - about:logins' show-password eye is back; our checkbox look had turned it into a gray square
 - about:logins looks like the settings: the page and its cards in the settings' colors; the list of logins a card, its rows plates with the selected one filled quietly instead of a bar at the start
 - about:logins' login is a card laid out as a form, labels in a column before the values; the fields of its add and edit form are like the pages' other fields, the hint beside the address like a tooltip, its ... menu like the window's menus
+- about:logins' list starts level with the login's card, its rows denser, 2px apart; a login with an alert is tinted, a breached site red, a vulnerable password or no username orange; the breach alert is a quiet tint instead of a framed red block
 
 ## 159.7 — 2026-10-22
 

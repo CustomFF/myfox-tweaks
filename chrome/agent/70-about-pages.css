@@ -23,9 +23,30 @@ moz-button.more-options-button {
         border-inline-start: none !important;
         border-radius: var(--myfox-radius) !important;
         margin-inline: 6px !important;
+        /* 2px apart: the tinted ones below don't merge. */
+        margin-block: 1px !important;
     }
     :is(.login-list-item, li.list-item[role="option"]).selected {
         background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
+    }
+    /* A login with an alert is tinted: a breached site red, a vulnerable
+       password or no username orange (the tint over the row's own fill,
+       which still marks the selected row and the one under the pointer). */
+    list-item:is([notificationicon="vulnerable"], [username=""]) {
+        --myfox-login-alert: var(--icon-color-warning, #ffa436);
+    }
+    list-item[notificationicon="breached"] {
+        --myfox-login-alert: var(--icon-color-critical, #ff6a75);
+    }
+    li.list-item[role="option"] {
+        background-image: linear-gradient(color-mix(in srgb, var(--myfox-login-alert, transparent) 16%, transparent)) !important;
+    }
+    img.alert-icon[src*="vulnerable-password"] {
+        fill: var(--icon-color-warning, #ffa436) !important;
+        fill-opacity: 1 !important;
+    }
+    .subtitle[data-l10n-id="login-list-item-subtitle-missing-username"] {
+        color: var(--icon-color-warning, #ffa436) !important;
     }
     :is(.login-list-item, li.list-item[role="option"]).keyboard-selected {
         outline: var(--myfox-focus-width) solid var(--myfox-focus-color) !important;
@@ -43,8 +64,20 @@ moz-button.more-options-button {
     login-item {
         --myfox-logins-label-width: 110px;
     }
+    body > header:has(> menu-button) {
+        padding-block: 16px 8px !important;
+    }
+    /* The list starts in the row of the login's card, beside it, not at
+       the top of the page beside the header. */
+    body > header:has(> menu-button) {
+        grid-area: 1 / 2 !important;
+    }
+    body:has(> login-list) > :is(login-item, login-intro) {
+        grid-area: 2 / 2 !important;
+    }
     login-list {
-        margin: 16px 0 16px 16px !important;
+        grid-area: 2 / 1 / 4 !important;
+        margin: 0 0 16px 16px !important;
         border: none !important;
         border-radius: var(--myfox-card-radius) !important;
         background-color: var(--background-color-box) !important;
@@ -56,7 +89,9 @@ moz-button.more-options-button {
     .container > .column:has(> form > .detail-grid) {
         min-height: 0 !important;
         max-width: 640px !important;
-        margin-block: 16px !important;
+        /* Right under the page's header: its buttons at the list's top
+           (below), the card after them. */
+        margin-block: 0 16px !important;
         padding: 16px !important;
         border-radius: var(--myfox-card-radius) !important;
         background-color: var(--background-color-box) !important;
@@ -112,6 +147,21 @@ moz-button.more-options-button {
             &:focus {
                 border: var(--myfox-focus-border) !important;
             }
+        }
+    }
+    /* A login's alert (a breached site, a vulnerable password): the quiet
+       tint of the sidebar's alerts instead of a framed block of strong
+       color with a shadow. */
+    login-alert[variant] {
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: var(--myfox-radius) !important;
+        padding: 10px 16px !important;
+        &[variant="error"] {
+            background-color: color-mix(in srgb, var(--icon-color-critical, #ff6a75) 14%, transparent) !important;
+        }
+        &[variant="warning"] {
+            background-color: color-mix(in srgb, var(--icon-color-warning, #ffa436) 14%, transparent) !important;
         }
     }
     /* The ... menu: as the window's menus, no frame, the menus' shadow,
@@ -194,8 +244,18 @@ moz-button.more-options-button {
     .meta {
         padding: 0 12px 8px !important;
     }
+    /* The list's rows dense: the title and username a line each, close. */
     li.list-item {
-        padding: 3px 12px !important;
+        padding: 1px 10px !important;
+    }
+    li.list-item > img.icon {
+        margin-inline-end: 10px !important;
+    }
+    .labels > .title {
+        line-height: 14px !important;
+    }
+    .labels > .subtitle {
+        line-height: 12px !important;
     }
     .labels {
         min-height: 0 !important;
