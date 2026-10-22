@@ -247,6 +247,51 @@
     }
   }
 
+  // "Remove found passwords (N)…" in the panel's ... menu, after Firefox's
+  // "Remove all": while something is searched for, it removes just the
+  // logins found (the ones the list shows), after a confirmation. Hidden
+  // without a search. Put in again when the menu opens, should Firefox
+  // render the menu anew.
+  function addRemoveFound(sbWin, megalist) {
+    let root = megalist.shadowRoot;
+    let doc = sbWin.document;
+    const update = () => {
+      let removeAll = root.querySelector('panel-item[action="remove-all-logins"]');
+      if (!removeAll) return;
+      let item = root.querySelector('panel-item[action="myfox-remove-found"]');
+      if (!item) {
+        item = doc.createElement("panel-item");
+        item.setAttribute("action", "myfox-remove-found");
+        item.addEventListener("click", () => removeFound(sbWin, megalist));
+        removeAll.after(item);
+      }
+      let found = (megalist.records || []).length;
+      item.textContent = t("passwords.removeFound", found);
+      item.hidden = !(megalist.searchText || "").trim() || !found;
+    };
+    root.addEventListener("click", e => {
+      if (e.composedPath().some(n => n.id === "more-options-menubutton")) update();
+    }, true);
+    update();
+  }
+
+  async function removeFound(sbWin, megalist) {
+    let guids = new Set((megalist.records || []).map(r => r.origin && r.origin.guid).filter(Boolean));
+    if (!guids.size) return;
+    let ok = Services.prompt.confirmEx(sbWin.top,
+      t("passwords.removeFoundTitle"), t("passwords.removeFoundMessage", guids.size),
+      Services.prompt.BUTTON_POS_0 * Services.prompt.BUTTON_TITLE_IS_STRING +
+      Services.prompt.BUTTON_POS_1 * Services.prompt.BUTTON_TITLE_CANCEL +
+      Services.prompt.BUTTON_POS_1_DEFAULT,
+      t("passwords.removeFoundButton"), null, null, null, {}) === 0;
+    if (!ok) return;
+    for (let login of await Services.logins.getAllLogins()) {
+      if (guids.has(login.guid)) {
+        try { await Services.logins.removeLoginAsync(login); } catch(e) {}
+      }
+    }
+  }
+
   function decorateCards(sbWin) {
     try {
       if (!sbWin || !/megalist/.test(sbWin.document.documentURI)) return;
@@ -275,6 +320,7 @@
           };
           scan();
           new sbWin.MutationObserver(scan).observe(root, { childList: true, subtree: true });
+          try { addRemoveFound(sbWin, megalist); } catch(e) {}
           return true;
         };
         if (!attach()) {

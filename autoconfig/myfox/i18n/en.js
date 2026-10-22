@@ -9,6 +9,10 @@
     "passwords.site": "Site",
     "passwords.username": "User",
     "passwords.password": "Password",
+    "passwords.removeFound": "Remove found passwords ({0})…",
+    "passwords.removeFoundTitle": "Remove found passwords?",
+    "passwords.removeFoundMessage": "The passwords found by the search will be removed: {0}. This can't be undone.",
+    "passwords.removeFoundButton": "Remove",
 
     "panel.downloads.title": "Downloads",
     "panel.addons.title": "Extensions",

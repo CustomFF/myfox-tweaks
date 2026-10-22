@@ -6,6 +6,10 @@
     "passwords.site": "Сайт",
     "passwords.username": "Логин",
     "passwords.password": "Пароль",
+    "passwords.removeFound": "Удалить найденные пароли ({0})…",
+    "passwords.removeFoundTitle": "Удалить найденные пароли?",
+    "passwords.removeFoundMessage": "Будут удалены найденные пароли: {0}. Отменить это нельзя.",
+    "passwords.removeFoundButton": "Удалить",
 
     "panel.downloads.title": "Загрузки",
     "panel.addons.title": "Расширения",
