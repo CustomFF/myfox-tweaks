@@ -423,6 +423,50 @@ addon-page-header .main-search {
 addon-page-header .header-name {
     font-size: calc(var(--font-size-root, 12px) * 1.4667) !important;
 }
+/* The navigation's heading ("Add-ons" by the logo) too. */
+:root:has(> body > drag-drop-addon-installer) moz-page-nav {
+    --font-size-xlarge: calc(var(--font-size-root, 12px) * 1.4667) !important;
+}
+/* Before its page heading, the icon of the navigation's item, as the
+   settings have (the views with an item of their own). */
+body:has(moz-page-nav[currentview="discover"]) {
+    --myfox-addons-heading-icon: url("chrome://global/skin/icons/trophy.svg");
+}
+body:has(moz-page-nav[currentview="extension"]) {
+    --myfox-addons-heading-icon: url("chrome://mozapps/skin/extensions/category-extensions.svg");
+}
+body:has(moz-page-nav[currentview="theme"]) {
+    --myfox-addons-heading-icon: url("chrome://mozapps/skin/extensions/category-themes.svg");
+}
+body:has(moz-page-nav[currentview="plugin"]) {
+    --myfox-addons-heading-icon: url("chrome://mozapps/skin/extensions/category-plugins.svg");
+}
+body:has(moz-page-nav[currentview="dictionary"]) {
+    --myfox-addons-heading-icon: url("chrome://mozapps/skin/extensions/category-dictionaries.svg");
+}
+body:has(moz-page-nav[currentview="locale"]) {
+    --myfox-addons-heading-icon: url("chrome://mozapps/skin/extensions/category-languages.svg");
+}
+body:has(moz-page-nav[currentview="sitepermission"]) {
+    --myfox-addons-heading-icon: url("chrome://mozapps/skin/extensions/category-sitepermission.svg");
+}
+body:has(moz-page-nav[currentview="mlmodel"]) {
+    --myfox-addons-heading-icon: url("chrome://global/skin/icons/highlights.svg");
+}
+addon-page-header .header-name::before {
+    content: "";
+    display: none;
+    width: var(--icon-size, 16px);
+    height: var(--icon-size, 16px);
+    margin-inline-end: var(--space-small, 4px);
+    vertical-align: -2px;
+    background: var(--myfox-addons-heading-icon) center / contain no-repeat;
+    -moz-context-properties: fill;
+    fill: currentColor;
+}
+body:has(moz-page-nav:is([currentview="discover"], [currentview="extension"], [currentview="theme"], [currentview="plugin"], [currentview="dictionary"], [currentview="locale"], [currentview="sitepermission"], [currentview="mlmodel"])) addon-page-header .header-name::before {
+    display: inline-block;
+}
 /* The page starts close under the heading, as the settings' first card
    does (Firefox leaves 16px under it, then the list's own margins). */
 addon-page-header .main-heading {
