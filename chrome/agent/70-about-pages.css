@@ -54,12 +54,12 @@ moz-button.more-options-button {
     }
 }
 
-/* about:logins' login: a card, a small form as the sidebar's password
-   card. Labels in a column before the values, the rows close together;
-   fields of the edit form as the other pages' fields (filled, a quiet
-   frame, the accent when focused). The list of logins: a card too, the
-   page's background round it, no frame. Cards in the box color, on the
-   page's, as the settings (see the page colors below). */
+/* about:logins' login: a small form as the sidebar's password card, on the
+   page itself, no card. Labels in a column before the values, the rows
+   close together; fields of the edit form as the other pages' fields
+   (filled, a quiet frame, the accent when focused). The list of logins: a
+   card in the box color, the page's background round it, no frame, as the
+   settings' boxes (see the page colors below). */
 @-moz-document url-prefix("about:") {
     login-item {
         --myfox-logins-label-width: 110px;
@@ -67,17 +67,8 @@ moz-button.more-options-button {
     body > header:has(> menu-button) {
         padding-block: 16px 8px !important;
     }
-    /* The list starts in the row of the login's card, beside it, not at
-       the top of the page beside the header. */
-    body > header:has(> menu-button) {
-        grid-area: 1 / 2 !important;
-    }
-    body:has(> login-list) > :is(login-item, login-intro) {
-        grid-area: 2 / 2 !important;
-    }
     login-list {
-        grid-area: 2 / 1 / 4 !important;
-        margin: 0 0 16px 16px !important;
+        margin: 16px 0 16px 16px !important;
         border: none !important;
         border-radius: var(--myfox-card-radius) !important;
         background-color: var(--background-color-box) !important;
@@ -89,12 +80,7 @@ moz-button.more-options-button {
     .container > .column:has(> form > .detail-grid) {
         min-height: 0 !important;
         max-width: 640px !important;
-        /* Right under the page's header: its buttons at the list's top
-           (below), the card after them. */
         margin-block: 0 16px !important;
-        padding: 16px !important;
-        border-radius: var(--myfox-card-radius) !important;
-        background-color: var(--background-color-box) !important;
     }
     form:has(> .detail-grid) {
         & .detail-row {
