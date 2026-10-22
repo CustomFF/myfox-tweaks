@@ -411,6 +411,33 @@ moz-page-nav-button {
     --page-nav-button-padding: 6px 10px !important;
     font-size: 13px !important;
 }
+/* about:addons' search field at the height of the settings' one, level
+   with the navigation's logo (64px down), not 20px under the top, and the
+   page heading as far under it as theirs. */
+addon-page-header .main-search {
+    padding-top: 64px !important;
+    padding-bottom: 11px !important;
+}
+/* Its page heading the size of the settings' one (their --font-size-xlarge,
+   which this page has smaller for its cards). */
+addon-page-header .header-name {
+    font-size: calc(var(--font-size-root, 12px) * 1.4667) !important;
+}
+/* Narrower than 950px Firefox folds the navigation to its icons, each in
+   a square as wide as an icon button; the rows' padding above would cut
+   the icon off at the right: there, Firefox's own small padding. */
+@media (max-width: 950px) {
+    moz-page-nav:not([alwaysexpanded]) moz-page-nav-button {
+        --page-nav-button-padding: var(--page-nav-button-padding-small) !important;
+    }
+    /* about:addons keeps a wider column for the folded navigation than
+       the settings do, so its page starts further from the icons: the
+       settings' column instead (the navigation's 40px start, a 24px icon
+       button and its 6px end padding, 2px more). */
+    :root:has(> body > drag-drop-addon-installer) {
+        --sidebar-width: 72px !important;
+    }
+}
 /* The selected item is filled with the accent, so an accent ring inside it
    didn't show: there the ring is double, a thin accent one just outside the
    item and one of the item's text color just inside it, as round it as the

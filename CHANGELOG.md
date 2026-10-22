@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- In a narrow window the settings' and about:addons' folded navigation shows its icons whole; they were cut at the right
+- about:addons lines up with the settings: in a narrow window its page starts as close to the navigation, its search field is level with the navigation's logo, its page heading the settings' size and height
+
 ## 159.8 — 2026-10-22
 
 - The sidebar password card's copy buttons show a check mark and "Copied" for a while after a copy; they showed nothing
