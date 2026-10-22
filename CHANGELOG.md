@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 159.9 — 2026-10-22
 
 - about:addons lines up with the settings: in a narrow window its page starts as close to the navigation, its search field is level with the navigation's logo, its page heading at the settings' height; its first section starts where the settings' first card does
 
