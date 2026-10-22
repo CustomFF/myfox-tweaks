@@ -78,10 +78,20 @@ moz-button.more-options-button {
 }
 
 /* Search-engine list rows: 12px of padding above and below each two-line
-   row made them tall and airy. */
+   row made them tall and airy. Each row is a plate of its own (each sits in
+   a setting-control, so the group's plain rows below don't apply), 2px
+   apart; the group has no fill of its own under them. */
 moz-box-item[id^="engineList-"],
 moz-box-item[id^="searchmode-"] {
-    --box-padding: 5px 12px !important;
+    --box-padding: 3px 8px !important;
+}
+#engineList {
+    background-color: transparent !important;
+
+    > setting-control + setting-control {
+        display: block !important;
+        margin-block-start: 2px !important;
+    }
 }
 
 /* about:addons list: each add-on is a .card with 16px of bottom margin and
