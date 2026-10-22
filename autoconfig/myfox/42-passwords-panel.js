@@ -6,7 +6,9 @@
   // card step in chrome/agent/60-password-manager.css: a 72px card (three
   // 22px rows, 3px in from its top and bottom) and 3px above and below it.
   const MEGALIST_CARD_HEIGHT = 78;
-  const MEGALIST_ALERT_EXTRA_HEIGHT = 51;
+  // A card with an alert has its alert bar under the rows: 22px and 3px
+  // below it (60-password-manager.css).
+  const MEGALIST_ALERT_EXTRA_HEIGHT = 25;
   // The edit pencil's 18px and a gap on each side.
   const PENCIL_ROOM = 20;
 
