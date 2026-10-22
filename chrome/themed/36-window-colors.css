@@ -3,8 +3,9 @@
    browser window. Agent sheet of themed/: only while a MyFox theme is on.
    The Library is laid out as the browser window is: the folders the color
    of the sidebar, the rest of the toolbar. Page Info's row of sections is
-   the tab strip, the section shown its selected tab. No frames: a field or
-   a list is told from the window by its fill, as the address bar is.
+   the tab strip, the section shown its selected tab. A list is told from
+   the window by its fill alone; a field has the quiet frame every text
+   field has.
    Matched by the root's mark alone, not by @-moz-document with these
    windows' addresses: a window opened after a theme switch missed rules
    kept to its address. */
@@ -15,8 +16,8 @@
     /* The design system's fields (the Library's search box). */
     --input-background-color: var(--toolbar-field-background-color) !important;
     --input-text-color: var(--toolbar-field-text-color) !important;
-    --input-border-color: var(--toolbar-field-border-color) !important;
-    --input-text-border-color: var(--toolbar-field-border-color) !important;
+    --input-border-color: var(--myfox-line-color) !important;
+    --input-text-border-color: var(--myfox-line-color) !important;
 
     /* Trees and their column headers sit on the window, in its text color. */
     tree,
@@ -32,8 +33,8 @@
         color: inherit !important;
     }
 
-    /* Text fields: the address bar's colors and border (the theme's is the
-       field's own color), the thin accent one when focused; read-only
+    /* Text fields: the address bar's colors with the quiet frame every text
+       field has, the thin accent one when focused; read-only
        ones too (the Library's, for a built-in folder or a history entry).
        But Page Info's values are fields that read as text: they stay on the
        window, focused or not (all read-only, but for the image's type, which
@@ -41,7 +42,7 @@
     input:not([type="radio" i], [type="checkbox" i], [type="range" i], [type="color" i], [type="file" i], [type="button" i], [type="submit" i], [type="reset" i], [type="image" i]) {
         background-color: var(--toolbar-field-background-color) !important;
         color: var(--toolbar-field-text-color) !important;
-        border: 1px solid var(--toolbar-field-border-color) !important;
+        border: 1px solid var(--myfox-line-color) !important;
         outline: none !important;
         box-shadow: none !important;
 

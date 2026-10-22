@@ -25,12 +25,12 @@
         --button-background-color-ghost-active: color-mix(in srgb, currentColor 25%, transparent) !important;
         --button-border-color-ghost: transparent !important;
 
-        /* Text fields: filled, with no frame (the frame is the focus mark),
-           the one radius. A tint of the text color over whatever is behind,
-           so it reads on any theme. Under both names: newer Firefox renamed
-           the --input-text-* tokens to --input-*. */
-        --input-border-color: transparent !important;
-        --input-text-border-color: transparent !important;
+        /* Text fields: filled, with the one quiet frame, the one radius. A
+           tint of the text color over whatever is behind, so it reads on any
+           theme. Under both names: newer Firefox renamed the --input-text-*
+           tokens to --input-*. */
+        --input-border-color: var(--myfox-line-color) !important;
+        --input-text-border-color: var(--myfox-line-color) !important;
         --input-background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
         --input-text-background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
         --input-border-radius: var(--myfox-radius) !important;
@@ -184,7 +184,8 @@
 
 @-moz-document url-prefix("chrome://") {
     /* Plain text fields of the older windows (the Library, Page Info, the
-       dialogs): the design system's height, radius and quiet border, not
+       dialogs): the design system's height and radius, filled with the quiet
+       frame and framed in the accent when focused, as the other fields; not
        Nova's 12px rounding and bright frame. Not the browser window's own:
        its fields (the address bar, the find bar) have their own looks. Nor
        Page Info's values, fields that read as text, as dense as text. */
@@ -195,5 +196,11 @@
         padding-block: 0 !important;
         border-radius: var(--myfox-radius) !important;
         border-color: var(--myfox-line-color) !important;
+        background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
+
+        &:focus {
+            border: var(--myfox-focus-border) !important;
+            outline: none !important;
+        }
     }
 }

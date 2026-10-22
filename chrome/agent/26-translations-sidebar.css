@@ -77,9 +77,10 @@
         #about-translations-target-section {
             grid-column: 1 / -1 !important;
             min-height: 0 !important;
-            /* No frame: the box is a filled field. A tint of the text color
-               over whatever is behind, so it reads on any theme. */
-            border: none !important;
+            /* A filled field with the quiet frame, as every text field. A
+               tint of the text color over whatever is behind, so it reads on
+               any theme. */
+            border: 1px solid var(--myfox-line-color) !important;
             background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
         }
         #about-translations-source-section {

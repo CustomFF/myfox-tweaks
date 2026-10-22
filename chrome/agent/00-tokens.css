@@ -17,8 +17,8 @@
     --myfox-focus-width: 1.5px;
     --myfox-focus-border: var(--myfox-focus-width) solid var(--myfox-focus-color);
 
-    /* Quiet lines: field borders, the dotted selection outline. */
-    --myfox-line-color: color-mix(in srgb, currentColor 50%, transparent);
+    /* Quiet lines: the one frame of every text field. */
+    --myfox-line-color: color-mix(in srgb, currentColor 20%, transparent);
 
     /* Container tabs (../user/20-tabs.css): a line in the container color
        along the tab's outer edge, this thick, and this strong on the

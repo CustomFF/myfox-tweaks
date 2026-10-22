@@ -250,9 +250,12 @@ richlistitem.download:focus-visible {
     display: block !important;
     width: 100% !important;
     /* This document resolves the field colors differently than the other
-       sidebar panels; use the same ones. */
-    --input-text-background-color: Field !important;
+       sidebar panels; use the same ones: filled, the quiet frame (under both
+       token names, see ../themed/35-controls.css). */
+    --input-text-background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
+    --input-background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
     --input-text-border-color: var(--myfox-line-color) !important;
+    --input-border-color: var(--myfox-line-color) !important;
     --input-text-color: FieldText !important;
 }
 

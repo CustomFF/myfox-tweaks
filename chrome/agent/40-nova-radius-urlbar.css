@@ -253,7 +253,7 @@ toolbarseparator.proton-zap::before {
 }
 
 /* Find bar (Ctrl+F): a 28px pill field and round previous/next buttons.
-   Same field height and quiet border as the other fields (35-controls.css). */
+   Same field height and quiet frame as the other fields (35-controls.css). */
 .findbar-textbox {
     border-radius: var(--myfox-radius) !important;
     min-height: 26px !important;
