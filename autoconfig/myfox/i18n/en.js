@@ -6,6 +6,9 @@
   MyFox.messages.en = {
     "common.clear": "Clear",
     "common.close": "Close",
+    "passwords.site": "Site",
+    "passwords.username": "User",
+    "passwords.password": "Password",
 
     "panel.downloads.title": "Downloads",
     "panel.addons.title": "Extensions",

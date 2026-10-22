@@ -1,10 +1,14 @@
 // Password manager sidebar (megalist).
 (function (MyFox) {
+  const { t, Cc, Ci } = MyFox;
 
   // Password-card height the megalist virtual list assumes; must match the
-  // 132px card step in chrome/agent/60-password-manager.css.
-  const MEGALIST_CARD_HEIGHT = 132;
+  // card step in chrome/agent/60-password-manager.css: a 72px card (three
+  // 22px rows, 3px in from its top and bottom) and 3px above and below it.
+  const MEGALIST_CARD_HEIGHT = 78;
   const MEGALIST_ALERT_EXTRA_HEIGHT = 51;
+  // The edit pencil's 18px and a gap on each side.
+  const PENCIL_ROOM = 20;
 
   // The password manager sidebar (megalist) is a virtual list: it doesn't
   // measure cards, it sizes the not-yet-rendered chunks from constants
@@ -25,5 +29,228 @@
     } catch(e) {}
   }
 
-  MyFox.sidebarHooks.push(({ sidebar }) => patchMegalistHeights(sidebar.contentWindow));
+  // A card's rows are labeled with short words of ours, shown by
+  // chrome/agent/60-password-manager.css in place of Firefox's (there are
+  // no short ones in Firefox's strings): handed over as CSS strings.
+  function setLabels(sbWin) {
+    try {
+      if (!sbWin || !/megalist/.test(sbWin.document.documentURI)) return;
+      let doc = sbWin.document;
+      let root = doc.documentElement;
+      // Measured as the labels are drawn: 12px in the panel's own font.
+      let probe = doc.createElement("span");
+      probe.style.cssText = "position: absolute; visibility: hidden; white-space: nowrap; font-size: 12px";
+      (doc.body || root).appendChild(probe);
+      let widest = 0;
+      for (let [name, key] of [["site", "passwords.site"], ["username", "passwords.username"], ["password", "passwords.password"]]) {
+        root.style.setProperty("--myfox-pw-" + name, JSON.stringify(t(key)));
+        probe.textContent = t(key) + ":";
+        widest = Math.max(widest, probe.getBoundingClientRect().width);
+      }
+      probe.textContent = t("passwords.site") + ":";
+      let site = probe.getBoundingClientRect().width;
+      probe.remove();
+      // The labels' column is as wide as the widest of them, and in the
+      // site's row (its label is the shortest) narrower by the room for the
+      // edit pencil before the row: wider still if the site's label doesn't
+      // fit in what is left.
+      widest = Math.max(widest, site + PENCIL_ROOM);
+      root.style.setProperty("--myfox-pw-label-width", Math.ceil(widest) + "px");
+      root.style.setProperty("--myfox-pw-pencil-room", PENCIL_ROOM + "px");
+    } catch(e) {}
+  }
+
+  // A card's rows are no buttons any more: each has buttons of its own at
+  // its end, in two columns. The site: open it, copy its address. The
+  // username: copy it. The password: show it (Firefox's own button, moved
+  // into the inner column), copy it. Copying the username and the password,
+  // and opening the site, are still done by Firefox's own handler (it asks
+  // for the primary password first), triggered from the button; a click or
+  // Enter on the row itself does nothing. The rows' tooltips ("Visit …",
+  // "Copy password") go to the buttons. Styled by
+  // chrome/agent/60-password-manager.css.
+  const HTML = "http://www.w3.org/1999/xhtml";
+  const COPY_ICON = "chrome://global/skin/icons/edit-copy.svg";
+  const VISIT_ICON = "chrome://global/skin/icons/open-in-new.svg";
+
+  function makeButton(doc, kind, icon) {
+    let button = doc.createElementNS(HTML, "button");
+    button.className = "myfox-pw-btn myfox-pw-" + kind;
+    let img = doc.createElementNS(HTML, "img");
+    img.src = icon;
+    img.alt = "";
+    button.appendChild(img);
+    // Enter on it is the button's, not the row's around it.
+    button.addEventListener("keypress", e => e.stopPropagation());
+    return button;
+  }
+
+  // The row's tooltip and accessible name on the button instead, kept as
+  // Firefox localizes them again (on every change of the login shown).
+  function moveTitle(row, button) {
+    const move = () => {
+      for (let name of ["title", "aria-label"]) {
+        let value = row.getAttribute(name);
+        if (value) {
+          button.setAttribute(name, value);
+          row.removeAttribute(name);
+        }
+      }
+    };
+    move();
+    new row.ownerDocument.defaultView.MutationObserver(move).observe(row, { attributes: true, attributeFilter: ["title", "aria-label"] });
+  }
+
+  // Firefox marks a row it copied from with .copied for a while; the button
+  // shows a check mark meanwhile.
+  function showCopied(button, row) {
+    let win = button.ownerDocument.defaultView;
+    let tries = 0;
+    let timer = win.setInterval(() => {
+      let copied = row && row.shadowRoot && row.shadowRoot.querySelector(".line-container.copied");
+      if (copied || !row) {
+        win.clearInterval(timer);
+        button.classList.add("copied");
+        win.setTimeout(() => button.classList.remove("copied"), 2000);
+      } else if (++tries > 40) {
+        win.clearInterval(timer);
+      }
+    }, 50);
+  }
+
+  function decorateCard(card, copyLabel) {
+    let root = card.shadowRoot;
+    if (!root || card.myfoxButtons) return;
+    let origin = root.querySelector('login-line[linetype="origin"]');
+    let username = root.querySelector('login-line[linetype="username"]');
+    let concealed = root.querySelector("concealed-login-line");
+    let password = concealed && concealed.shadowRoot && concealed.shadowRoot.querySelector("login-line");
+    let reveal = concealed && concealed.shadowRoot && concealed.shadowRoot.querySelector(".reveal-button-container");
+    let lineOf = row => row && row.shadowRoot && row.shadowRoot.querySelector(".line-container");
+    if (!lineOf(origin) || !lineOf(username) || !password || !reveal) return;
+    card.myfoxButtons = true;
+    let doc = card.ownerDocument;
+
+    // Each button calls the handler Firefox gives its row (the card's: it
+    // asks for the primary password first where it has to), and goes no
+    // further: the row would take the click as its own.
+    const onClick = (button, fn) => button.addEventListener("click", e => {
+      e.stopPropagation();
+      fn();
+    });
+
+    let visit = makeButton(doc, "visit", VISIT_ICON);
+    onClick(visit, () => origin.onLineClick());
+    let copySite = makeButton(doc, "copy", COPY_ICON);
+    copySite.title = copyLabel;
+    copySite.setAttribute("aria-label", copyLabel);
+    onClick(copySite, () => {
+      try {
+        let address = (card.origin && card.origin.href) || origin.value;
+        Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper).copyString(address);
+        showCopied(copySite, null);
+      } catch(ex) {}
+    });
+    lineOf(origin).append(visit, copySite);
+    moveTitle(origin, visit);
+
+    let copyUser = makeButton(doc, "copy", COPY_ICON);
+    onClick(copyUser, () => {
+      username.onLineClick();
+      showCopied(copyUser, username);
+    });
+    lineOf(username).append(copyUser);
+    moveTitle(username, copyUser);
+
+    let copyPassword = makeButton(doc, "copy", COPY_ICON);
+    onClick(copyPassword, () => {
+      concealed.onLineClick();
+      showCopied(copyPassword, password);
+    });
+    reveal.after(copyPassword);
+    moveTitle(password, copyPassword);
+
+    // Clicks and Enter on a row itself go nowhere; the buttons' go through.
+    const block = e => {
+      if (e.type === "keypress" && e.code !== "Enter" && e.code !== "Space") return;
+      let path = e.composedPath();
+      if (path.some(n => n.classList && (n.classList.contains("myfox-pw-btn") || n.classList.contains("reveal-button") || n.classList.contains("edit-button")))) return;
+      if (path.some(n => n.localName === "login-line")) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    };
+    root.addEventListener("click", block, true);
+    root.addEventListener("keypress", block, true);
+
+    // The buttons show with the focus from the keyboard in their row (and
+    // the pencil with it anywhere in the card): the card and the row it's in
+    // are marked myfox-focus. Not :focus-within, which a click leaves on
+    // (nor :focus-visible, which a clicked value's field has as well).
+    const win = doc.defaultView;
+    let byPointer = false;
+    doc.addEventListener("pointerdown", () => byPointer = true, true);
+    doc.addEventListener("keydown", () => byPointer = false, true);
+    const markFocus = () => {
+      let focused = doc.activeElement;
+      while (focused && focused.shadowRoot && focused.shadowRoot.activeElement) {
+        focused = focused.shadowRoot.activeElement;
+      }
+      let chain = [];
+      if (focused && !byPointer) {
+        for (let n = focused; n; n = n.getRootNode().host) chain.push(n);
+      }
+      for (let el of [card, origin, username, concealed]) {
+        el.toggleAttribute("myfox-focus", chain.includes(el));
+      }
+    };
+    root.addEventListener("focusin", markFocus);
+    root.addEventListener("focusout", () => win.setTimeout(markFocus, 0));
+  }
+
+  function decorateCards(sbWin) {
+    try {
+      if (!sbWin || !/megalist/.test(sbWin.document.documentURI)) return;
+      let doc = sbWin.document;
+      sbWin.customElements.whenDefined("megalist-alpha").then(async () => {
+        let copyLabel = "";
+        try {
+          let [msg] = await doc.l10n.formatMessages([{ id: "contextual-manager-copy-icon" }]);
+          copyLabel = (msg.attributes.find(a => a.name === "alt") || {}).value || "";
+        } catch(e) {}
+        let attach = () => {
+          let megalist = doc.querySelector("megalist-alpha");
+          let root = megalist && megalist.shadowRoot;
+          if (!root) return false;
+          const scan = () => {
+            for (let card of root.querySelectorAll("password-card")) {
+              if (card.myfoxButtons) continue;
+              Promise.resolve(card.updateComplete).then(() => {
+                let rows = [...card.shadowRoot.querySelectorAll("login-line, concealed-login-line")];
+                return Promise.all(rows.map(r => r.updateComplete));
+              }).then(() => {
+                let c = card.shadowRoot.querySelector("concealed-login-line");
+                return c && c.shadowRoot && Promise.resolve(c.shadowRoot.querySelector("login-line")?.updateComplete);
+              }).then(() => decorateCard(card, copyLabel)).catch(() => {});
+            }
+          };
+          scan();
+          new sbWin.MutationObserver(scan).observe(root, { childList: true, subtree: true });
+          return true;
+        };
+        if (!attach()) {
+          let tries = 0;
+          let timer = sbWin.setInterval(() => {
+            if (attach() || ++tries > 50) sbWin.clearInterval(timer);
+          }, 100);
+        }
+      });
+    } catch(e) {}
+  }
+
+  MyFox.sidebarHooks.push(({ sidebar }) => {
+    patchMegalistHeights(sidebar.contentWindow);
+    setLabels(sidebar.contentWindow);
+    decorateCards(sidebar.contentWindow);
+  });
 })(globalThis.MyFox);

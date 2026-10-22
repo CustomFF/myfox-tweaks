@@ -3,6 +3,9 @@
   MyFox.messages.ru = {
     "common.clear": "Очистить",
     "common.close": "Закрыть",
+    "passwords.site": "Сайт",
+    "passwords.username": "Логин",
+    "passwords.password": "Пароль",
 
     "panel.downloads.title": "Загрузки",
     "panel.addons.title": "Расширения",
