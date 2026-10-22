@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 159.8 — 2026-10-22
 
 - The sidebar password card's copy buttons show a check mark and "Copied" for a while after a copy; they showed nothing
 - about:logins' show-password eye is back; our checkbox look had turned it into a gray square
