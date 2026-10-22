@@ -14,6 +14,155 @@ moz-button.more-options-button {
     --button-border: none !important;
 }
 
+/* about:logins' list of logins: rows are plates with the small radius, the
+   selected one filled quietly, as the sidebar's lists; not Firefox's bar at
+   the start and a fill of the page's own darker color. */
+@-moz-document url-prefix("about:") {
+    .login-list-item,
+    li.list-item[role="option"] {
+        border-inline-start: none !important;
+        border-radius: var(--myfox-radius) !important;
+        margin-inline: 6px !important;
+    }
+    :is(.login-list-item, li.list-item[role="option"]).selected {
+        background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
+    }
+    :is(.login-list-item, li.list-item[role="option"]).keyboard-selected {
+        outline: var(--myfox-focus-width) solid var(--myfox-focus-color) !important;
+        outline-offset: calc(-1 * var(--myfox-focus-width)) !important;
+    }
+}
+
+/* about:logins' login: a card, a small form as the sidebar's password
+   card. Labels in a column before the values, the rows close together;
+   fields of the edit form as the other pages' fields (filled, a quiet
+   frame, the accent when focused). The list of logins: a card too, the
+   page's background round it, no frame. Cards in the box color, on the
+   page's, as the settings (see the page colors below). */
+@-moz-document url-prefix("about:") {
+    login-item {
+        --myfox-logins-label-width: 110px;
+    }
+    login-list {
+        margin: 16px 0 16px 16px !important;
+        border: none !important;
+        border-radius: var(--myfox-card-radius) !important;
+        background-color: var(--background-color-box) !important;
+    }
+    .meta:has(#login-sort) {
+        background-color: transparent !important;
+        border-bottom-color: color-mix(in srgb, currentColor 10%, transparent) !important;
+    }
+    .container > .column:has(> form > .detail-grid) {
+        min-height: 0 !important;
+        max-width: 640px !important;
+        margin-block: 16px !important;
+        padding: 16px !important;
+        border-radius: var(--myfox-card-radius) !important;
+        background-color: var(--background-color-box) !important;
+    }
+    form:has(> .detail-grid) {
+        & .detail-row {
+            align-items: center !important;
+            margin-bottom: 6px !important;
+        }
+        & .detail-cell {
+            display: flex !important;
+            align-items: center !important;
+            column-gap: 12px !important;
+            min-height: 26px !important;
+        }
+        & .field-label {
+            flex: 0 0 var(--myfox-logins-label-width) !important;
+            margin: 0 !important;
+            text-align: end !important;
+            color: var(--text-color-deemphasized, color-mix(in srgb, currentColor 65%, transparent)) !important;
+        }
+        & .detail-grid {
+            row-gap: 6px !important;
+            column-gap: 8px !important;
+        }
+        & .detail-grid > .detail-row {
+            margin-bottom: 0 !important;
+        }
+        & .detail-grid > .detail-row > :is(.copy-button, .copied-button) {
+            align-self: center !important;
+        }
+        & .reveal-password-wrapper {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+        }
+        & input:read-only:not([type="checkbox"]) {
+            font-size: inherit !important;
+        }
+        & .detail-cell input:read-write:not([type="checkbox"]) {
+            appearance: none !important;
+            box-sizing: border-box !important;
+            flex: 0 0 298px !important;
+            width: 298px !important;
+            height: 26px !important;
+            min-height: 26px !important;
+            margin: 0 !important;
+            padding: 0 8px !important;
+            border: 1px solid var(--myfox-line-color) !important;
+            border-radius: var(--myfox-radius) !important;
+            background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
+            font-size: inherit !important;
+            outline: none !important;
+            &:focus {
+                border: var(--myfox-focus-border) !important;
+            }
+        }
+    }
+    /* The ... menu: as the window's menus, no frame, the menus' shadow,
+       rows with the small radius under the pointer. */
+    .menu:has(.menuitem-button) {
+        padding: 4px !important;
+        border: none !important;
+        border-radius: var(--myfox-radius) !important;
+        box-shadow: var(--myfox-shadow-small), 0 0 3px rgba(0, 0, 0, 0.3) !important;
+        font: message-box !important;
+        font-size: var(--myfox-font-size) !important;
+    }
+    .menu .menuitem-button {
+        border-radius: var(--myfox-radius) !important;
+        padding-block: 4px !important;
+        background-color: transparent !important;
+        &:hover {
+            background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
+        }
+    }
+    .menuitem-separator {
+        border: none !important;
+        border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent) !important;
+        margin-block: 4px !important;
+    }
+    /* The hint beside a field of the edit form: as the tooltips, a quiet
+       frame and the menu text size, no arrow. */
+    .tooltip-container:has(.tooltip-message) {
+        /* Beside the field (the labels' column, the field's 298px). */
+        inset-inline-start: calc(var(--myfox-logins-label-width, 110px) + 12px + 298px + 10px) !important;
+        box-shadow: var(--myfox-shadow-small) !important;
+        border-radius: calc(var(--myfox-radius) + 2px) !important;
+        width: max-content !important;
+        max-width: 260px !important;
+    }
+    .arrow-box:has(> .tooltip-message) {
+        padding: 5px 9px !important;
+        border: none !important;
+        outline: 1px solid color-mix(in srgb, currentColor 25%, transparent) !important;
+        outline-offset: -1px !important;
+        border-radius: calc(var(--myfox-radius) + 2px) !important;
+        &::before,
+        &::after {
+            display: none !important;
+        }
+    }
+    .tooltip-message {
+        font-size: var(--myfox-font-size) !important;
+    }
+}
+
 /* about:logins page: same 12px base, no outline on the icon-only "+" and
    "..." buttons, and much tighter spacing (rows, header, detail pane). The
    generic class names are scoped to internal documents (an agent sheet only
@@ -387,13 +536,14 @@ moz-visual-picker-item:not([checked]) {
 }
 
 /* about:preferences, about:addons ("Add-ons and themes", known by its
-   drop zone: its root has no id) and our about:myfox: the page and its boxes in the MyFox
+   drop zone: its root has no id), about:logins (known by its list) and our
+   about:myfox: the page and its boxes in the MyFox
    themes' grays instead of Firefox's violet-tinged ones. These pages follow
    the website appearance setting (light or dark), not the theme, so the
    colors are both themes' at once, picked the same way: the page as the
    address field (dark) or the toolbar (light), a box as the toolbar (dark)
    or the address field (light); see the themes' manifest.json files. */
-:is(#preferences-root, #myfox-root, :root:has(> body > drag-drop-addon-installer)):is(:root) {
+:is(#preferences-root, #myfox-root, :root:has(> body > drag-drop-addon-installer), :root:has(> body > login-list)):is(:root) {
     --background-color-canvas: light-dark(rgb(236, 234, 230), rgb(40, 44, 47)) !important;
     --background-color-box: light-dark(rgb(252, 251, 250), rgb(50, 54, 57)) !important;
 }

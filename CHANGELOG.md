@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- about:logins' show-password eye is back; our checkbox look had turned it into a gray square
+- about:logins looks like the settings: the page and its cards in the settings' colors; the list of logins a card, its rows plates with the selected one filled quietly instead of a bar at the start
+- about:logins' login is a card laid out as a form, labels in a column before the values; the fields of its add and edit form are like the pages' other fields, the hint beside the address like a tooltip, its ... menu like the window's menus
+
 ## 159.7 — 2026-10-22
 
 - The search engine button at the start of the address bar fits inside the bar again; since 159.4 it stuck out below it
