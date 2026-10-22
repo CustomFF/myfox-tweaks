@@ -423,6 +423,21 @@ addon-page-header .main-search {
 addon-page-header .header-name {
     font-size: calc(var(--font-size-root, 12px) * 1.4667) !important;
 }
+/* The page starts close under the heading, as the settings' first card
+   does (Firefox leaves 16px under it, then the list's own margins). */
+addon-page-header .main-heading {
+    padding-bottom: 0 !important;
+}
+/* Its first section's label where the settings' first card starts. */
+addon-page-header ~ #main {
+    margin-top: 0 !important;
+}
+#main section:first-of-type > .list-section-heading:first-child {
+    margin-top: 0 !important;
+}
+addon-list > message-bar-stack:empty {
+    margin-top: 0 !important;
+}
 /* Narrower than 950px Firefox folds the navigation to its icons, each in
    a square as wide as an icon button; the rows' padding above would cut
    the icon off at the right: there, Firefox's own small padding. */
