@@ -25,8 +25,16 @@
         --button-background-color-ghost-active: color-mix(in srgb, currentColor 25%, transparent) !important;
         --button-border-color-ghost: transparent !important;
 
-        /* Text fields: the same quiet border the sidebar search boxes have. */
-        --input-text-border-color: var(--myfox-line-color) !important;
+        /* Text fields: filled, with no frame (the frame is the focus mark),
+           the one radius. A tint of the text color over whatever is behind,
+           so it reads on any theme. Under both names: newer Firefox renamed
+           the --input-text-* tokens to --input-*. */
+        --input-border-color: transparent !important;
+        --input-text-border-color: transparent !important;
+        --input-background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
+        --input-text-background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
+        --input-border-radius: var(--myfox-radius) !important;
+        --input-text-border-radius: var(--myfox-radius) !important;
 
         /* Keyboard focus: one thin accent border everywhere instead of
            Firefox's 2px ring (cyan under a theme). The address bar and the
@@ -42,7 +50,8 @@
     :where(moz-button:not([type~="icon"])) {
         --button-min-height: 26px !important;
     }
-    :where(moz-input-text, moz-input-search, moz-input-password, moz-select) {
+    :where(moz-input-text, moz-input-search, moz-input-password, moz-input-url, moz-input-email, moz-input-tel, moz-select) {
+        --input-min-height: 26px !important;
         --input-text-min-height: 26px !important;
     }
 
@@ -57,9 +66,8 @@
     }
 
     /* Focus: the same thin accent border, not the design system's glowing ring. */
-    moz-input-text:focus-within,
-    moz-input-password:focus-within,
-    moz-select:focus-within {
+    :is(moz-input-text, moz-input-search, moz-input-password, moz-input-url, moz-input-email, moz-input-tel, moz-select):focus-within {
+        --input-border: var(--myfox-focus-border) !important;
         --input-text-border: var(--myfox-focus-border) !important;
         --focus-outline: none !important;
     }

@@ -200,6 +200,8 @@ moz-button.menu-button {
 @-moz-document url-prefix("chrome://") {
     moz-card:not(.date-card):not(.nested-card) {
         --card-border: none !important;
+        /* Some panels (the passwords' add form) frame the card directly. */
+        border: none !important;
         --card-box-shadow: none !important;
         --card-background-color: color-mix(in srgb, currentColor 8%, transparent) !important;
         --card-border-radius: var(--myfox-radius) !important;

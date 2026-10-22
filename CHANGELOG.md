@@ -27,6 +27,8 @@
 - The bookmarks toolbar button has a new icon, outlined like the other toolbar icons, instead of a filled one
 - The sidebar and bookmarks toolbar buttons, while on, have a quieter fill, brighter under the pointer
 - Tooltips all look alike, Firefox's own ones for toolbar buttons too: the theme's sidebar colors with a quiet frame, the menu text size, instead of the system's colors, frame and font
+- Text fields of the browser's pages and panels (settings, the passwords' add form, the sidebar's search boxes) are filled with no frame, 26px high with the small radius, and show an accent frame when focused; newer Firefox had left them with Nova's rounded, framed look
+- The passwords' add form has no frame round it, as the other cards
 
 ## 159.6 — 2026-10-19
 
