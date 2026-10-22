@@ -178,8 +178,24 @@ moz-page-nav {
 }
 moz-page-nav-button {
     --page-nav-button-border-radius: 0px !important;
+    /* Focused, as square as the item (Nova rounds it to a pill) and the
+       ring inside it. */
+    --page-nav-button-border-radius-focused: 0px !important;
+    --page-nav-focus-outline-offset: calc(-1 * var(--myfox-focus-width)) !important;
     --page-nav-button-padding: 6px 10px !important;
     font-size: 13px !important;
+}
+/* The selected item is filled with the accent, so an accent ring inside it
+   didn't show: there the ring is double, a thin accent one just outside the
+   item and one of the item's text color just inside it, as round it as the
+   other items' ring. Inside the component (an agent sheet reaches into
+   it); not about:addons' detail tabs, the other selected buttons, which
+   aren't filled. */
+button[selected]:not(.tab-button):focus-visible {
+    outline: none !important;
+    box-shadow:
+        0 0 0 1px var(--myfox-focus-color),
+        inset 0 0 0 var(--myfox-focus-width) var(--page-nav-button-text-color-selected, currentColor) !important;
 }
 
 /* about:preferences cards/boxes/promos/message bars/pickers. Their corner

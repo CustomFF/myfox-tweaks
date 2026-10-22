@@ -37,6 +37,9 @@
     }
     moz-button[iconsrc*="close"] {
         --button-border-radius: 50% !important;
+        /* The focus ring inside the circle: outside it, a close button in a
+           corner (the sidebar's) lost the ring's top and right to the edge. */
+        --focus-outline-offset: calc(-1 * var(--myfox-focus-width)) !important;
         /* Close buttons are transparent until hovered, whatever type the
            panel declares (some declare "primary"). */
         --button-background-color: transparent !important;
