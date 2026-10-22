@@ -66,15 +66,19 @@
   // into the inner column), copy it. Copying the username and the password,
   // and opening the site, are still done by Firefox's own handler (it asks
   // for the primary password first), triggered from the button; a click or
-  // Enter on the row itself does nothing. The rows' tooltips ("Visit …",
-  // "Copy password") go to the buttons. Styled by
+  // Enter on the row itself does nothing. The site's tooltip ("Visit …")
+  // goes to its open button; every copy button just says "Copy". Styled by
   // chrome/agent/60-password-manager.css.
   const HTML = "http://www.w3.org/1999/xhtml";
   const COPY_ICON = "chrome://global/skin/icons/edit-copy.svg";
   const VISIT_ICON = "chrome://global/skin/icons/open-in-new.svg";
 
-  function makeButton(doc, kind, icon) {
+  function makeButton(doc, kind, icon, label) {
     let button = doc.createElementNS(HTML, "button");
+    if (label) {
+      button.title = label;
+      button.setAttribute("aria-label", label);
+    }
     button.className = "myfox-pw-btn myfox-pw-" + kind;
     let img = doc.createElementNS(HTML, "img");
     img.src = icon;
@@ -85,14 +89,15 @@
     return button;
   }
 
-  // The row's tooltip and accessible name on the button instead, kept as
-  // Firefox localizes them again (on every change of the login shown).
+  // The row's tooltip and accessible name off it, kept off as Firefox
+  // localizes them again (on every change of the login shown); on the
+  // button instead, unless it has its own.
   function moveTitle(row, button) {
     const move = () => {
       for (let name of ["title", "aria-label"]) {
         let value = row.getAttribute(name);
         if (value) {
-          button.setAttribute(name, value);
+          if (button) button.setAttribute(name, value);
           row.removeAttribute(name);
         }
       }
@@ -141,9 +146,7 @@
 
     let visit = makeButton(doc, "visit", VISIT_ICON);
     onClick(visit, () => origin.onLineClick());
-    let copySite = makeButton(doc, "copy", COPY_ICON);
-    copySite.title = copyLabel;
-    copySite.setAttribute("aria-label", copyLabel);
+    let copySite = makeButton(doc, "copy", COPY_ICON, copyLabel);
     onClick(copySite, () => {
       try {
         let address = (card.origin && card.origin.href) || origin.value;
@@ -154,21 +157,34 @@
     lineOf(origin).append(visit, copySite);
     moveTitle(origin, visit);
 
-    let copyUser = makeButton(doc, "copy", COPY_ICON);
+    let copyUser = makeButton(doc, "copy", COPY_ICON, copyLabel);
     onClick(copyUser, () => {
       username.onLineClick();
       showCopied(copyUser, username);
     });
     lineOf(username).append(copyUser);
-    moveTitle(username, copyUser);
+    moveTitle(username, null);
 
-    let copyPassword = makeButton(doc, "copy", COPY_ICON);
+    let copyPassword = makeButton(doc, "copy", COPY_ICON, copyLabel);
     onClick(copyPassword, () => {
       concealed.onLineClick();
       showCopied(copyPassword, password);
     });
     reveal.after(copyPassword);
-    moveTitle(password, copyPassword);
+    moveTitle(password, null);
+
+    // The pencil's tooltip is its own label ("Edit"), not "Edit password":
+    // the card is all about the one password. Kept so as Firefox localizes
+    // the button again.
+    let edit = root.querySelector(".edit-button");
+    if (edit) {
+      const retitle = () => {
+        let label = edit.textContent.trim();
+        if (label && edit.getAttribute("tooltiptext") !== label) edit.setAttribute("tooltiptext", label);
+      };
+      retitle();
+      new doc.defaultView.MutationObserver(retitle).observe(edit, { attributes: true, attributeFilter: ["tooltiptext"], childList: true, characterData: true, subtree: true });
+    }
 
     // Clicks and Enter on a row itself go nowhere; the buttons' go through.
     const block = e => {
