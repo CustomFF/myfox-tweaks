@@ -100,21 +100,16 @@
     new row.ownerDocument.defaultView.MutationObserver(move).observe(row, { attributes: true, attributeFilter: ["title", "aria-label"] });
   }
 
-  // Firefox marks a row it copied from with .copied for a while; the button
-  // shows a check mark meanwhile.
-  function showCopied(button, row) {
+  // After a copy the button shows a check mark and Firefox's "Copied"
+  // (the word its rows show after a label) for a while, as about:logins'
+  // copy buttons do. Firefox marks only a row clicked itself, not one whose
+  // handler a button calls.
+  function showCopied(button, word) {
     let win = button.ownerDocument.defaultView;
-    let tries = 0;
-    let timer = win.setInterval(() => {
-      let copied = row && row.shadowRoot && row.shadowRoot.querySelector(".line-container.copied");
-      if (copied || !row) {
-        win.clearInterval(timer);
-        button.classList.add("copied");
-        win.setTimeout(() => button.classList.remove("copied"), 2000);
-      } else if (++tries > 40) {
-        win.clearInterval(timer);
-      }
-    }, 50);
+    win.clearTimeout(button.myfoxCopiedTimer);
+    button.setAttribute("data-copied", word || "");
+    button.classList.add("copied");
+    button.myfoxCopiedTimer = win.setTimeout(() => button.classList.remove("copied"), 2000);
   }
 
   // A card is made ours only if every part of Firefox's we rely on is
@@ -164,6 +159,8 @@
         fn();
       });
 
+      let usernameLabel = labelOf(lines[1], "username");
+      const copiedWord = () => usernameLabel.getAttribute("data-after");
       let visit = makeButton(doc, "visit", VISIT_ICON);
       onClick(visit, () => origin.onLineClick());
       let copySite = makeButton(doc, "copy", COPY_ICON, copyLabel);
@@ -171,29 +168,29 @@
         try {
           let address = (card.origin && card.origin.href) || origin.value;
           Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper).copyString(address);
-          showCopied(copySite, null);
+          showCopied(copySite, copiedWord());
         } catch(ex) {}
       });
       lineOf(origin).append(visit, copySite);
-        added.push(visit, copySite);
+      added.push(visit, copySite);
       moveTitle(origin, visit);
 
       let copyUser = makeButton(doc, "copy", COPY_ICON, copyLabel);
-      onClick(copyUser, () => {
-        username.onLineClick();
-        showCopied(copyUser, username);
-      });
+      // The handlers settle on whether they copied (not when the primary
+      // password isn't given), as Firefox's rows take them.
+      onClick(copyUser, () => Promise.resolve(username.onLineClick()).then(copied => {
+        if (copied) showCopied(copyUser, copiedWord());
+      }));
       lineOf(username).append(copyUser);
-        added.push(copyUser);
+      added.push(copyUser);
       moveTitle(username, null);
 
       let copyPassword = makeButton(doc, "copy", COPY_ICON, copyLabel);
-      onClick(copyPassword, () => {
-        concealed.onLineClick();
-        showCopied(copyPassword, password);
-      });
+      onClick(copyPassword, () => Promise.resolve(concealed.onLineClick()).then(copied => {
+        if (copied) showCopied(copyPassword, copiedWord());
+      }));
       reveal.after(copyPassword);
-        added.push(copyPassword);
+      added.push(copyPassword);
       moveTitle(password, null);
 
       // The pencil's tooltip is its own label ("Edit"), not "Edit password":
