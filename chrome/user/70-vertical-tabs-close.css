@@ -88,16 +88,16 @@
         background-repeat: no-repeat !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :hover, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
-        background-image: linear-gradient(to top left, transparent, var(--myfox-tab-fade-color) 75%) !important;
+        background-image: var(--myfox-container-layer, none), linear-gradient(to top left, transparent, var(--myfox-tab-fade-color) 75%) !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget], :hover) > .tab-stack > .tab-background {
-        background-image: linear-gradient(to bottom left, transparent, var(--myfox-tab-fade-color) 75%) !important;
+        background-image: var(--myfox-container-layer, none), linear-gradient(to bottom left, transparent, var(--myfox-tab-fade-color) 75%) !important;
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget], :hover, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *) > .tab-stack > .tab-background {
-        background-image: linear-gradient(to top right, transparent, var(--myfox-tab-fade-color) 75%) !important;
+        background-image: var(--myfox-container-layer, none), linear-gradient(to top right, transparent, var(--myfox-tab-fade-color) 75%) !important;
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is(:is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ *, :is(.tabbrowser-tab[selected], :has(.tabbrowser-tab[selected])) ~ * *):not([multiselected], [dragtarget], :hover) > .tab-stack > .tab-background {
-        background-image: linear-gradient(to bottom right, transparent, var(--myfox-tab-fade-color) 75%) !important;
+        background-image: var(--myfox-container-layer, none), linear-gradient(to bottom right, transparent, var(--myfox-tab-fade-color) 75%) !important;
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:not([selected], [multiselected], [dragtarget]):hover {
         z-index: 999999 !important;

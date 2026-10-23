@@ -64,7 +64,10 @@
        (sized to the padding box it repeated into the border as a thin line). */
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid]>.tab-stack>.tab-background {
         --myfox-container-direction: to right;
-        background-image: linear-gradient(var(--myfox-container-direction), var(--myfox-container-line-color), transparent 67%) !important;
+        /* A layer of its own: a background tab's fade toward the selected one
+           (../user/70-vertical-tabs-close.css) is drawn under it. */
+        --myfox-container-layer: linear-gradient(var(--myfox-container-direction), var(--myfox-container-line-color), transparent 67%);
+        background-image: var(--myfox-container-layer) !important;
         background-origin: border-box !important;
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid]>.tab-stack>.tab-background {
