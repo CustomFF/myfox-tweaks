@@ -116,4 +116,17 @@
       } catch(e) {}
     }
   });
+
+  // DNS over HTTPS through Cloudflare (Firefox's own provider), in the
+  // "Increased protection" mode: when it fails, Firefox falls back to the
+  // system's DNS, so captive portals, local names and company networks keep
+  // working. Once, under a guard of its own (existing profiles get it too),
+  // and not when DNS over HTTPS was already set by hand. MyFox's --no-doh
+  // pre-seeds myfox.doh=false in user.js before the first launch, as it does
+  // myfox.theme.
+  oncePerProfile("myfox.dohInitialized", () => {
+    if (!prefs.getBoolPref("myfox.doh", true) || prefs.prefHasUserValue("network.trr.mode")) return;
+    prefs.setIntPref("network.trr.mode", 2);
+    prefs.setStringPref("network.trr.uri", "https://mozilla.cloudflare-dns.com/dns-query");
+  });
 })(globalThis.MyFox);
