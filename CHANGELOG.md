@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 159.10 — 2026-10-23
 
 - DNS over HTTPS through Cloudflare is on from the first start, in the "Increased protection" mode (it falls back to the system's DNS); MyFox can leave it off, and it's an ordinary Firefox setting afterwards
 
