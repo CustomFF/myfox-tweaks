@@ -37,6 +37,12 @@ sidebar-panel-header,
     min-height: auto !important;
     gap: 2px !important; /* reduce gap between heading and search box */
 }
+/* Firefox 160 draws the heading and its ✕ in the browser window above the
+   panel, no longer inside it: in by the panel's own 4px, level with the
+   search box and the "..." button under them. */
+#sidebar-panel-header {
+    padding-inline: 4px !important;
+}
 sidebar-panel-header .options-container {
     height: auto !important;
     min-height: auto !important;
@@ -184,7 +190,11 @@ moz-input-search:focus-within {
    card below it. Round it and let it reach the edge. */
 moz-button.menu-button {
     border-radius: var(--myfox-radius) !important;
+    margin-inline-start: 6px !important;
     margin-inline-end: 0 !important;
+    /* Firefox 160 spaces it from the search box by this on its inner
+       button (::part), which pushed the button out of its 22px. */
+    --space-small: 0px !important;
     width: 22px !important;
     height: 22px !important;
     min-width: 22px !important;
@@ -269,7 +279,6 @@ sidebar-tab-row {
     height: 24px !important;
     margin-inline-start: 20px !important;
 }
-
 /* History date groups (moz-card accordions) read like the bookmarks tree:
    plain 24px rows, a small chevron on the left (down = open, right =
    closed), regular weight, square corners, no gaps between groups. */
