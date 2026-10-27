@@ -279,13 +279,13 @@ sidebar-tab-row {
     height: 24px !important;
     margin-inline-start: 20px !important;
 }
-/* That 20px is the row's indent, so no 8px more inside it before the
-   icon; and the delete button shown on hover kept clear of the overlay
+/* That 20px is the row's indent, so only 4px more inside it before the
+   icon, not 8px (just clear of the hover fill's edge); and the delete button shown on hover kept clear of the overlay
    scrollbar, which covers the row's last few pixels. The sidebar panels
    are chrome:// documents; Firefox View (about:) keeps its own. */
 @-moz-document url-prefix("chrome://") {
     .fxview-tab-row-main {
-        padding-inline-start: 0 !important;
+        padding-inline-start: 4px !important;
     }
     moz-button.fxview-tab-row-button.delete-button {
         margin-inline-end: 8px !important;
