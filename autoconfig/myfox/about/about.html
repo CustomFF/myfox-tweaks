@@ -20,6 +20,7 @@
     <a class="nav-item" href="#about" data-section="about" data-l10n="aboutpage.nav.about"></a>
     <a class="nav-item" href="#changelog" data-section="changelog" data-l10n="aboutpage.nav.changelog"></a>
     <a class="nav-item" href="#settings" data-section="settings" data-l10n="aboutpage.nav.settings"></a>
+    <a class="nav-item" href="#profiles" data-section="profiles" data-l10n="aboutpage.nav.profiles" hidden></a>
   </nav>
   <main>
     <section id="about" hidden>
@@ -59,6 +60,25 @@
           <moz-toggle id="command-toggle" disabled></moz-toggle>
         </div>
         <div id="command-status" class="setting-status" hidden></div>
+      </div>
+    </section>
+    <section id="profiles" hidden>
+      <h2 data-l10n="aboutpage.nav.profiles"></h2>
+      <div class="box" id="profiles-box" hidden>
+        <div id="profiles-list"></div>
+        <div id="profiles-status" class="setting-status" hidden></div>
+        <div class="profiles-buttons">
+          <button id="profiles-new" data-l10n="aboutpage.profiles.new"></button>
+          <button id="profiles-import" data-l10n="aboutpage.profiles.importFrom"></button>
+        </div>
+        <div id="profiles-foreign" hidden>
+          <div class="setting-desc" data-l10n="aboutpage.profiles.foreignDesc"></div>
+          <div class="profiles-foreign-list"></div>
+        </div>
+      </div>
+      <div class="box" id="profiles-command" hidden>
+        <div class="setting-desc" data-l10n="aboutpage.profiles.commandDesc"></div>
+        <div class="command-line"><code></code><button data-l10n="aboutpage.profiles.copy"></button></div>
       </div>
     </section>
   </main>

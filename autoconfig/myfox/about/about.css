@@ -246,3 +246,73 @@ h3 {
 #changelog-list li {
     margin-bottom: 4px;
 }
+
+/* Profiles: a row per profile, its name (with "default" and "open" marks),
+   what it is and when it was last used, its folder, and on the right what
+   can be done with it. */
+.profile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 0;
+}
+.profile + .profile {
+    border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+.profile-info {
+    min-width: 0;
+}
+.profile-name {
+    font-weight: 600;
+}
+.badge {
+    margin-inline-start: 8px;
+    padding: 1px 6px;
+    border-radius: var(--myfox-radius, 4px);
+    background-color: color-mix(in srgb, currentColor 12%, transparent);
+    font-weight: normal;
+    font-size: 0.9em;
+}
+.profile-path {
+    margin-top: 2px;
+    opacity: 0.5;
+    font-family: monospace;
+    font-size: 0.9em;
+    overflow-wrap: anywhere;
+}
+.profile-actions,
+.profiles-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.profile-actions button,
+.profiles-buttons button,
+.command-line button {
+    margin: 0;
+}
+.profiles-buttons {
+    justify-content: flex-start;
+    margin-top: 12px;
+}
+#profiles-foreign {
+    margin-top: 12px;
+}
+/* A command to run in a terminal with Firefox closed, and a button that
+   copies it. */
+.command-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+.command-line code {
+    flex: 1;
+    padding: 6px 8px;
+    border-radius: var(--myfox-radius, 4px);
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+    overflow-wrap: anywhere;
+}

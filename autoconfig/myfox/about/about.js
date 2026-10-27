@@ -52,7 +52,8 @@ async function loadMyfox() {
   try {
     let install = Services.dirsvc.get("GreD", Ci.nsIFile).path;
     let info = await IOUtils.readJSON(PathUtils.join(install, "myfox.json"));
-    if (!info.features?.includes("command") || !info.launcher) return null;
+    if (!info.launcher) return null;
+    info.features ??= [];
     let { type, permissions } = await IOUtils.stat(info.launcher);
     return type === "regular" && (permissions & 0o111) ? info : null;
   } catch(e) {
@@ -60,15 +61,15 @@ async function loadMyfox() {
   }
 }
 
-// One `<launcher> command ... --json` run: its JSON answer, or {error}. The
-// child gets Firefox's environment (HOME, PATH, LANG: the paths and the
-// language of its notes depend on it).
-async function runCommand(launcher, args) {
+// One `<launcher> ... --json` run: its JSON answer, or {error}. The child
+// gets Firefox's environment (HOME, PATH, LANG: the paths and the language
+// of its notes depend on it).
+async function runMyfox(launcher, args) {
   try {
     const { Subprocess } = ChromeUtils.importESModule("resource://gre/modules/Subprocess.sys.mjs");
     let proc = await Subprocess.call({
       command: launcher,
-      arguments: ["command", ...args, "--json"],
+      arguments: [...args, "--json"],
       environmentAppend: true,
       stderr: "pipe",
     });
@@ -86,10 +87,10 @@ async function runCommand(launcher, args) {
     return { error: String(e.message || e) };
   }
 }
+const runCommand = (launcher, args) => runMyfox(launcher, ["command", ...args]);
 
-async function initCommandSetting() {
-  let myfox = await loadMyfox();
-  if (!myfox) return;
+async function initCommandSetting(myfox) {
+  if (!myfox?.features.includes("command")) return;
   document.getElementById("command-box").hidden = false;
   let toggle = document.getElementById("command-toggle");
   let status = document.getElementById("command-status");
@@ -251,6 +252,167 @@ async function initAppearance() {
   box.hidden = false;
 }
 
+// Profiles (MyFox >= 1.2.1, "profiles" among its features): the profiles
+// MyFox knows of, asked from it each time the section is shown (they change
+// behind its back too, through firefox -P). What can be done while this
+// Firefox runs is done here: open a profile in a window of its own, put
+// the tweaks into one. Making another one the default, making a new one,
+// importing one from another Firefox change profiles.ini, which this
+// Firefox rewrites when it quits: those are a command to run with Firefox
+// closed. Removing a profile isn't offered here at all.
+const PROFILE_OWNERS = ["myfox", "ours", "unused", "foreign"];
+
+function shellQuote(word) {
+  return /^[A-Za-z0-9._@%+=:,\/-]+$/.test(word) ? word : "'" + word.replace(/'/g, "'\\''") + "'";
+}
+
+function formatDate(iso) {
+  try {
+    return new Intl.DateTimeFormat(langChain[0], { dateStyle: "medium", timeStyle: "short" }).format(new Date(iso));
+  } catch(e) {
+    return iso;
+  }
+}
+
+async function initProfiles(myfox) {
+  if (!myfox?.features.includes("profiles")) return;
+  document.querySelector('.nav-item[data-section="profiles"]').hidden = false;
+  showSection();
+  let list = document.getElementById("profiles-list");
+  let status = document.getElementById("profiles-status");
+  let commandBox = document.getElementById("profiles-command");
+  let foreignBox = document.getElementById("profiles-foreign");
+  let busy = false;
+
+  const button = (label, onClick) => {
+    let b = document.createElement("button");
+    b.textContent = label;
+    b.addEventListener("click", onClick);
+    return b;
+  };
+  const showStatus = (text, error) => {
+    status.textContent = text || "";
+    status.classList.toggle("error", !!error);
+    status.hidden = !text;
+  };
+  // A command for the terminal, with Firefox closed.
+  const showCommand = (args) => {
+    let line = ["myfox", ...args.map(shellQuote)].join(" ");
+    commandBox.querySelector("code").textContent = line;
+    commandBox.hidden = false;
+    commandBox.scrollIntoView({ block: "nearest" });
+  };
+  commandBox.querySelector("button").addEventListener("click", () => {
+    Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper)
+      .copyString(commandBox.querySelector("code").textContent);
+  });
+
+  const openProfile = (p) => {
+    try {
+      let starter = Services.dirsvc.get("GreD", Ci.nsIFile);
+      starter.append("firefox-myfox");
+      let proc = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
+      proc.init(starter);
+      proc.runwAsync(["--no-remote", "--profile", p.path], 3);
+      showStatus("");
+    } catch(e) {
+      showStatus(String(e.message || e), true);
+    }
+  };
+  const applyTweaks = async (p) => {
+    if (busy) return;
+    busy = true;
+    showStatus(t("aboutpage.profiles.applying", p.name));
+    let res = await runMyfox(myfox.launcher, ["profile", "apply", p.id]);
+    busy = false;
+    if (res.error) showStatus(res.error, true);
+    else { showStatus(""); load(); }
+  };
+
+  const row = (p, foreign) => {
+    let item = document.createElement("div");
+    item.className = "profile";
+    let info = document.createElement("div");
+    info.className = "profile-info";
+    let name = document.createElement("div");
+    name.className = "profile-name";
+    name.textContent = p.name;
+    for (let [on, key] of [[p.used, "isDefault"], [p.open, "isOpen"]]) {
+      if (!on) continue;
+      let badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = t("aboutpage.profiles." + key);
+      name.appendChild(badge);
+    }
+    let details = [];
+    if (!foreign && PROFILE_OWNERS.includes(p.owner)) details.push(t("aboutpage.profiles.owner." + p.owner));
+    if (p.last_used) details.push(t("aboutpage.profiles.lastUsed", formatDate(p.last_used)));
+    if (p.imported_from) details.push(t("aboutpage.profiles.importedFrom", p.imported_from));
+    let desc = document.createElement("div");
+    desc.className = "setting-desc";
+    desc.textContent = details.join(" · ");
+    let path = document.createElement("div");
+    path.className = "profile-path";
+    path.textContent = p.path;
+    info.append(name, desc, path);
+    let actions = document.createElement("div");
+    actions.className = "profile-actions";
+    if (foreign) {
+      actions.append(button(t("aboutpage.profiles.import"), () => showCommand(["profile", "import", p.id])));
+    } else {
+      if (!p.open && ["myfox", "ours", "unused"].includes(p.owner)) {
+        let launch = button(t("aboutpage.profiles.open"), () => openProfile(p));
+        launch.title = t("aboutpage.profiles.openTitle");
+        actions.append(launch);
+      }
+      if (!p.open && !p.tweaks && ["ours", "unused"].includes(p.owner)) {
+        actions.append(button(t("aboutpage.profiles.apply"), () => applyTweaks(p)));
+      }
+      if (!p.used) {
+        actions.append(button(t("aboutpage.profiles.use"), () => showCommand(["profile", "use", p.id])));
+      }
+    }
+    item.append(info, actions);
+    return item;
+  };
+
+  async function load() {
+    let res = await runMyfox(myfox.launcher, ["profile", "list"]);
+    list.textContent = "";
+    if (res.error || !Array.isArray(res)) {
+      showStatus(res.error || t("aboutpage.command.failed", ""), true);
+      return;
+    }
+    for (let p of res) list.appendChild(row(p, false));
+  }
+  async function loadForeign() {
+    let res = await runMyfox(myfox.launcher, ["profile", "list", "--all"]);
+    let rows = foreignBox.querySelector(".profiles-foreign-list");
+    rows.textContent = "";
+    if (res.error || !Array.isArray(res)) {
+      showStatus(res.error || t("aboutpage.command.failed", ""), true);
+      return;
+    }
+    let foreign = res.filter(p => p.owner === "foreign");
+    if (!foreign.length) {
+      let none = document.createElement("div");
+      none.className = "setting-desc";
+      none.textContent = t("aboutpage.profiles.noForeign");
+      rows.appendChild(none);
+    }
+    for (let p of foreign) rows.appendChild(row(p, true));
+  }
+
+  document.getElementById("profiles-new").addEventListener("click", () => showCommand(["profile", "new", "--use"]));
+  document.getElementById("profiles-import").addEventListener("click", () => {
+    foreignBox.hidden = !foreignBox.hidden;
+    if (!foreignBox.hidden) loadForeign();
+  });
+  document.getElementById("profiles-box").hidden = false;
+  load();
+  window.addEventListener("hashchange", () => { if (location.hash === "#profiles") load(); });
+}
+
 function showSection() {
   // A section whose menu item is hidden (settings without MyFox) isn't one.
   let id = location.hash.slice(1);
@@ -273,7 +435,9 @@ window.addEventListener("DOMContentLoaded", async () => {
   showSection();
   window.addEventListener("hashchange", showSection);
   initAppearance();
-  initCommandSetting();
+  let myfox = await loadMyfox();
+  initCommandSetting(myfox);
+  initProfiles(myfox);
 
   let versions = await loadChangelog();
   let version = document.getElementById("about-version");
