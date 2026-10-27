@@ -413,6 +413,160 @@ async function initProfiles(myfox) {
   window.addEventListener("hashchange", () => { if (location.hash === "#profiles") load(); });
 }
 
+// What's available, from GitHub for now (later the project's site): the
+// released tweaks' and MyFox core's changelogs, newest version first.
+const TWEAKS_CHANGELOG_URL = "https://github.com/CustomFF/myfox-tweaks/releases/latest/download/changelog.json";
+const CORE_CHANGELOG_URL = "https://github.com/CustomFF/myfox/releases/latest/download/changelog.json";
+
+async function fetchChangelog(url) {
+  try {
+    let res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) return null;
+    return (await res.json()).versions || null;
+  } catch(e) {
+    return null;
+  }
+}
+
+// Dotted versions compared number by number (159.10 is newer than 159.9).
+function compareVersions(a, b) {
+  let pa = String(a).split(".").map(Number), pb = String(b).split(".").map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    let d = (pa[i] || 0) - (pb[i] || 0);
+    if (d) return d;
+  }
+  return 0;
+}
+const newerThan = (versions, current) =>
+  (versions || []).filter(v => !current || compareVersions(v.version, current) > 0);
+
+// A box per version: its number, date and changes; one not installed yet
+// (a newer release) marked so.
+function versionBox(v, notInstalled) {
+  let box = document.createElement("div");
+  box.className = "box";
+  let h = document.createElement("h3");
+  h.textContent = v.version;
+  let date = document.createElement("span");
+  date.className = "date";
+  date.textContent = v.date;
+  h.appendChild(date);
+  if (notInstalled) {
+    let badge = document.createElement("span");
+    badge.className = "badge";
+    badge.textContent = t("aboutpage.changelog.notInstalled");
+    h.appendChild(badge);
+  }
+  let ul = document.createElement("ul");
+  for (let change of v.changes) {
+    let li = document.createElement("li");
+    li.textContent = change;
+    ul.appendChild(li);
+  }
+  box.append(h, ul);
+  return box;
+}
+
+function renderChangelog(versions, installedVersion) {
+  let list = document.getElementById("changelog-list");
+  list.textContent = "";
+  if (!versions?.length) {
+    let p = document.createElement("p");
+    let a = document.createElement("a");
+    a.href = "https://github.com/CustomFF/myfox-tweaks/blob/master/CHANGELOG.md";
+    a.textContent = t("aboutpage.changelog.missing");
+    p.appendChild(a);
+    list.appendChild(p);
+    return;
+  }
+  for (let v of versions) {
+    list.appendChild(versionBox(v, installedVersion && compareVersions(v.version, installedVersion) > 0));
+  }
+}
+
+// Updates: the tweaks and MyFox core, what is installed and what is out,
+// with the changes in between. With MyFox 1.2.2 or newer ("update" among
+// its features) a button installs them all through `myfox refresh --json`;
+// what Firefox reads at startup takes a restart, which the page offers.
+async function initUpdates(myfox, tweaksInstalled, tweaksReleased) {
+  let box = document.getElementById("updates-box");
+  let status = document.getElementById("updates-status");
+  let installButton = document.getElementById("updates-install");
+  let checkButton = document.getElementById("updates-check");
+  let changes = document.getElementById("updates-changes");
+  let canInstall = !!myfox?.features.includes("update");
+  const showStatus = (text, error) => {
+    status.textContent = text || "";
+    status.classList.toggle("error", !!error);
+    status.hidden = !text;
+  };
+  const line = (key, installed, latest) => {
+    let row = document.createElement("div");
+    row.className = "update-line";
+    let name = document.createElement("span");
+    name.className = "setting-label";
+    name.textContent = t("aboutpage.updates." + key);
+    let state = document.createElement("span");
+    state.className = "setting-desc";
+    state.textContent = !latest ? t("aboutpage.updates.unknown", installed || "?")
+      : installed && compareVersions(latest, installed) <= 0 ? t("aboutpage.updates.upToDate", installed)
+      : t("aboutpage.updates.available", installed || "?", latest);
+    row.append(name, state);
+    return row;
+  };
+
+  async function check(tweaksReleasedNow) {
+    showStatus("");
+    let tweaks = tweaksReleasedNow ?? await fetchChangelog(TWEAKS_CHANGELOG_URL);
+    let core = myfox ? await fetchChangelog(CORE_CHANGELOG_URL) : null;
+    let rows = document.getElementById("updates-versions");
+    rows.textContent = "";
+    rows.appendChild(line("tweaks", tweaksInstalled, tweaks?.[0]?.version));
+    if (myfox) rows.appendChild(line("core", myfox.version, core?.[0]?.version));
+    if (!tweaks && (!myfox || !core)) showStatus(t("aboutpage.updates.offline"), true);
+    changes.textContent = "";
+    let newTweaks = newerThan(tweaks, tweaksInstalled);
+    let newCore = myfox ? newerThan(core, myfox.version) : [];
+    for (let [key, list] of [["tweaks", newTweaks], ["core", newCore]]) {
+      if (!list.length) continue;
+      let h = document.createElement("h3");
+      h.textContent = t("aboutpage.updates." + key);
+      changes.appendChild(h);
+      for (let v of list) changes.appendChild(versionBox(v, false));
+    }
+    installButton.hidden = !canInstall || !(newTweaks.length || newCore.length);
+  }
+
+  installButton.addEventListener("click", async () => {
+    installButton.disabled = checkButton.disabled = true;
+    showStatus(t("aboutpage.updates.installing"));
+    let res = await runMyfox(myfox.launcher, ["refresh"]);
+    installButton.disabled = checkButton.disabled = false;
+    if (res.error || !res.ok) {
+      showStatus(res.error || t("aboutpage.command.failed", ""), true);
+      return;
+    }
+    let done = (res.updated || []).map(u => t("aboutpage.updates.track." + u.track) + " " + u.to).join(", ");
+    showStatus(done ? t("aboutpage.updates.installed", done) : t("aboutpage.updates.nothing"));
+    if (res.restart) {
+      let ps = Services.prompt;
+      let restart = ps.confirmEx(window, t("aboutpage.updates.restartTitle"), t("aboutpage.updates.restartText"),
+        ps.BUTTON_POS_0 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_1 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_0_DEFAULT,
+        t("aboutpage.updates.restartNow"), t("aboutpage.updates.restartLater"), null, null, {}) === 0;
+      if (restart) {
+        let cancel = Cc["@mozilla.org/supports-PRBool;1"].createInstance(Ci.nsISupportsPRBool);
+        Services.obs.notifyObservers(cancel, "quit-application-requested", "restart");
+        if (!cancel.data) Services.startup.quit(Ci.nsIAppStartup.eAttemptQuit | Ci.nsIAppStartup.eRestart);
+        return;
+      }
+    }
+    check();
+  });
+  checkButton.addEventListener("click", () => check());
+  box.hidden = false;
+  check(tweaksReleased);
+}
+
 function showSection() {
   // A section whose menu item is hidden (settings without MyFox) isn't one.
   let id = location.hash.slice(1);
@@ -439,38 +593,18 @@ window.addEventListener("DOMContentLoaded", async () => {
   initCommandSetting(myfox);
   initProfiles(myfox);
 
-  let versions = await loadChangelog();
+  // The installed tweaks' changelog, and the released one (newer versions
+  // too) from GitHub for the changelog section and the updates.
+  let installed = await loadChangelog();
+  let installedVersion = installed?.[0]?.version || null;
   let version = document.getElementById("about-version");
-  version.textContent = versions?.length
-    ? t("aboutpage.about.version", versions[0].version)
+  version.textContent = installedVersion
+    ? t("aboutpage.about.version", installedVersion)
     : t("aboutpage.about.versionDev");
-
-  let list = document.getElementById("changelog-list");
-  if (!versions?.length) {
-    let p = document.createElement("p");
-    let a = document.createElement("a");
-    a.href = "https://github.com/CustomFF/myfox-tweaks/blob/master/CHANGELOG.md";
-    a.textContent = t("aboutpage.changelog.missing");
-    p.appendChild(a);
-    list.appendChild(p);
-    return;
-  }
-  for (let v of versions) {
-    let box = document.createElement("div");
-    box.className = "box";
-    let h = document.createElement("h3");
-    h.textContent = v.version;
-    let date = document.createElement("span");
-    date.className = "date";
-    date.textContent = v.date;
-    h.appendChild(date);
-    let ul = document.createElement("ul");
-    for (let change of v.changes) {
-      let li = document.createElement("li");
-      li.textContent = change;
-      ul.appendChild(li);
-    }
-    box.append(h, ul);
-    list.appendChild(box);
-  }
+  // The installed changelog always, with only the released versions newer
+  // than it added on top: no network, and it's still all there.
+  let released = await fetchChangelog(TWEAKS_CHANGELOG_URL);
+  renderChangelog([...newerThan(released, installedVersion), ...(installed || [])], installedVersion);
+  initUpdates(myfox, installedVersion, released);
 });
+

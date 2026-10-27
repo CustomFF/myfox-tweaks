@@ -19,6 +19,7 @@
     <h1 id="nav-title">MyFox tweaks</h1>
     <a class="nav-item" href="#about" data-section="about" data-l10n="aboutpage.nav.about"></a>
     <a class="nav-item" href="#changelog" data-section="changelog" data-l10n="aboutpage.nav.changelog"></a>
+    <a class="nav-item" href="#updates" data-section="updates" data-l10n="aboutpage.nav.updates"></a>
     <a class="nav-item" href="#settings" data-section="settings" data-l10n="aboutpage.nav.settings"></a>
     <a class="nav-item" href="#profiles" data-section="profiles" data-l10n="aboutpage.nav.profiles" hidden></a>
   </nav>
@@ -43,6 +44,18 @@
     <section id="changelog" hidden>
       <h2 data-l10n="aboutpage.nav.changelog"></h2>
       <div id="changelog-list"></div>
+    </section>
+    <section id="updates" hidden>
+      <h2 data-l10n="aboutpage.nav.updates"></h2>
+      <div class="box" id="updates-box" hidden>
+        <div id="updates-versions"></div>
+        <div id="updates-status" class="setting-status" hidden></div>
+        <div class="profiles-buttons">
+          <button id="updates-install" class="primary" data-l10n="aboutpage.updates.install" hidden></button>
+          <button id="updates-check" data-l10n="aboutpage.updates.check"></button>
+        </div>
+      </div>
+      <div id="updates-changes"></div>
     </section>
     <section id="settings" hidden>
       <h2 data-l10n="aboutpage.nav.settings"></h2>

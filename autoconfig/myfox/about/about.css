@@ -316,3 +316,21 @@ h3 {
     background-color: color-mix(in srgb, currentColor 8%, transparent);
     overflow-wrap: anywhere;
 }
+
+/* Updates: a line per part (the tweaks, MyFox) with what is installed and
+   what is out; the changes in between below, as in the changelog. */
+.update-line {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 4px 0;
+}
+.update-line .setting-label {
+    min-width: 120px;
+}
+#updates-changes h3 {
+    margin-top: 16px;
+}
+h3 .badge {
+    vertical-align: middle;
+}
