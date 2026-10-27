@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 160.1 — 2026-10-27
 
 - An image's context menu has "View Image Info", which Firefox hides: Page Info on its Media tab, for that image
 - about:myfox has an Updates section: the installed and the released versions of the tweaks and of MyFox, the changes in between, and with MyFox 1.2.2 or newer a button that installs them and offers to restart Firefox; the changelog section shows the released versions not installed yet too
