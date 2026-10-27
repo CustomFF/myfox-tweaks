@@ -50,10 +50,13 @@
       try { if (bookmark) prefs.setStringPref(ROLE_PREFS[role], bookmark.guid); } catch(e) {}
       return null;
     };
-    let addIfMissing = (title, url, index, role) => {
+    // At the toolbar's end: on a profile that already has bookmarks there
+    // (imported, or set up by hand) they keep their places; on a new one the
+    // toolbar is empty anyway. In order, "Advanced settings" first.
+    let addIfMissing = (title, url, role) => {
       return pu.bookmarks.fetch({ url }).then(found => {
         if (!found) {
-          return pu.bookmarks.insert({ parentGuid: toolbarGuid, title, url, index })
+          return pu.bookmarks.insert({ parentGuid: toolbarGuid, title, url, index: pu.bookmarks.DEFAULT_INDEX })
             .then(added => remember(role, added));
         }
         return remember(role, found);
@@ -74,15 +77,15 @@
             return pu.bookmarks.update({ guid: existing.guid, url: galleryUrl })
               .then(() => remember("gallery", existing));
           }
-          return addIfMissing(t("bookmarks.gallery"), galleryUrl, 1, "gallery");
+          return addIfMissing(t("bookmarks.gallery"), galleryUrl, "gallery");
         }).catch(() => null);
       }
-      return addIfMissing(t("bookmarks.gallery"), galleryUrl, 1, "gallery");
+      return addIfMissing(t("bookmarks.gallery"), galleryUrl, "gallery");
     };
 
     if (!bookmarksDone && !MyFox.bookmarksRunning) {
       MyFox.bookmarksRunning = true;
-      let ensureAll = () => addIfMissing(t("bookmarks.advanced"), "about:config", 0, "advanced")
+      let ensureAll = () => addIfMissing(t("bookmarks.advanced"), "about:config", "advanced")
         .then(saveGalleryBookmark);
       // On a new profile's first start Places may still be processing the
       // default bookmarks and erase what we just added (that's how
