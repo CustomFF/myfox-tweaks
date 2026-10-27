@@ -279,6 +279,19 @@ sidebar-tab-row {
     height: 24px !important;
     margin-inline-start: 20px !important;
 }
+/* That 20px is the row's indent, so no 8px more inside it before the
+   icon; and the delete button shown on hover kept clear of the overlay
+   scrollbar, which covers the row's last few pixels. The sidebar panels
+   are chrome:// documents; Firefox View (about:) keeps its own. */
+@-moz-document url-prefix("chrome://") {
+    .fxview-tab-row-main {
+        padding-inline-start: 0 !important;
+    }
+    moz-button.fxview-tab-row-button.delete-button {
+        margin-inline-end: 8px !important;
+    }
+}
+
 /* History date groups (moz-card accordions) read like the bookmarks tree:
    plain 24px rows, a small chevron on the left (down = open, right =
    closed), regular weight, square corners, no gaps between groups. */
