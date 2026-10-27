@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- An image's context menu has "View Image Info", which Firefox hides: Page Info on its Media tab, for that image
+
 ## 160.0 — 2026-10-27
 
 - about:myfox has a Profiles section with MyFox 1.2.1 or newer: MyFox's profiles, when each was last used, launching one in a window of its own, putting the tweaks into one; making one the default, a new profile or an import from another Firefox as a command to run with Firefox closed

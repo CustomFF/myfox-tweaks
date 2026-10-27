@@ -117,6 +117,15 @@
     }
   });
 
+  // "View Image Info" in an image's context menu (Firefox hides it by
+  // default): Page Info on its Media tab, for that image. Once, under a
+  // guard of its own (existing profiles get it too), and not over a value
+  // the user set.
+  oncePerProfile("myfox.viewImageInfoInitialized", () => {
+    if (prefs.prefHasUserValue("browser.menu.showViewImageInfo")) return;
+    prefs.setBoolPref("browser.menu.showViewImageInfo", true);
+  });
+
   // DNS over HTTPS through Cloudflare (Firefox's own provider), in the
   // "Increased protection" mode: when it fails, Firefox falls back to the
   // system's DNS, so captive portals, local names and company networks keep
