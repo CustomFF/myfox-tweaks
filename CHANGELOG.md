@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- The settings' dialogs (the update history, exceptions, permissions and the rest) in the MyFox themes' grays like the settings page, with its rounded corners
+
 ## 160.1 — 2026-10-27
 
 - An image's context menu has "View Image Info", which Firefox hides: Page Info on its Media tab, for that image

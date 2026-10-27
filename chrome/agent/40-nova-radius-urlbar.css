@@ -229,9 +229,11 @@ toolbarseparator.proton-zap::before {
 /* First-run welcome / terms-of-use spotlight and about:welcome (one shared
    onboarding bundle): a 24px card holding 12px list rows; the new-tab page:
    12px shortcut tiles, a 16px focus ring around them, 16px dialogs;
-   about:config: an 8px table and a 12px search field. All drawn from the
+   about:config: an 8px table and a 12px search field; the dialogs opened
+   inside a page (the settings' ones): 8px lists. All drawn from the
    design-system radius scale, so point the scale at --myfox-radius for
    these pages only (keyed on their own elements). */
+:root[subdialog],
 :root:has(> body.onboardingContainer),
 :root:has(> body.activity-stream),
 :root:has(#about-config-search) {
