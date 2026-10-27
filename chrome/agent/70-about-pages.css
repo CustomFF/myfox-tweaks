@@ -356,10 +356,11 @@ moz-select {
    instead of one per page. url-prefix is bare-scheme only in an agent sheet:
    "about:" matches documents the content process reports as about:*,
    "chrome://" the parent-process ones. Left alone: windows with a
-   windowtype (the browser itself, dialogs), Reader View (has a platform
+   windowtype (the browser itself, dialogs), unless opened inside a page as
+   a sub-dialog (Settings' update history), Reader View (has a platform
    attribute) and the new-tab page. */
 @-moz-document url-prefix("about:"), url-prefix("chrome://") {
-    :root:not([windowtype]):not([platform]):not(:has(> body.activity-stream)) {
+    :root:is(:not([windowtype]), [subdialog]):not([platform]):not(:has(> body.activity-stream)) {
         --font-size-root: 12px !important;
         font-size: var(--myfox-font-size) !important;
     }
