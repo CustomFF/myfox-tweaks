@@ -1,5 +1,10 @@
 # Changelog
 
+## 160.0 — 2026-10-27
+
+- about:myfox has a Profiles section with MyFox 1.2.1 or newer: MyFox's profiles, when each was last used, launching one in a window of its own, putting the tweaks into one; making one the default, a new profile or an import from another Firefox as a command to run with Firefox closed
+- The "Advanced settings" and "Add bookmarklets" bookmarks go to the end of the bookmarks toolbar, after the bookmarks already there (an imported profile's)
+
 ## 159.10 — 2026-10-23
 
 - DNS over HTTPS through Cloudflare is on from the first start, in the "Increased protection" mode (it falls back to the system's DNS); MyFox can leave it off, and it's an ordinary Firefox setting afterwards
