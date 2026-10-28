@@ -13,6 +13,20 @@
     light: "myfox-light-theme@daydve.github.io",
   };
 
+  // The theme add-on, once Firefox knows it. In a fresh profile it does by
+  // now; a profile MyFox imported brought the other Firefox's add-on list
+  // along, and the .xpi files put next to it are found only later in the
+  // first run, so it asks again for up to a minute.
+  async function findTheme(win, am, id) {
+    for (let i = 0; i < 30; i++) {
+      let addon = await am.getAddonByID(id);
+      if (addon) return addon;
+      await new Promise(resolve => win.setTimeout(resolve, 2000));
+      if (win.closed) return null;
+    }
+    return null;
+  }
+
   function applyTheme() {
     let win = wm.getMostRecentWindow("navigator:browser");
     if (!win) { return; }
@@ -37,7 +51,7 @@
     try {
       let am = win.AddonManager;
       if (am && (force || !prefs.getBoolPref("myfox.themeApplied", false))) {
-        am.getAddonByID(themeId).then(async (addon) => {
+        findTheme(win, am, themeId).then(async (addon) => {
           if (addon && addon.type === "theme") {
             let current = prefs.getStringPref("extensions.activeThemeID", "default-theme@mozilla.org");
             if (force || current === "default-theme@mozilla.org" || current === themeId) {
