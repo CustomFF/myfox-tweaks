@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 160.2 — 2026-10-28
 
 - The built-in VPN and its toolbar button are off, once, unless you turned the VPN on yourself: Mozilla switches it on remotely in profiles imported from a regular Firefox
 - about:myfox imports profiles of other Firefox installs with a MyFox newer than 1.2.2: copy or move, what to do with the Firefox account, the new profile's name, making it the default or opening it; MyFox closes Firefox, imports and starts it again, and the copy gets the MyFox theme matching the old one's light or dark. Making a MyFox profile the default goes the same way
