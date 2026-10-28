@@ -335,7 +335,9 @@ async function initProfiles(myfox) {
       starter.append("firefox-myfox");
       let proc = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
       proc.init(starter);
-      proc.runwAsync(["--no-remote", "--profile", p.path], 3);
+      // No --no-remote: Firefox keeps one instance per profile anyway, and
+      // one that took it would refuse MyFox's --myfox-quit before an import.
+      proc.runwAsync(["--profile", p.path], 2);
       showStatus("");
     } catch(e) {
       showStatus(String(e.message || e), true);
