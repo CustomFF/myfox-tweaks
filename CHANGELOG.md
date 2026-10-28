@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 160.3 — 2026-10-28
 
-- about:myfox's Updates with a MyFox newer than 1.2.3: "Check for updates" asks MyFox what's new for the tweaks, the themes, the bookmarklets and MyFox itself, and the page shows its last answer on every visit without going online
+- about:myfox's Updates with MyFox 1.2.4 or newer: "Check for updates" asks MyFox what's new for the tweaks, the themes, the bookmarklets and MyFox itself, and the page shows its last answer on every visit without going online
 
 ## 160.2 — 2026-10-28
 
