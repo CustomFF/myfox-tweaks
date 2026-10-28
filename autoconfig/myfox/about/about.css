@@ -358,6 +358,10 @@ h3 {
 
 /* Updates: a line per part (the tweaks, MyFox) with what is installed and
    what is out; the changes in between below, as in the changelog. */
+/* With MyFox's own check: when it last ran, under the parts. */
+.update-checked {
+    margin-top: 6px;
+}
 .update-line {
     display: flex;
     align-items: baseline;

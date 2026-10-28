@@ -716,23 +716,152 @@ async function initUpdates(myfox, tweaksInstalled, tweaksReleased) {
     }
     let done = (res.updated || []).map(u => t("aboutpage.updates.track." + u.track) + " " + u.to).join(", ");
     showStatus(done ? t("aboutpage.updates.installed", done) : t("aboutpage.updates.nothing"));
-    if (res.restart) {
-      let ps = Services.prompt;
-      let restart = ps.confirmEx(window, t("aboutpage.updates.restartTitle"), t("aboutpage.updates.restartText"),
-        ps.BUTTON_POS_0 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_1 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_0_DEFAULT,
-        t("aboutpage.updates.restartNow"), t("aboutpage.updates.restartLater"), null, null, {}) === 0;
-      if (restart) {
-        let cancel = Cc["@mozilla.org/supports-PRBool;1"].createInstance(Ci.nsISupportsPRBool);
-        Services.obs.notifyObservers(cancel, "quit-application-requested", "restart");
-        if (!cancel.data) Services.startup.quit(Ci.nsIAppStartup.eAttemptQuit | Ci.nsIAppStartup.eRestart);
-        return;
-      }
-    }
+    if (res.restart && offerRestart()) return;
     check();
   });
   checkButton.addEventListener("click", () => check());
   box.hidden = false;
   check(tweaksReleased);
+}
+
+// Updates through MyFox's own check (MyFox 1.2.4 or newer, "update-check"):
+// `myfox refresh --check` asks what's new for all four parts (the tweaks,
+// the themes, the bookmarklets, MyFox itself) and keeps the answer in
+// <install>/myfox-updates.json, which the page shows on every visit without
+// going to the network. MyFox takes out of it what it installed; what it
+// still lists but this install already has (an update from elsewhere) is
+// left out here.
+const UPDATE_TRACKS = ["tweaks", "themes", "bookmarklets", "core"];
+
+async function loadUpdateCheck() {
+  try {
+    let install = Services.dirsvc.get("GreD", Ci.nsIFile).path;
+    return await IOUtils.readJSON(PathUtils.join(install, "myfox-updates.json"));
+  } catch(e) {
+    return null;
+  }
+}
+
+function pendingUpdates(check, tweaksInstalled, coreInstalled) {
+  let installed = { tweaks: tweaksInstalled, core: coreInstalled };
+  return (check?.updates || [])
+    .filter(u => UPDATE_TRACKS.includes(u.track))
+    .filter(u => !installed[u.track] || !u.to || compareVersions(u.to, installed[u.track]) > 0)
+    .sort((a, b) => UPDATE_TRACKS.indexOf(a.track) - UPDATE_TRACKS.indexOf(b.track));
+}
+
+async function initCheckedUpdates(myfox, tweaksInstalled, onTweaksPending) {
+  let box = document.getElementById("updates-box");
+  let status = document.getElementById("updates-status");
+  let installButton = document.getElementById("updates-install");
+  let checkButton = document.getElementById("updates-check");
+  let changes = document.getElementById("updates-changes");
+  let canInstall = myfox.features.includes("update");
+  checkButton.dataset.l10n = "aboutpage.updates.checkNow";
+  checkButton.textContent = t(checkButton.dataset.l10n);
+  const showStatus = (text, error) => {
+    status.textContent = text || "";
+    status.classList.toggle("error", !!error);
+    status.hidden = !text;
+  };
+  const line = (label, text) => {
+    let row = document.createElement("div");
+    row.className = "update-line";
+    let name = document.createElement("span");
+    name.className = "setting-label";
+    name.textContent = label;
+    let state = document.createElement("span");
+    state.className = "setting-desc";
+    state.textContent = text;
+    row.append(name, state);
+    return row;
+  };
+
+  function render(check) {
+    let pending = pendingUpdates(check, tweaksInstalled, myfox.version);
+    let byTrack = Object.fromEntries(pending.map(u => [u.track, u]));
+    let rows = document.getElementById("updates-versions");
+    rows.textContent = "";
+    // The tweaks and MyFox always (this page knows what's installed of
+    // them), the themes and the bookmarklets when there's something new.
+    for (let track of UPDATE_TRACKS) {
+      let u = byTrack[track];
+      let installed = { tweaks: tweaksInstalled, core: myfox.version }[track];
+      let label = track === "tweaks" || track === "core"
+        ? t("aboutpage.updates." + track)
+        : t("aboutpage.updates.label." + track);
+      if (u) rows.appendChild(line(label, t("aboutpage.updates.available", u.from || installed || "?", u.to || "?")));
+      else if (installed) rows.appendChild(line(label, check
+        ? t("aboutpage.updates.upToDate", installed)
+        : t("aboutpage.updates.unknownYet", installed)));
+    }
+    let when = check?.checked ? new Date(check.checked) : null;
+    let checkedText = when && !isNaN(when)
+      ? t("aboutpage.updates.lastCheck", when.toLocaleString(langChain[0], { dateStyle: "medium", timeStyle: "short" }))
+      : t("aboutpage.updates.neverChecked");
+    let checked = document.createElement("div");
+    checked.className = "setting-desc update-checked";
+    checked.textContent = checkedText;
+    rows.appendChild(checked);
+
+    changes.textContent = "";
+    for (let u of pending) {
+      if (!u.changes?.length) continue;
+      let h = document.createElement("h3");
+      h.textContent = t("aboutpage.updates." + u.track);
+      changes.appendChild(h);
+      changes.appendChild(versionBox({ version: u.to, date: "", changes: u.changes }, false));
+    }
+    installButton.hidden = !canInstall || !pending.length;
+    onTweaksPending(byTrack.tweaks || null);
+  }
+
+  checkButton.addEventListener("click", async () => {
+    installButton.disabled = checkButton.disabled = true;
+    showStatus(t("aboutpage.updates.checking"));
+    let res = await runMyfox(myfox.launcher, ["refresh", "--check"]);
+    installButton.disabled = checkButton.disabled = false;
+    if (res.error || !Array.isArray(res.updates)) {
+      showStatus(res.error || t("aboutpage.command.failed", ""), true);
+      return;
+    }
+    showStatus("");
+    render(res);
+  });
+  installButton.addEventListener("click", async () => {
+    installButton.disabled = checkButton.disabled = true;
+    showStatus(t("aboutpage.updates.installing"));
+    let res = await runMyfox(myfox.launcher, ["refresh"]);
+    installButton.disabled = checkButton.disabled = false;
+    if (res.error || !res.ok) {
+      showStatus(res.error || t("aboutpage.command.failed", ""), true);
+      return;
+    }
+    let done = (res.updated || []).map(u => t("aboutpage.updates.track." + u.track) + " " + u.to).join(", ");
+    showStatus(done ? t("aboutpage.updates.installed", done) : t("aboutpage.updates.nothing"));
+    // What was just installed is on disk, not yet in this page (nor in the
+    // myfox.json it read): it counts as installed from here on.
+    let installedNow = Object.fromEntries((res.updated || []).map(u => [u.track, u.to]));
+    if (installedNow.tweaks) tweaksInstalled = installedNow.tweaks;
+    if (installedNow.core) myfox.version = installedNow.core;
+    render(await loadUpdateCheck());
+    if (res.restart) offerRestart();
+  });
+  box.hidden = false;
+  render(await loadUpdateCheck());
+}
+
+// What Firefox reads at startup takes a restart, which the page offers.
+function offerRestart() {
+  let ps = Services.prompt;
+  let restart = ps.confirmEx(window, t("aboutpage.updates.restartTitle"), t("aboutpage.updates.restartText"),
+    ps.BUTTON_POS_0 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_1 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_0_DEFAULT,
+    t("aboutpage.updates.restartNow"), t("aboutpage.updates.restartLater"), null, null, {}) === 0;
+  if (!restart) return false;
+  let cancel = Cc["@mozilla.org/supports-PRBool;1"].createInstance(Ci.nsISupportsPRBool);
+  Services.obs.notifyObservers(cancel, "quit-application-requested", "restart");
+  if (!cancel.data) Services.startup.quit(Ci.nsIAppStartup.eAttemptQuit | Ci.nsIAppStartup.eRestart);
+  return true;
 }
 
 function showSection() {
@@ -770,7 +899,16 @@ window.addEventListener("DOMContentLoaded", async () => {
     ? t("aboutpage.about.version", installedVersion)
     : t("aboutpage.about.versionDev");
   // The installed changelog always, with only the released versions newer
-  // than it added on top: no network, and it's still all there.
+  // than it added on top: no network, and it's still all there. With
+  // MyFox's own check those come from its last answer, without dates.
+  if (myfox?.features.includes("update-check")) {
+    renderChangelog(installed, installedVersion);
+    initCheckedUpdates(myfox, installedVersion, (u) => {
+      let newer = u?.to && u.changes?.length ? [{ version: u.to, date: "", changes: u.changes }] : [];
+      renderChangelog([...newer, ...(installed || [])], installedVersion);
+    });
+    return;
+  }
   let released = await fetchChangelog(TWEAKS_CHANGELOG_URL);
   renderChangelog([...newerThan(released, installedVersion), ...(installed || [])], installedVersion);
   initUpdates(myfox, installedVersion, released);

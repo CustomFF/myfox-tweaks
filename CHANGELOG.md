@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- about:myfox's Updates with a MyFox newer than 1.2.3: "Check for updates" asks MyFox what's new for the tweaks, the themes, the bookmarklets and MyFox itself, and the page shows its last answer on every visit without going online
+
 ## 160.2 — 2026-10-28
 
 - The built-in VPN and its toolbar button are off, once, unless you turned the VPN on yourself: Mozilla switches it on remotely in profiles imported from a regular Firefox
