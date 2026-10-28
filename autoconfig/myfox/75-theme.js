@@ -1,6 +1,7 @@
-// Theme: enables the theme add-on the installer picked, once per profile.
+// Theme: enables the theme add-on the installer picked, once per profile, or
+// whenever MyFox asks for it with <profile>/.myfox-theme.
 (function (MyFox) {
-  const { prefs, wm, whenPlacesReady } = MyFox;
+  const { prefs, wm, whenPlacesReady, profileDir } = MyFox;
 
   // Theme add-on IDs — our own fork (themes/, signed through AMO's unlisted
   // channel; see themes/README.md), not a third-party AMO listing anymore.
@@ -25,14 +26,21 @@
     // (myfox.themeApplied) and only if the user hasn't since picked a
     // different theme themselves: theme choice is a setting, never
     // overwritten on later startups.
+    // <profile>/.myfox-theme: MyFox imported this profile from another
+    // Firefox, which brought its own theme along. It asks for the MyFox
+    // theme (myfox.theme, matched to the old one's light or dark) over
+    // whatever is on, once: the file goes when it's done.
+    let marker = profileDir.clone();
+    marker.append(".myfox-theme");
+    let force = marker.exists();
     let themeId = THEME_IDS[prefs.getCharPref("myfox.theme", "dark")] || THEME_IDS.dark;
     try {
       let am = win.AddonManager;
-      if (am && !prefs.getBoolPref("myfox.themeApplied", false)) {
+      if (am && (force || !prefs.getBoolPref("myfox.themeApplied", false))) {
         am.getAddonByID(themeId).then(async (addon) => {
           if (addon && addon.type === "theme") {
             let current = prefs.getStringPref("extensions.activeThemeID", "default-theme@mozilla.org");
-            if (current === "default-theme@mozilla.org" || current === themeId) {
+            if (force || current === "default-theme@mozilla.org" || current === themeId) {
               try {
                 if (addon.userDisabled) { await addon.enable(); }
               } catch(e) {}
@@ -40,6 +48,7 @@
               try { prefs.clearUserPref("extensions.lastSelectedThemeID"); } catch(e) {}
             }
             prefs.setBoolPref("myfox.themeApplied", true);
+            if (force) { try { marker.remove(false); } catch(e) {} }
           }
         }).catch(() => {});
       }
