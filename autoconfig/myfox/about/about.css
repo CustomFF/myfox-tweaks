@@ -252,6 +252,7 @@ h3 {
    can be done with it. */
 .profile {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
@@ -261,6 +262,7 @@ h3 {
     border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
 }
 .profile-info {
+    flex: 1 1 0;
     min-width: 0;
 }
 .profile-name {
@@ -300,6 +302,43 @@ h3 {
 }
 #profiles-foreign {
     margin-top: 12px;
+}
+/* The import panel under a profile of another Firefox: its choices one
+   group per line, then Start (and, for a profile of a newer Firefox, the
+   command that imports it anyway). */
+.import-panel {
+    flex-basis: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--myfox-radius, 4px);
+    background-color: color-mix(in srgb, currentColor 6%, transparent);
+}
+.import-field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 16px;
+}
+.import-field > .setting-desc,
+.import-label {
+    flex-basis: 100%;
+}
+.import-label {
+    font-weight: 600;
+}
+.import-field label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.import-name input {
+    width: 260px;
+    margin: 0;
+}
+.import-start button {
+    margin: 0;
 }
 /* A command to run in a terminal with Firefox closed, and a button that
    copies it. */

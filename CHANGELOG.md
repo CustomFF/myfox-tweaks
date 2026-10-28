@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- about:myfox imports profiles of other Firefox installs with a MyFox newer than 1.2.2: copy or move, what to do with the Firefox account, the new profile's name, making it the default or opening it; MyFox closes Firefox, imports and starts it again, and the copy gets the MyFox theme matching the old one's light or dark. Making a MyFox profile the default goes the same way
 - The settings' dialogs (the update history, exceptions, permissions and the rest) in the MyFox themes' grays like the settings page, with its rounded corners
 
 ## 160.1 — 2026-10-27

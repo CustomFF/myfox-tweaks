@@ -89,6 +89,16 @@ async function runMyfox(launcher, args) {
 }
 const runCommand = (launcher, args) => runMyfox(launcher, ["command", ...args]);
 
+// A `<launcher> ...` run left to itself: MyFox closes this Firefox and shows
+// its own window for the rest, so no answer comes back to the page.
+function launchMyfox(launcher, args) {
+  let file = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsIFile);
+  file.initWithPath(launcher);
+  let proc = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
+  proc.init(file);
+  proc.runwAsync(args, args.length);
+}
+
 async function initCommandSetting(myfox) {
   if (!myfox?.features.includes("command")) return;
   document.getElementById("command-box").hidden = false;
@@ -283,6 +293,16 @@ async function initProfiles(myfox) {
   let commandBox = document.getElementById("profiles-command");
   let foreignBox = document.getElementById("profiles-foreign");
   let busy = false;
+  // MyFox with "profiles-import" imports and switches profiles itself: it
+  // closes this Firefox, does it in its own window and starts Firefox
+  // again. An older one leaves both as commands for the terminal.
+  let canImport = myfox.features.includes("profiles-import");
+  let names = new Map();
+  if (canImport) {
+    let desc = document.getElementById("profiles-foreign-desc");
+    desc.dataset.l10n = "aboutpage.profiles.foreignDescImport";
+    desc.textContent = t(desc.dataset.l10n);
+  }
 
   const button = (label, onClick) => {
     let b = document.createElement("button");
@@ -296,15 +316,17 @@ async function initProfiles(myfox) {
     status.hidden = !text;
   };
   // A command for the terminal, with Firefox closed.
+  const commandLine = (args) => ["myfox", ...args.map(shellQuote)].join(" ");
+  const copyText = (text) => Cc["@mozilla.org/widget/clipboardhelper;1"]
+    .getService(Ci.nsIClipboardHelper).copyString(text);
   const showCommand = (args) => {
-    let line = ["myfox", ...args.map(shellQuote)].join(" ");
+    let line = commandLine(args);
     commandBox.querySelector("code").textContent = line;
     commandBox.hidden = false;
     commandBox.scrollIntoView({ block: "nearest" });
   };
   commandBox.querySelector("button").addEventListener("click", () => {
-    Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper)
-      .copyString(commandBox.querySelector("code").textContent);
+    copyText(commandBox.querySelector("code").textContent);
   });
 
   const openProfile = (p) => {
@@ -329,6 +351,132 @@ async function initProfiles(myfox) {
     else { showStatus(""); load(); }
   };
 
+  // Making a MyFox profile the default: MyFox closes Firefox and starts it
+  // again in that profile, so it asks first.
+  const useProfile = (p) => {
+    let ok = Services.prompt.confirmEx(window, t("aboutpage.profiles.useTitle"),
+      t("aboutpage.profiles.useText", p.name),
+      Services.prompt.BUTTON_POS_0 * Services.prompt.BUTTON_TITLE_IS_STRING +
+      Services.prompt.BUTTON_POS_1 * Services.prompt.BUTTON_TITLE_CANCEL,
+      t("aboutpage.profiles.use"), null, null, null, {}) === 0;
+    if (ok) launchMyfox(myfox.launcher, ["profile", "use", p.id, "--relaunch", "--gui"]);
+  };
+
+  // Importing a profile of another Firefox: a panel under its row with the
+  // choices, then MyFox takes over (see launchMyfox).
+  const field = (cls, ...children) => {
+    let div = document.createElement("div");
+    div.className = "import-field" + (cls ? " " + cls : "");
+    div.append(...children);
+    return div;
+  };
+  const choice = (type, group, value, label, checked) => {
+    let l = document.createElement("label");
+    let input = document.createElement("input");
+    input.type = type;
+    if (group) input.name = group;
+    input.value = value;
+    input.checked = !!checked;
+    l.append(input, label);
+    return l;
+  };
+  const importPanel = (p) => {
+    let panel = document.createElement("div");
+    panel.className = "import-panel";
+    let group = "import-" + p.id;
+
+    let copy = choice("radio", group + "-mode", "copy", t("aboutpage.profiles.import.copy"), true);
+    let move = choice("radio", group + "-mode", "move", t("aboutpage.profiles.import.move"));
+    let moveNote = document.createElement("div");
+    moveNote.className = "setting-desc";
+    moveNote.textContent = t("aboutpage.profiles.import.moveNote");
+    moveNote.hidden = true;
+
+    // The Firefox account: only a copy of a signed-in profile has a choice;
+    // a moved profile takes it along.
+    let syncTitle = document.createElement("div");
+    syncTitle.className = "import-label";
+    syncTitle.textContent = t("aboutpage.profiles.import.sync");
+    let syncs = ["none", "move", "copy"].map((v, i) =>
+      choice("radio", group + "-sync", v, t("aboutpage.profiles.import.sync." + v), i === 0));
+    let sync = field("import-sync", syncTitle, ...syncs);
+    sync.hidden = !p.account;
+
+    let nameLabel = document.createElement("label");
+    nameLabel.className = "import-name";
+    let name = document.createElement("input");
+    name.type = "text";
+    name.value = t("aboutpage.profiles.import.nameDefault", p.name);
+    nameLabel.append(t("aboutpage.profiles.import.name"), name);
+
+    let use = choice("checkbox", null, "use", t("aboutpage.profiles.use"));
+    let open = choice("checkbox", null, "open", t("aboutpage.profiles.import.open"));
+
+    let start = document.createElement("button");
+    start.className = "primary";
+    start.textContent = t("aboutpage.profiles.import.start");
+    let hint = document.createElement("span");
+    hint.className = "setting-desc";
+
+    const args = () => {
+      let moving = move.querySelector("input").checked;
+      let a = ["profile", "import", p.id];
+      if (moving) a.push("--move");
+      else if (p.account) a.push("--sync", syncs.find(s => s.querySelector("input").checked).querySelector("input").value);
+      let n = name.value.trim();
+      if (n) a.push("--name", n);
+      if (use.querySelector("input").checked) a.push("--use");
+      else if (open.querySelector("input").checked) a.push("--open");
+      return a;
+    };
+
+    // A profile last used by a newer Firefox: MyFox refuses it unless told
+    // to, and that only from the terminal, at the user's own risk.
+    let lastVersion = String(p.last_version || "").split("_")[0];
+    let newer = !!lastVersion && Services.vc.compare(lastVersion, Services.appinfo.version) > 0;
+    let downgrade = document.createElement("div");
+    downgrade.className = "import-downgrade";
+    downgrade.hidden = !newer;
+    let downNote = document.createElement("div");
+    downNote.className = "setting-desc";
+    downNote.textContent = t("aboutpage.profiles.import.newer", lastVersion, Services.appinfo.version);
+    let downLine = document.createElement("div");
+    downLine.className = "command-line";
+    let downCode = document.createElement("code");
+    let downCopy = document.createElement("button");
+    downCopy.textContent = t("aboutpage.profiles.copy");
+    downCopy.addEventListener("click", () => copyText(downCode.textContent));
+    downLine.append(downCode, downCopy);
+    downgrade.append(downNote, downLine);
+
+    const update = () => {
+      let moving = move.querySelector("input").checked;
+      moveNote.hidden = !moving;
+      sync.hidden = moving || !p.account;
+      open.hidden = use.querySelector("input").checked;
+      start.disabled = p.open || newer;
+      hint.textContent = p.open ? t("aboutpage.profiles.import.isOpen") : "";
+      downCode.textContent = commandLine([...args(), "--allow-downgrade", "--relaunch"]);
+    };
+    panel.addEventListener("change", update);
+    name.addEventListener("input", update);
+    start.addEventListener("click", () => {
+      start.disabled = true;
+      launchMyfox(myfox.launcher, [...args(), "--relaunch", "--gui"]);
+      showStatus(t("aboutpage.profiles.import.started"));
+    });
+
+    panel.append(
+      field("", copy, move, moveNote),
+      sync,
+      field("", nameLabel),
+      field("", use, open),
+      field("import-start", start, hint),
+      downgrade);
+    update();
+    return panel;
+  };
+
   const row = (p, foreign) => {
     let item = document.createElement("div");
     item.className = "profile";
@@ -347,7 +495,13 @@ async function initProfiles(myfox) {
     let details = [];
     if (!foreign && PROFILE_OWNERS.includes(p.owner)) details.push(t("aboutpage.profiles.owner." + p.owner));
     if (p.last_used) details.push(t("aboutpage.profiles.lastUsed", formatDate(p.last_used)));
-    if (p.imported_from) details.push(t("aboutpage.profiles.importedFrom", p.imported_from));
+    if (p.imported_from) {
+      // Where it came from, by that profile's name while it is still there.
+      let from = names.get(p.imported_from);
+      details.push(p.moved ? t("aboutpage.profiles.movedFrom", p.imported_from)
+        : from ? t("aboutpage.profiles.importedFromName", from)
+        : t("aboutpage.profiles.importedFrom", p.imported_from));
+    }
     let desc = document.createElement("div");
     desc.className = "setting-desc";
     desc.textContent = details.join(" · ");
@@ -357,7 +511,14 @@ async function initProfiles(myfox) {
     info.append(name, desc, path);
     let actions = document.createElement("div");
     actions.className = "profile-actions";
-    if (foreign) {
+    if (foreign && canImport) {
+      let panel = null;
+      actions.append(button(t("aboutpage.profiles.import"), () => {
+        if (panel) { panel.hidden = !panel.hidden; return; }
+        panel = importPanel(p);
+        item.append(panel);
+      }));
+    } else if (foreign) {
       actions.append(button(t("aboutpage.profiles.import"), () => showCommand(["profile", "import", p.id])));
     } else {
       if (!p.open && ["myfox", "ours", "unused"].includes(p.owner)) {
@@ -369,7 +530,8 @@ async function initProfiles(myfox) {
         actions.append(button(t("aboutpage.profiles.apply"), () => applyTweaks(p)));
       }
       if (!p.used) {
-        actions.append(button(t("aboutpage.profiles.use"), () => showCommand(["profile", "use", p.id])));
+        actions.append(button(t("aboutpage.profiles.use"),
+          () => canImport ? useProfile(p) : showCommand(["profile", "use", p.id])));
       }
     }
     item.append(info, actions);
@@ -377,6 +539,10 @@ async function initProfiles(myfox) {
   };
 
   async function load() {
+    if (canImport) {
+      let all = await runMyfox(myfox.launcher, ["profile", "list", "--all"]);
+      if (Array.isArray(all)) names = new Map(all.map(p => [p.path, p.name]));
+    }
     let res = await runMyfox(myfox.launcher, ["profile", "list"]);
     list.textContent = "";
     if (res.error || !Array.isArray(res)) {
