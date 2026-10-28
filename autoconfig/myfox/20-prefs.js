@@ -138,4 +138,14 @@
     prefs.setIntPref("network.trr.mode", 2);
     prefs.setStringPref("network.trr.uri", "https://mozilla.cloudflare-dns.com/dns-query");
   });
+
+  // The built-in VPN (IP protection) and its toolbar button, which Mozilla
+  // turns on remotely (a Nimbus rollout) in profiles that were enrolled
+  // before the tweaks turned telemetry off: imported ones. Off, once, under
+  // a guard of its own (existing profiles get it too), and not when the user
+  // turned it on themselves. Changing the pref also ends the rollout.
+  oncePerProfile("myfox.vpnInitialized", () => {
+    if (prefs.getBoolPref("browser.ipProtection.userEnabled", false)) return;
+    prefs.setBoolPref("browser.ipProtection.enabled", false);
+  });
 })(globalThis.MyFox);
