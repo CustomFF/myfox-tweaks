@@ -111,6 +111,8 @@
     "aboutpage.profiles.apply": "Put the tweaks in",
     "aboutpage.profiles.applying": "Putting the tweaks into {0}…",
     "aboutpage.profiles.use": "Make default",
+    "aboutpage.profiles.remove": "Delete",
+    "aboutpage.profiles.removing": "Deleting {0}: MyFox asks in its own window…",
     "aboutpage.profiles.import": "Import",
     "aboutpage.profiles.new": "New profile",
     "aboutpage.profiles.importFrom": "Import from another Firefox",

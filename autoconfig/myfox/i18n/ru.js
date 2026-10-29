@@ -108,6 +108,8 @@
     "aboutpage.profiles.apply": "Поставить твики",
     "aboutpage.profiles.applying": "Ставлю твики в профиль {0}…",
     "aboutpage.profiles.use": "Сделать основным",
+    "aboutpage.profiles.remove": "Удалить",
+    "aboutpage.profiles.removing": "Удаление профиля {0}: MyFox спрашивает в своём окне…",
     "aboutpage.profiles.import": "Импортировать",
     "aboutpage.profiles.new": "Новый профиль",
     "aboutpage.profiles.importFrom": "Импорт из другого Firefox",

@@ -89,6 +89,18 @@ async function runMyfox(launcher, args) {
 }
 const runCommand = (launcher, args) => runMyfox(launcher, ["command", ...args]);
 
+// A `<launcher> ...` run with its own window (--gui), waited for: true when
+// it went through (exit code 0).
+async function runMyfoxWindow(launcher, args) {
+  try {
+    const { Subprocess } = ChromeUtils.importESModule("resource://gre/modules/Subprocess.sys.mjs");
+    let proc = await Subprocess.call({ command: launcher, arguments: [...args, "--gui"], environmentAppend: true });
+    return (await proc.wait()).exitCode === 0;
+  } catch(e) {
+    return false;
+  }
+}
+
 // A `<launcher> ...` run left to itself: MyFox closes this Firefox and shows
 // its own window for the rest, so no answer comes back to the page.
 function launchMyfox(launcher, args) {
@@ -479,6 +491,16 @@ async function initProfiles(myfox) {
     return panel;
   };
 
+  const removeProfile = async (p) => {
+    if (busy) return;
+    busy = true;
+    showStatus(t("aboutpage.profiles.removing", p.name));
+    await runMyfoxWindow(myfox.launcher, ["profile", "remove", p.id]);
+    busy = false;
+    showStatus("");
+    load();
+  };
+
   const row = (p, foreign) => {
     let item = document.createElement("div");
     item.className = "profile";
@@ -534,6 +556,12 @@ async function initProfiles(myfox) {
       if (!p.used) {
         actions.append(button(t("aboutpage.profiles.use"),
           () => canImport ? useProfile(p) : showCommand(["profile", "use", p.id])));
+      }
+      // Only what MyFox made can go, and not while in use: MyFox asks in a
+      // window of its own (and offers the Firefox account a move brought
+      // back to where it came from), then the list shows what's left.
+      if (p.created && !p.used && !p.open) {
+        actions.append(button(t("aboutpage.profiles.remove"), () => removeProfile(p)));
       }
     }
     item.append(info, actions);
