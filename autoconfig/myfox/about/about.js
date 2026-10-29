@@ -89,6 +89,22 @@ async function runMyfox(launcher, args) {
 }
 const runCommand = (launcher, args) => runMyfox(launcher, ["command", ...args]);
 
+// A `<launcher> ...` run that answers in plain text, waited for: its exit
+// code and what it said on stderr (MyFox's reason when it didn't do it).
+async function runMyfoxPlain(launcher, args) {
+  try {
+    const { Subprocess } = ChromeUtils.importESModule("resource://gre/modules/Subprocess.sys.mjs");
+    let proc = await Subprocess.call({ command: launcher, arguments: args, environmentAppend: true, stderr: "pipe" });
+    let err = "", chunk;
+    while ((chunk = await proc.stdout.readString())) {}
+    while ((chunk = await proc.stderr.readString())) err += chunk;
+    let { exitCode } = await proc.wait();
+    return { ok: exitCode === 0, error: err.trim() || t("aboutpage.command.failed", exitCode) };
+  } catch(e) {
+    return { ok: false, error: String(e.message || e) };
+  }
+}
+
 // A `<launcher> ...` run left to itself: MyFox closes this Firefox and shows
 // its own window for the rest, so no answer comes back to the page.
 function launchMyfox(launcher, args) {
@@ -479,6 +495,32 @@ async function initProfiles(myfox) {
     return panel;
   };
 
+  // Deleting a profile MyFox made (MyFox 1.3.1 or newer, "profiles-remove"):
+  // asked here, then MyFox deletes it with no questions, this Firefox open.
+  // A copy whose import moved the Firefox account in from another profile
+  // gives it back there unless told to keep it.
+  let canRemove = myfox.features.includes("profiles-remove");
+  const removeProfile = async (p) => {
+    if (busy) return;
+    let ps = Services.prompt;
+    let giveBack = p.account && p.imported_from && !p.moved;
+    let check = { value: true };
+    let from = names.get(p.imported_from) || p.imported_from;
+    let ok = ps.confirmEx(window, t("aboutpage.profiles.removeTitle"), t("aboutpage.profiles.removeText", p.name),
+      ps.BUTTON_POS_0 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_1 * ps.BUTTON_TITLE_CANCEL + ps.BUTTON_POS_1_DEFAULT,
+      t("aboutpage.profiles.remove"), null, null,
+      giveBack ? t("aboutpage.profiles.removeGiveBack", from) : null, check) === 0;
+    if (!ok) return;
+    busy = true;
+    showStatus(t("aboutpage.profiles.removing", p.name));
+    let args = ["profile", "remove", p.id, "-y"];
+    if (giveBack && !check.value) args.push("--no-restore-sync");
+    let res = await runMyfoxPlain(myfox.launcher, args);
+    busy = false;
+    showStatus(res.ok ? t("aboutpage.profiles.removed", p.name) : res.error, !res.ok);
+    load();
+  };
+
   const row = (p, foreign) => {
     let item = document.createElement("div");
     item.className = "profile";
@@ -535,11 +577,11 @@ async function initProfiles(myfox) {
         actions.append(button(t("aboutpage.profiles.use"),
           () => canImport ? useProfile(p) : showCommand(["profile", "use", p.id])));
       }
-      // Only what MyFox made can go, and not while in use. MyFox removes a
-      // profile only with its Firefox closed (on exit Firefox would write
-      // the profile back into its list): a command for the terminal.
+      // Only what MyFox made can go, and not while in use; an older MyFox
+      // deletes it only with its Firefox closed: a command for the terminal.
       if (p.created && !p.used && !p.open) {
-        actions.append(button(t("aboutpage.profiles.remove"), () => showCommand(["profile", "remove", p.id])));
+        actions.append(button(t("aboutpage.profiles.remove"),
+          () => canRemove ? removeProfile(p) : showCommand(["profile", "remove", p.id])));
       }
     }
     item.append(info, actions);
