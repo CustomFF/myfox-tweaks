@@ -2,7 +2,7 @@
 
 ## 160.5 — 2026-10-29
 
-- about:myfox's Profiles can delete a profile MyFox made, unless it is the default or open: MyFox asks first in its own window
+- about:myfox's Profiles has "Delete" for a profile MyFox made, unless it is the default or open: the command that deletes it with Firefox closed, to copy
 
 ## 160.4 — 2026-10-29
 
