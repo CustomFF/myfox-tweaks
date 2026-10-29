@@ -498,14 +498,16 @@ async function initProfiles(myfox) {
   // Deleting a profile MyFox made (MyFox 1.3.1 or newer, "profiles-remove"):
   // asked here, then MyFox deletes it with no questions, this Firefox open.
   // A copy whose import moved the Firefox account in from another profile
-  // gives it back there unless told to keep it.
+  // gives it back there unless told to keep it: MyFox 1.3.2 or newer names
+  // that profile (restore_sync, null when there's none); before it, a guess.
   let canRemove = myfox.features.includes("profiles-remove");
   const removeProfile = async (p) => {
     if (busy) return;
     let ps = Services.prompt;
-    let giveBack = p.account && p.imported_from && !p.moved;
+    let target = "restore_sync" in p ? p.restore_sync : (p.account && !p.moved && p.imported_from) || null;
+    let giveBack = !!target;
     let check = { value: true };
-    let from = names.get(p.imported_from) || p.imported_from;
+    let from = names.get(target) || target;
     let ok = ps.confirmEx(window, t("aboutpage.profiles.removeTitle"), t("aboutpage.profiles.removeText", p.name),
       ps.BUTTON_POS_0 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_1 * ps.BUTTON_TITLE_CANCEL + ps.BUTTON_POS_1_DEFAULT,
       t("aboutpage.profiles.remove"), null, null,
