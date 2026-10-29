@@ -1,5 +1,9 @@
 # Changelog
 
+## 160.5 — 2026-10-29
+
+- about:myfox's Profiles can delete a profile MyFox made, unless it is the default or open: MyFox asks first in its own window
+
 ## 160.4 — 2026-10-29
 
 - The sidebar button opens and closes the sidebar again in Firefox 160
