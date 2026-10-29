@@ -63,6 +63,7 @@
     "aboutpage.about.versionDev": "A development copy, not a release",
     "aboutpage.about.text": "MyFox tweaks is a set of user styles and settings for Firefox that changes how it looks and works: it brings back what Mozilla took out, adds what Firefox never had, and keeps the interface the way it is comfortable to use every day.",
     "aboutpage.links.heading": "Links",
+    "aboutpage.links.site": "The MyFox website, myfox.in",
     "aboutpage.links.tweaks": "The tweaks on GitHub",
     "aboutpage.links.myfox": "The MyFox installer on GitHub",
     "aboutpage.links.bookmarklets": "The bookmarklets on GitHub",

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- about:myfox links to the MyFox website, myfox.in
+
 ## 160.5 — 2026-10-29
 
 - about:myfox's Profiles has "Delete" for a profile MyFox made, unless it is the default or open: the command that deletes it with Firefox closed, to copy
