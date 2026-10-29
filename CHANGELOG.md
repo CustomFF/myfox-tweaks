@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 160.6 — 2026-10-29
 
 - about:myfox's "Delete" deletes the profile right from the page with MyFox 1.3.1 or newer: the page asks first, and a profile an import moved the Firefox account into gives it back unless you untick that; Firefox stays open
 - about:myfox links to the MyFox website, myfox.in
