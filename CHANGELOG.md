@@ -1,5 +1,9 @@
 # Changelog
 
+## 160.4 — 2026-10-29
+
+- The sidebar button opens and closes the sidebar again in Firefox 160
+
 ## 160.3 — 2026-10-28
 
 - about:myfox's Updates with MyFox 1.2.4 or newer: "Check for updates" asks MyFox what's new for the tweaks, the themes, the bookmarklets and MyFox itself, and the page shows its last answer on every visit without going online
