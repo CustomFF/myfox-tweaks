@@ -215,15 +215,17 @@
         if (this.inSingleTabWindow || this.uninitializing) {
           return;
         }
+        // updateVisibility() is gone from Firefox 160's sidebar state, whose
+        // show() and hide() do without it; earlier versions still need it.
         if (this.isOpen) {
-          this._state.updateVisibility(false);
+          this._state.updateVisibility?.(false);
           this.hide({ dismissPanel: false });
           this.updateToolbarButton();
           return;
         }
         let cmd = this._state.command || this.lastOpenedId || this.DEFAULT_SIDEBAR_ID || "viewHistorySidebar";
         this._state.command = cmd;
-        this._state.updateVisibility(true);
+        this._state.updateVisibility?.(true);
         await this.show(cmd);
         this.updateToolbarButton();
       };
