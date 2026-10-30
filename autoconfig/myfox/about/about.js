@@ -485,9 +485,20 @@ async function initProfiles(myfox) {
     };
     panel.addEventListener("change", update);
     name.addEventListener("input", update);
-    start.addEventListener("click", () => {
+    start.addEventListener("click", async () => {
       start.disabled = true;
-      launchMyfox(myfox.launcher, [...args(), "--relaunch", "--gui"]);
+      let a = args();
+      // MyFox 1.4.0 or newer imports with this Firefox open; only making
+      // the copy the default still takes closing it (MyFox's window).
+      if (canInPlace && !a.includes("--use")) {
+        showStatus(t("aboutpage.profiles.import.running"));
+        let res = await runMyfoxPlain(myfox.launcher, [...a, "-y"]);
+        start.disabled = false;
+        showStatus(res.ok ? t("aboutpage.profiles.import.done", name.value.trim() || p.name) : res.error, !res.ok, res.ok);
+        if (res.ok) { panel.hidden = true; load(); loadForeign(); }
+        return;
+      }
+      launchMyfox(myfox.launcher, [...a, "--relaunch", "--gui"]);
       showStatus(t("aboutpage.profiles.import.started"));
     });
 
@@ -508,6 +519,23 @@ async function initProfiles(myfox) {
   // gives it back there unless told to keep it: MyFox 1.3.2 or newer names
   // that profile (restore_sync, null when there's none); before it, a guess.
   let canRemove = myfox.features.includes("profiles-remove");
+  // MyFox 1.4.0 or newer: new profiles and imports with this Firefox open
+  // ("profiles-new"), and renaming what MyFox made ("profiles-rename").
+  let canInPlace = myfox.features.includes("profiles-new");
+  let canRename = myfox.features.includes("profiles-rename");
+  const renameProfile = async (p) => {
+    if (busy) return;
+    let value = { value: p.name };
+    if (!Services.prompt.prompt(window, t("aboutpage.profiles.renameTitle"), t("aboutpage.profiles.renameText", p.name), value, null, {})) return;
+    let newName = value.value.trim();
+    if (!newName || newName === p.name) return;
+    busy = true;
+    let res = await runMyfox(myfox.launcher, ["profile", "rename", p.id, newName]);
+    busy = false;
+    if (res.error || !res.ok) showStatus(res.error || t("aboutpage.command.failed", ""), true);
+    else showStatus(t("aboutpage.profiles.renamed", res.name || newName), false, true);
+    load();
+  };
   const removeProfile = async (p) => {
     if (busy) return;
     let ps = Services.prompt;
@@ -590,6 +618,9 @@ async function initProfiles(myfox) {
         actions.append(button(t("aboutpage.profiles.use"),
           () => canImport ? useProfile(p) : showCommand(["profile", "use", p.id])));
       }
+      if (canRename && p.created) {
+        actions.append(button(t("aboutpage.profiles.rename"), () => renameProfile(p)));
+      }
       // Only what MyFox made can go, and not while in use; an older MyFox
       // deletes it only with its Firefox closed: a command for the terminal.
       if (p.created && !p.used && !p.open) {
@@ -632,7 +663,58 @@ async function initProfiles(myfox) {
     for (let p of foreign) rows.appendChild(row(p, true));
   }
 
-  document.getElementById("profiles-new").addEventListener("click", () => showCommand(["profile", "new", "--use"]));
+  // A new profile: with MyFox 1.4.0 or newer a panel (its name, open it
+  // now or make it the default), as a toggle like the import's; before it,
+  // the command for the terminal.
+  let newToggle = document.getElementById("profiles-new");
+  let newPanel = document.getElementById("profiles-new-panel");
+  if (canInPlace) newToggle.setAttribute("aria-pressed", "false");
+  newToggle.addEventListener("click", () => {
+    if (!canInPlace) { showCommand(["profile", "new", "--use"]); return; }
+    if (!newPanel.firstChild) buildNewPanel();
+    newPanel.hidden = !newPanel.hidden;
+    newToggle.setAttribute("aria-pressed", String(!newPanel.hidden));
+  });
+  function buildNewPanel() {
+    let nameLabel = document.createElement("label");
+    nameLabel.className = "import-name";
+    let name = document.createElement("input");
+    name.type = "text";
+    name.placeholder = t("aboutpage.profiles.newNameDefault");
+    nameLabel.append(t("aboutpage.profiles.import.name"), name);
+    let use = choice("checkbox", null, "use", t("aboutpage.profiles.use"));
+    let open = choice("checkbox", null, "open", t("aboutpage.profiles.newOpen"));
+    let start = document.createElement("button");
+    start.className = "primary";
+    start.textContent = t("aboutpage.profiles.newCreate");
+    const update = () => { open.hidden = use.querySelector("input").checked; };
+    newPanel.addEventListener("change", update);
+    start.addEventListener("click", async () => {
+      let a = ["profile", "new"];
+      let n = name.value.trim();
+      if (n) a.push("--name", n);
+      // The default takes closing this Firefox: MyFox's window does it.
+      if (use.querySelector("input").checked) {
+        launchMyfox(myfox.launcher, [...a, "--use", "--relaunch", "--gui"]);
+        showStatus(t("aboutpage.profiles.newStarted"));
+        return;
+      }
+      if (open.querySelector("input").checked) a.push("--open");
+      start.disabled = true;
+      showStatus(t("aboutpage.profiles.newRunning"));
+      let res = await runMyfoxPlain(myfox.launcher, [...a, "-y"]);
+      start.disabled = false;
+      showStatus(res.ok ? t("aboutpage.profiles.newDone") : res.error, !res.ok, res.ok);
+      if (res.ok) {
+        name.value = "";
+        newPanel.hidden = true;
+        newToggle.setAttribute("aria-pressed", "false");
+        load();
+      }
+    });
+    newPanel.append(field("", nameLabel), field("", use, open), field("import-start", start));
+    update();
+  }
   // A toggle: pressed while the other installs' profiles are shown.
   let importToggle = document.getElementById("profiles-import");
   importToggle.setAttribute("aria-pressed", "false");

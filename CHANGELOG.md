@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- about:myfox's Profiles with MyFox 1.4.0 or newer: "New profile" makes one right from the page, with a name and opening it after creating, or making it the default; importing without making the copy the default goes with Firefox open; profiles MyFox made can be renamed
+
 ## 160.7 — 2026-10-30
 
 - about:myfox's Profiles: a deleted profile's message has a check, not a warning, and goes after a few seconds (any message there goes on a click); "Import from another Firefox" stays pressed while the list is open; Firefox's empty stand-in profiles show as not profiles, with nothing to import (MyFox 1.3.4 or newer)
