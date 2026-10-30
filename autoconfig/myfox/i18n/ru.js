@@ -120,6 +120,7 @@
     "aboutpage.profiles.importFrom": "Импорт из другого Firefox",
     "aboutpage.profiles.foreignDesc": "Профили других установок Firefox. Импорт копирует профиль в новый профиль MyFox, исходный остаётся как был.",
     "aboutpage.profiles.noForeign": "Профилей других установок Firefox не найдено.",
+    "aboutpage.profiles.placeholder": "Не профиль: пустая заготовка, которую оставил Firefox, её ни разу не открывали",
     "aboutpage.profiles.commandDesc": "Закройте Firefox и выполните в терминале:",
     "aboutpage.profiles.copy": "Копировать",
     "aboutpage.profiles.importedFromName": "импортирован из «{0}»",

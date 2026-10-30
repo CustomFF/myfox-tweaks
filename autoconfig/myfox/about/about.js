@@ -326,11 +326,18 @@ async function initProfiles(myfox) {
     b.addEventListener("click", onClick);
     return b;
   };
-  const showStatus = (text, error) => {
+  // The section's message: an error, a note, or something done ("ok"),
+  // which goes by itself after a while; any of them goes on a click.
+  let statusTimer = null;
+  const showStatus = (text, error, ok) => {
+    clearTimeout(statusTimer);
     status.textContent = text || "";
     status.classList.toggle("error", !!error);
+    status.classList.toggle("ok", !!ok);
     status.hidden = !text;
+    if (ok) statusTimer = setTimeout(() => showStatus(""), 6000);
   };
+  status.addEventListener("click", () => showStatus(""));
   // A command for the terminal, with Firefox closed.
   const commandLine = (args) => ["myfox", ...args.map(shellQuote)].join(" ");
   const copyText = (text) => Cc["@mozilla.org/widget/clipboardhelper;1"]
@@ -519,7 +526,7 @@ async function initProfiles(myfox) {
     if (giveBack && !check.value) args.push("--no-restore-sync");
     let res = await runMyfoxPlain(myfox.launcher, args);
     busy = false;
-    showStatus(res.ok ? t("aboutpage.profiles.removed", p.name) : res.error, !res.ok);
+    showStatus(res.ok ? t("aboutpage.profiles.removed", p.name) : res.error, !res.ok, res.ok);
     load();
   };
 
@@ -539,6 +546,7 @@ async function initProfiles(myfox) {
       name.appendChild(badge);
     }
     let details = [];
+    if (foreign && p.placeholder) details.push(t("aboutpage.profiles.placeholder"));
     if (!foreign && PROFILE_OWNERS.includes(p.owner)) details.push(t("aboutpage.profiles.owner." + p.owner));
     if (p.last_used) details.push(t("aboutpage.profiles.lastUsed", formatDate(p.last_used)));
     if (p.imported_from) {
@@ -557,7 +565,10 @@ async function initProfiles(myfox) {
     info.append(name, desc, path);
     let actions = document.createElement("div");
     actions.className = "profile-actions";
-    if (foreign && canImport) {
+    if (foreign && p.placeholder) {
+      // Firefox's empty stand-in (MyFox 1.3.4 or newer says so): never
+      // opened, nothing in it to import.
+    } else if (foreign && canImport) {
       let panel = null;
       actions.append(button(t("aboutpage.profiles.import"), () => {
         if (panel) { panel.hidden = !panel.hidden; return; }
@@ -622,8 +633,12 @@ async function initProfiles(myfox) {
   }
 
   document.getElementById("profiles-new").addEventListener("click", () => showCommand(["profile", "new", "--use"]));
-  document.getElementById("profiles-import").addEventListener("click", () => {
+  // A toggle: pressed while the other installs' profiles are shown.
+  let importToggle = document.getElementById("profiles-import");
+  importToggle.setAttribute("aria-pressed", "false");
+  importToggle.addEventListener("click", () => {
     foreignBox.hidden = !foreignBox.hidden;
+    importToggle.setAttribute("aria-pressed", String(!foreignBox.hidden));
     if (!foreignBox.hidden) loadForeign();
   });
   document.getElementById("profiles-box").hidden = false;

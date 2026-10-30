@@ -123,6 +123,7 @@
     "aboutpage.profiles.importFrom": "Import from another Firefox",
     "aboutpage.profiles.foreignDesc": "Profiles of other Firefox installs. Importing copies one into a new MyFox profile; the original stays as it is.",
     "aboutpage.profiles.noForeign": "No profiles of other Firefox installs found.",
+    "aboutpage.profiles.placeholder": "Not a profile: an empty stand-in Firefox left, never opened",
     "aboutpage.profiles.commandDesc": "Close Firefox and run in a terminal:",
     "aboutpage.profiles.copy": "Copy",
     "aboutpage.profiles.importedFromName": "imported from “{0}”",
