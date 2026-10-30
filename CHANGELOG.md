@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Sponsored suggestions in the address bar (Firefox Suggest, where Mozilla shows them) are off, once, unless you set them yourself, like the new tab's sponsors
+
 ## 160.8 — 2026-10-30
 
 - about:myfox's Profiles with MyFox 1.4.0 or newer: "New profile" makes one right from the page, with a name and opening it after creating, or making it the default; importing without making the copy the default goes with Firefox open; profiles MyFox made can be renamed

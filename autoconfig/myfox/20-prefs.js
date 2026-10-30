@@ -148,4 +148,13 @@
     if (prefs.getBoolPref("browser.ipProtection.userEnabled", false)) return;
     prefs.setBoolPref("browser.ipProtection.enabled", false);
   });
+
+  // Sponsored suggestions in the address bar (Firefox Suggest, in the
+  // regions Mozilla shows them), as the new tab's sponsors above. Once,
+  // under a guard of its own (existing profiles get it too), and not over
+  // a value the user set.
+  oncePerProfile("myfox.sponsoredSuggestInitialized", () => {
+    if (prefs.prefHasUserValue("browser.urlbar.suggest.quicksuggest.sponsored")) return;
+    prefs.setBoolPref("browser.urlbar.suggest.quicksuggest.sponsored", false);
+  });
 })(globalThis.MyFox);
