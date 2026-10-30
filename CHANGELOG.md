@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 160.7 — 2026-10-30
 
 - about:myfox's Profiles: a deleted profile's message has a check, not a warning, and goes after a few seconds (any message there goes on a click); "Import from another Firefox" stays pressed while the list is open; Firefox's empty stand-in profiles show as not profiles, with nothing to import (MyFox 1.3.4 or newer)
 
