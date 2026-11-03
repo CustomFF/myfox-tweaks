@@ -43,6 +43,11 @@ sidebar-panel-header,
 #sidebar-panel-header {
     padding-inline: 4px !important;
 }
+/* None of it over our own panels, which have their own title row (the
+   attribute is set by myfox/30-sidebar.js). */
+#sidebar-box[myfox-own-panel] #sidebar-panel-header {
+    display: none !important;
+}
 sidebar-panel-header .options-container {
     height: auto !important;
     min-height: auto !important;

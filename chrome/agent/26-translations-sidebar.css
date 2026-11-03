@@ -83,6 +83,20 @@
             border: 1px solid var(--myfox-line-color) !important;
             background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
         }
+        /* Each box its half and no more: Firefox 160 grows the text areas
+           to fit their text (an inline height), which ran the source box
+           over the translation. They scroll inside instead. */
+        #about-translations-source-section,
+        #about-translations-target-section {
+            height: auto !important;
+            overflow: hidden !important;
+        }
+        #about-translations-source-textarea,
+        #about-translations-target-textarea {
+            height: 100% !important;
+            max-height: 100% !important;
+            overflow-y: auto !important;
+        }
         #about-translations-source-section {
             grid-row: 3 !important;
         }

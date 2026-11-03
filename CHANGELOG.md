@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Firefox 160: the sidebar's Downloads, Extensions and Translations panels have one title row again, not two close buttons; in Translations a long text no longer runs over the translation, each box scrolls in its half
+
 ## 160.10 — 2026-11-03
 
 - A private window's new tab has the search field of the regular new tab, not a pill, and its text at Firefox's size
