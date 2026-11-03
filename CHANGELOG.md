@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- A private window's new tab has the search field of the regular new tab, not a pill, and its text at Firefox's size
+
 ## 160.9 — 2026-10-30
 
 - Sponsored suggestions in the address bar (Firefox Suggest, where Mozilla shows them) are off, once, unless you set them yourself, like the new tab's sponsors

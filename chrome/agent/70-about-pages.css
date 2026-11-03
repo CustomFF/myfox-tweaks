@@ -358,9 +358,9 @@ moz-select {
    "chrome://" the parent-process ones. Left alone: windows with a
    windowtype (the browser itself, dialogs), unless opened inside a page as
    a sub-dialog (Settings' update history), Reader View (has a platform
-   attribute) and the new-tab page. */
+   attribute) and the new-tab pages, the private one too (html.private). */
 @-moz-document url-prefix("about:"), url-prefix("chrome://") {
-    :root:is(:not([windowtype]), [subdialog]):not([platform]):not(:has(> body.activity-stream)) {
+    :root:is(:not([windowtype]), [subdialog]):not([platform]):not(:has(> body.activity-stream)):not(.private) {
         --font-size-root: 12px !important;
         font-size: var(--myfox-font-size) !important;
     }
@@ -595,14 +595,14 @@ moz-visual-picker-item:not([checked]) {
     --visual-picker-item-border-color: transparent !important;
 }
 
-/* New-tab page: one radius for the search field (Nova makes it a pill), less
-   air around it, a small square "add shortcut" button (slightly translucent
+/* New-tab page (and the private one's search, in .showSearch): one radius
+   for the search field (Nova makes it a pill), less air around it, a small square "add shortcut" button (slightly translucent
    until hovered), and square "..." and "personalize" buttons. */
 @-moz-document url-prefix("about:") {
-    .search-wrapper .search-inner-wrapper {
+    :is(.search-wrapper, .showSearch) .search-inner-wrapper {
         height: 40px !important;
     }
-    .search-wrapper content-search-handoff-ui {
+    :is(.search-wrapper, .showSearch) content-search-handoff-ui {
         --content-search-handoff-ui-border-radius: var(--myfox-radius) !important;
     }
     /* The engine icon's stock left inset (16px) is wider than its top/bottom
