@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 160.11 — 2026-11-03
 
 - Firefox 160: the sidebar's Downloads, Extensions and Translations panels have one title row again, not two close buttons; in Translations a long text no longer runs over the translation, each box scrolls in its half
 
