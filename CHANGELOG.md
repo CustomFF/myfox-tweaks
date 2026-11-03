@@ -3,6 +3,7 @@
 ## 160.11 — 2026-11-03
 
 - Firefox 160: the sidebar's Downloads, Extensions and Translations panels have one title row again, not two close buttons; in Translations a long text no longer runs over the translation, each box scrolls in its half
+- Translations: "Clear" is a broom and "Copy" an icon in the translation's corner the same way, shown only when there is a translation; both quiet until pointed at
 
 ## 160.10 — 2026-11-03
 

@@ -1,0 +1,21 @@
+/* about:translations (the sidebar's Translations panel and the page in a
+   tab): a broom, not a cross, on the button that clears the source text,
+   and "Copy" an icon of the same size, its label left to the tooltip.
+   Author origin: the page draws that icon on the button's ::part(button),
+   which only Firefox's own styles and these reach. Author sheets apply to
+   every document and take no @-moz-document, so the rule starts from the
+   page's own root. */
+:root:has(#about-translations-main-user-interface) #about-translations-clear-button[type~="icon"]::part(button) {
+    background-image: url("resource://myfox/icons/clear-text-field.svg") !important;
+}
+:root:has(#about-translations-main-user-interface) #about-translations-copy-button::part(moz-button-label) {
+    display: none !important;
+}
+:root:has(#about-translations-main-user-interface) #about-translations-copy-button::part(button) {
+    width: var(--AT-square-button-small) !important;
+    min-width: 0 !important;
+    height: var(--AT-square-button-small) !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    justify-content: center !important;
+}

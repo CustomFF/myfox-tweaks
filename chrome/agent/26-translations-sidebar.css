@@ -21,6 +21,32 @@
    Keyed on the page's own elements: in an agent sheet only a bare scheme in
    url-prefix() is reliable ("about:translations" missed the page in a tab). */
 @-moz-document url-prefix("about:") {
+    /* "Copy" like "Clear": an icon in the box's top right corner (its label
+       hidden by ../author/80-translations.css), the translation kept clear
+       of it as the source text is of the other. */
+    #about-translations-copy-button {
+        inset-block-start: calc(anchor(top) + var(--space-small)) !important;
+        inset-block-end: auto !important;
+        inset-inline-start: auto !important;
+        inset-inline-end: calc(anchor(end) + var(--space-small)) !important;
+        --button-min-height: var(--AT-square-button-small) !important;
+    }
+    #about-translations-target-textarea {
+        padding-inline-end: var(--AT-source-textarea-button-inline-padding) !important;
+    }
+    /* Only there when there is a translation to copy; both buttons quiet
+       until pointed at (or focused from the keyboard). */
+    #about-translations-copy-button[disabled] {
+        display: none !important;
+    }
+    #about-translations-clear-button,
+    #about-translations-copy-button {
+        opacity: 0.6 !important;
+        &:hover,
+        &:focus-visible {
+            opacity: 1 !important;
+        }
+    }
     :root:has(#about-translations-main-user-interface) {
         --border-radius-small: var(--myfox-radius) !important;
         --border-radius-medium: var(--myfox-radius) !important;
