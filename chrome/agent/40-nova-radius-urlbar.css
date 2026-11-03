@@ -244,12 +244,12 @@ toolbarseparator.proton-zap::before {
     --panel-border-radius: var(--myfox-radius) !important;
 }
 
-/* The rest of the browser window's pills: the window buttons' hover circles
-   (minimize/maximize/close), the private-browsing indicator, the
-   fullscreen/pointer-lock warning, and, inside the address bar, the
-   container indicator and the translations button's language badge. */
+/* The rest of the browser window's pills: the private-browsing indicator,
+   the fullscreen/pointer-lock warning, and, inside the address bar, the
+   container indicator and the translations button's language badge. The
+   window buttons (minimize/maximize/close) keep their circles, as the
+   system draws them. */
 @-moz-document url-prefix("chrome://") {
-    .titlebar-button > .toolbarbutton-icon,
     .private-browsing-indicator-button,
     .pointerlockfswarning {
         border-radius: var(--myfox-radius) !important;
