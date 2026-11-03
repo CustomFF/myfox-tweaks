@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 160.10 — 2026-11-03
 
 - A private window's new tab has the search field of the regular new tab, not a pill, and its text at Firefox's size
 
