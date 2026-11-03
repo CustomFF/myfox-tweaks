@@ -87,3 +87,9 @@
         fill: currentColor !important;
     }
 }
+
+/* Firefox 160 titles our panels in the window above them (myfox/00-common.js
+   marks the row then): no second title row. */
+.myfox-panel-title-row[myfox-window-titled] {
+    display: none !important;
+}

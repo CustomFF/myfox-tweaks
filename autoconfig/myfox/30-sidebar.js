@@ -108,6 +108,7 @@
                 if (entry) {
                   entry.menuId ??= "menu_myfox_" + panel.name + "Sidebar";
                   entry.myfoxLabel ??= t(panel.titleKey);
+                  entry.label ??= t(panel.titleKey);
                   continue;
                 }
                 map.set(panel.view, {
@@ -118,6 +119,8 @@
                   // when the panel is switched off) and its label.
                   menuId: "menu_myfox_" + panel.name + "Sidebar",
                   myfoxLabel: t(panel.titleKey),
+                  // Firefox 160 titles the panel in the window from this.
+                  label: t(panel.titleKey),
                   ...(panel.l10nId ? { sourceL10nEl: panel.l10nId } : {})
                 });
               }
@@ -199,13 +202,6 @@
         for (let hook of MyFox.sidebarHooks) {
           try { hook({ win, doc, sbCtrl, sidebar }); } catch(e) {}
         }
-        // Firefox 160 draws a panel's title and close button in the window,
-        // above the panel; ours have their own (and Firefox has no title for
-        // them), so its row goes while one of ours is shown.
-        try {
-          let own = !!sidebar.contentDocument?.querySelector(".myfox-panel-title-row");
-          doc.getElementById("sidebar-box")?.toggleAttribute("myfox-own-panel", own);
-        } catch(e) {}
       };
       runHooks();
       sidebar.addEventListener("load", function onSidebarLoad(ev) {

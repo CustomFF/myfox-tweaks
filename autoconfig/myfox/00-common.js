@@ -182,7 +182,7 @@
   }
 
   // The title row every panel of ours has (Downloads, Extensions,
-  // Translations): its title and a close button, an HTML button so Tab
+  // Translations) before Firefox 160: its title and a close button, an HTML button so Tab
   // reaches it. Styled by chrome/agent/22-own-panels.css.
   function createPanelTitleRow(sidebarDoc, sbCtrl, title) {
     const HTML = "http://www.w3.org/1999/xhtml";
@@ -203,6 +203,9 @@
       try { if (sbCtrl) sbCtrl.hide(); } catch(ex) {}
     });
     titleRow.appendChild(closeBtn);
+    // Firefox 160 titles every panel, ours too (their label, see
+    // 30-sidebar.js), in the window above it: no second title row then.
+    if (sbCtrl?.panelHeader) titleRow.setAttribute("myfox-window-titled", "");
     return titleRow;
   }
 
