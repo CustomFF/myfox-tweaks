@@ -43,6 +43,15 @@
     background-image: url("resource://myfox-panel-icons/import-bookmarklets.svg") !important;
 }
 
+/* A toolbar button moved onto the bookmarks toolbar (Web Developer, say)
+   kept the navigation bar's 24px icon box and made the whole toolbar, and
+   every bookmark on it, 8px taller: its icon as a bookmark's, 16px. */
+#PersonalToolbar .toolbarbutton-1 > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack) {
+    width: 16px !important;
+    height: 16px !important;
+    padding: 0 !important;
+}
+
 /* Tighter drop-down/context/popup menu rows. */
 menupopup:not(.in-menulist)>menuitem,
 menupopup:not(.in-menulist)>menu {
