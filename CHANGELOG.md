@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 160.12 — 2026-11-06
 
 - A sidebar tool opened from the » menu shows its button in the row above the sidebar while its panel is open, in place of the last button, which moves to the top of the menu
+- A toolbar button moved onto the bookmarks toolbar is the size of a bookmark and no longer makes the toolbar taller
 
 ## 160.11 — 2026-11-03
 
