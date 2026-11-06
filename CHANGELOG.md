@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- A sidebar tool opened from the » menu shows its button in the row above the sidebar while its panel is open, in place of the last button, which moves to the top of the menu
+
 ## 160.11 — 2026-11-03
 
 - Firefox 160: the sidebar's Downloads, Extensions and Translations panels have one title row again, not two close buttons; in Translations a long text no longer runs over the translation, each box scrolls in its half

@@ -10,6 +10,7 @@
   function initWindow(win) {
     const doc = win.document;
     let scheduled = false;
+    let displacedButton = null;
 
     const launcher = () => doc.querySelector("sidebar-main");
     const toolButtons = sr =>
@@ -34,7 +35,17 @@
         let fits = LEFT_PADDING + tools.length * SLOT + CORNER <= width;
         let capacity = fits ? tools.length
           : Math.max(0, Math.floor((width - LEFT_PADDING - CORNER) / SLOT));
-        tools.forEach((b, i) => b.toggleAttribute("myfox-overflowed", i >= capacity));
+        // The open panel's button stays in the row, as in Opera: it takes
+        // the last visible button's place for as long as the panel is open,
+        // and that button heads the menu. Hidden buttons take no room, so the
+        // active one shows up right where the displaced one was.
+        // moz-button moves aria-selected inside; the open one is the only
+        // button that isn't a "ghost".
+        let active = tools.findIndex(b => !(b.getAttribute("type") || "").includes("ghost"));
+        let displaced = active >= capacity && capacity > 0 ? capacity - 1 : -1;
+        tools.forEach((b, i) => b.toggleAttribute("myfox-overflowed",
+          i === displaced || (i >= capacity && !(i === active && displaced >= 0))));
+        displacedButton = displaced >= 0 ? tools[displaced] : null;
         // In overflow mode "customize" moves into the menu, like the stock one.
         if (customize) customize.toggleAttribute("myfox-overflowed", !fits);
         host.toggleAttribute("myfox-overflow", !fits);
@@ -65,13 +76,15 @@
       // The shadow DOM is re-rendered by the launcher; re-measure when its
       // buttons change (our own marks are not in the filter).
       new win.MutationObserver(schedule).observe(sr, {
-        childList: true, subtree: true, attributes: true, attributeFilter: ["view", "hidden"],
+        childList: true, subtree: true, attributes: true, attributeFilter: ["view", "hidden", "type"],
       });
     }
 
     function openMenu(sr, anchor) {
       let customize = sr.querySelector('moz-button[view="viewCustomizeSidebar"]');
       let entries = toolButtons(sr).filter(b => b.hasAttribute("myfox-overflowed"));
+      if (entries.includes(displacedButton))
+        entries = [displacedButton, ...entries.filter(b => b !== displacedButton)];
       // Sidebar settings closes the list, as in the stock menu.
       if (customize) entries.push(customize);
 
