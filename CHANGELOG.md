@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Firefox 160: the sidebar's title stays the open panel's, not the name of another extension that just updated its own panel
+
 ## 160.12 — 2026-11-06
 
 - A sidebar tool opened from the » menu shows its button in the row above the sidebar while its panel is open, in place of the last button, which moves to the top of the menu

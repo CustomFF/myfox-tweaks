@@ -234,6 +234,24 @@
       };
     }
 
+    // Firefox 160 puts an extension's name into the panel's title whenever
+    // the extension updates its sidebar (its icon or title, on a tab switch,
+    // say), even when another panel is open: Sidebery open, "Bitwarden" on
+    // top. Title the open panel again.
+    if (sbCtrl && sbCtrl._setExtensionAttributes && !sbCtrl.mySetExtensionAttributesPatched) {
+      sbCtrl.mySetExtensionAttributesPatched = true;
+      const originalSetExtensionAttributes = sbCtrl._setExtensionAttributes;
+      sbCtrl._setExtensionAttributes = function(commandID, ...rest) {
+        let result = originalSetExtensionAttributes.call(this, commandID, ...rest);
+        try {
+          if (this.currentID && this.currentID !== commandID && this.panelHeader?.setView) {
+            this.panelHeader.setView(this.currentID);
+          }
+        } catch(e) {}
+        return result;
+      };
+    }
+
     // The button opens and closes the sidebar panel (above), so it is named
     // after the panel: Firefox names it after the launcher, which here is
     // always shown, and it said "Hide sidebar" with the panel hidden too.
