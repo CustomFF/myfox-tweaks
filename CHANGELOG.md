@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## 161.0 — 2026-11-13
 
 - Firefox's settings have a "MyFox settings" link at the end of their side menu, under "Firefox Support"
+- about:myfox: the site link reads "The MyFox website", and each link is clickable only on its text, not across the whole row
+- A tab's sound icon no longer turns green on hover
 - Firefox no longer offers to translate every page in another language, once, unless you set it yourself; the address bar's translate button still does it
 - Firefox 160: the sidebar's title stays the open panel's, not the name of another extension that just updated its own panel
 
