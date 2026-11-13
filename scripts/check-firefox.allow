@@ -1,0 +1,4 @@
+# Names scripts/check-firefox.py reports as missing that are fine:
+# one per line, with why.
+
+sidebar.launcherAboveSidebar   # our own pref (the launcher above the sidebar), not Firefox's

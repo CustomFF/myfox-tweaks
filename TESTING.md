@@ -13,6 +13,12 @@ for f in autoconfig/myfox.cfg autoconfig/myfox/*.js; do cp "$f" /tmp/fc.js && no
 grep -rn 'url(' chrome/user chrome/agent chrome/themed chrome/author | grep -v 'chrome://\|data:'   # relative url()s must use ../, nothing else
 ```
 
+On a new Firefox version, before the checklist: `scripts/check-firefox.py`
+(`--firefox DIR` for another install than MyFox's) reads the build's
+`omni.ja` and lists the ids, classes, elements, attributes, properties, prefs
+and `chrome://` files the tweaks name that the build no longer has. Names it
+lacks on purpose go into `scripts/check-firefox.allow`.
+
 ## Fresh profile, first start
 
 - [ ] bookmarks toolbar has exactly two bookmarks ("Advanced settings" → about:config,
