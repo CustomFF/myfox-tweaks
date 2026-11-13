@@ -59,7 +59,6 @@
                 if (addon.userDisabled) { await addon.enable(); }
               } catch(e) {}
               prefs.setStringPref("extensions.activeThemeID", themeId);
-              try { prefs.clearUserPref("extensions.lastSelectedThemeID"); } catch(e) {}
             }
             prefs.setBoolPref("myfox.themeApplied", true);
             if (force) { try { marker.remove(false); } catch(e) {} }

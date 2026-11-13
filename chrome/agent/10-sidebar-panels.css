@@ -70,8 +70,7 @@ sidebar-panel-header .options-container {
     margin: 0 !important;
     line-height: 1.2 !important;
 }
-sidebar-panel-header moz-button,
-#sidebar-panel-close {
+sidebar-panel-header moz-button {
     width: 28px !important;
     height: 28px !important;
     min-width: 28px !important;
@@ -81,17 +80,6 @@ sidebar-panel-header moz-button,
     --button-size-icon: 28px !important;
     --button-min-height: 28px !important;
     --space-small: 0px !important;
-}
-/* Round ✕: a small circle around the glyph (same 20px as the downloads one).
-   Other sidebars' close buttons are sized in 80-close-buttons.css. */
-#sidebar-panel-close {
-    width: 20px !important;
-    height: 20px !important;
-    min-width: 20px !important;
-    min-height: 20px !important;
-    --button-size-icon: 20px !important;
-    --button-min-height: 20px !important;
-    --icon-size: 12px !important;
 }
 sidebar-panel-header .menu-button {
     margin-inline-start: 6px !important;
