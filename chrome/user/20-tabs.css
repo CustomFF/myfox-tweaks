@@ -264,16 +264,6 @@
         /* overrides full transparency with full opacity */
     }
 
-    /* Color the icon on hover for confirmation or avoidance */
-    .tab-icon-overlay:not([pinned], [sharing], [crashed]):is([soundplaying], [muted]):hover {
-        fill: green !important;
-    }
-
-    &[lwthemetextcolor="bright"] .tab-icon-overlay:not([pinned], [sharing], [crashed]):is([soundplaying], [muted]):hover {
-        fill: lightgreen !important;
-        /* for dark themes */
-    }
-
     /* Override font-size for tabs */
 
     .tabbrowser-tab {
