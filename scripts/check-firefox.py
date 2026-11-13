@@ -34,7 +34,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ALLOW_FILE = Path(__file__).with_suffix(".allow")
-SOURCE_TYPES = ["*.js", "*.mjs", "*.css", "*.xhtml", "*.html", "*.ftl", "*.xml", "*.inc", "*.json"]
+SOURCE_TYPES = ["*.js", "*.mjs", "*.css", "*.xhtml", "*.html", "*.ftl", "*.xml", "*.inc", "*.json", "*.manifest"]
 
 IDENT = r"-?[A-Za-z_][\w-]*"
 
@@ -55,6 +55,18 @@ def extract(firefox: Path, dest: Path) -> list[str]:
         listing = subprocess.run(["unzip", "-Z1", str(jar)], capture_output=True, text=True).stdout
         names += [f"{sub}/{n}" for n in listing.splitlines()]
     return names
+
+
+def overrides(dest: Path) -> dict[str, str]:
+    """chrome.manifest's "override <url> <url>": a file that moved keeps its
+    old url working (category-themes.svg is themeGeneric.svg)."""
+    found = {}
+    for path in dest.rglob("*.manifest"):
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            parts = line.split()
+            if len(parts) >= 3 and parts[0] == "override":
+                found[parts[1]] = parts[2]
+    return found
 
 
 def corpus_words(dest: Path) -> tuple[set[str], set[str]]:
@@ -160,6 +172,7 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="myfox-check-") as tmp:
         files = extract(args.firefox, Path(tmp))
         words, quoted = corpus_words(Path(tmp))
+        moved = overrides(Path(tmp))
         prefs_text = ""
         for p in Path(tmp).rglob("*.js"):
             if "preferences" in p.parts or p.name in ("greprefs.js", "firefox.js"):
@@ -226,7 +239,12 @@ def main() -> int:
     for path in css_files + js_files:
         text = path.read_text(encoding="utf-8")
         for m in re.finditer(r"(chrome|resource)://([\w.-]*)/+([\w./-]+\.\w+)", text):
-            scheme, host, rest = m.groups()
+            url = m.group(0)
+            for _ in range(5):
+                if url not in moved:
+                    break
+                url = moved[url]
+            scheme, host, rest = re.match(r"(chrome|resource)://([\w.-]*)/+(.*)", url).groups()
             if host.startswith("myfox") or m.group(0) in allow:
                 continue
             checked["url"].add(m.group(0))
