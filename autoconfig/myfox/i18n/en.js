@@ -57,6 +57,7 @@
 
     "aboutpage.title": "MyFox tweaks",
     "aboutpage.menu": "About MyFox tweaks",
+    "prefs.myfoxSettings": "MyFox settings",
     "aboutpage.nav.about": "About",
     "aboutpage.nav.changelog": "Changelog",
     "aboutpage.about.version": "Version {0}",

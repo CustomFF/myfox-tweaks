@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Firefox's settings have a "MyFox settings" link at the end of their side menu, under "Firefox Support"
 - Firefox no longer offers to translate every page in another language, once, unless you set it yourself; the address bar's translate button still does it
 - Firefox 160: the sidebar's title stays the open panel's, not the name of another extension that just updated its own panel
 
