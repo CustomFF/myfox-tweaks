@@ -19,6 +19,14 @@ On a new Firefox version, before the checklist: `scripts/check-firefox.py`
 and `chrome://` files the tweaks name that the build no longer has. Names it
 lacks on purpose go into `scripts/check-firefox.allow`.
 
+master supports two Firefox versions, the current stable and the current beta;
+an older Firefox takes an older release. So whatever neither has goes: run the
+check on both (`--firefox <stable> --firefox <beta>`) and remove what it lists
+as missing in every build. A workaround for a Firefox bug keeps its name in the
+build after Mozilla fixes the bug, which the check can't see: its comment names
+the version it is for ("Firefox 160 puts…"), and on a new beta grep the
+comments for versions older than the stable and see if they are still needed.
+
 ## Fresh profile, first start
 
 - [ ] bookmarks toolbar has exactly two bookmarks ("Advanced settings" → about:config,

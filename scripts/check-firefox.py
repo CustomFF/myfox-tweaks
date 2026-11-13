@@ -17,10 +17,12 @@ proof that everything works. Run it when a new Firefox beta comes out,
 before the manual checklist in TESTING.md.
 
 Usage:
-    scripts/check-firefox.py [--firefox DIR] [--verbose]
+    scripts/check-firefox.py [--firefox DIR]... [--verbose]
 
 DIR is the Firefox install (the folder with omni.ja), by default MyFox's,
-~/.local/share/myfox/firefox. Names the build lacks on purpose go into
+~/.local/share/myfox/firefox. Give it twice, the stable Firefox and the
+beta (the two the tweaks support), to tell what neither has, dead code to
+remove, from what only one has. Names the build lacks on purpose go into
 scripts/check-firefox.allow, one per line, with a comment saying why.
 Exit status: 0 nothing missing, 1 something is, 2 the build can't be read.
 """
@@ -149,12 +151,9 @@ def own_names(js_files, html_files) -> set[str]:
     return own
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--firefox", type=Path, default=Path.home() / ".local/share/myfox/firefox")
-    ap.add_argument("--verbose", action="store_true", help="also list what was checked")
-    args = ap.parse_args()
-
+def check(firefox: Path):
+    """(version, missing, checked) for one build: missing maps (kind, name)
+    to the places that name it, checked maps a kind to the names checked."""
     css_files = sorted((ROOT / "chrome").rglob("*.css"))
     js_files = sorted((ROOT / "autoconfig").rglob("*.js")) + [ROOT / "autoconfig" / "myfox.cfg"]
     # The about page is our own document, whose styles and code name only it.
@@ -170,15 +169,16 @@ def main() -> int:
                 allow.add(line)
 
     with tempfile.TemporaryDirectory(prefix="myfox-check-") as tmp:
-        files = extract(args.firefox, Path(tmp))
+        files = extract(firefox, Path(tmp))
         words, quoted = corpus_words(Path(tmp))
         moved = overrides(Path(tmp))
         prefs_text = ""
         for p in Path(tmp).rglob("*.js"):
             if "preferences" in p.parts or p.name in ("greprefs.js", "firefox.js"):
                 prefs_text += p.read_text(encoding="utf-8", errors="replace")
-    libxul = static_prefs(args.firefox)
-    version = (args.firefox / "application.ini").read_text(errors="replace") if (args.firefox / "application.ini").exists() else ""
+    libxul = static_prefs(firefox)
+    ini = firefox / "application.ini"
+    version = ini.read_text(errors="replace") if ini.exists() else ""
     version = (re.search(r"^Version=(.+)$", version, re.M) or [None, "?"])[1]
 
     own = own_names(js_files, html_files)
@@ -264,20 +264,53 @@ def main() -> int:
             if not any(f.endswith(t) or f == t for f in files for t in tails):
                 missing[("url", m.group(0))].append(f"{path.relative_to(ROOT)}:{line_of(text, m.start())}")
 
-    print(f"Firefox {version} at {args.firefox}")
+    return version, missing, checked
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap.add_argument("--firefox", type=Path, action="append",
+                    help="a Firefox install; give it twice for the stable and the beta")
+    ap.add_argument("--verbose", action="store_true", help="also list what was checked")
+    args = ap.parse_args()
+    builds = args.firefox or [Path.home() / ".local/share/myfox/firefox"]
+
     plural = {"class": "classes", "property": "properties"}
-    for kind in ("id", "class", "element", "attribute", "property", "pref", "url"):
-        print(f"  {plural.get(kind, kind + 's'):11} {len(checked[kind]):5} checked")
-    if args.verbose:
-        for kind in sorted(checked):
-            print(f"\n{kind}s: " + " ".join(sorted(checked[kind])))
-    if not missing:
+    results = []
+    for firefox in builds:
+        version, missing, checked = check(firefox)
+        results.append((version, missing))
+        print(f"Firefox {version} at {firefox}")
+        for kind in ("id", "class", "element", "attribute", "property", "pref", "url"):
+            print(f"  {plural.get(kind, kind + 's'):11} {len(checked[kind]):5} checked")
+        if args.verbose:
+            for kind in sorted(checked):
+                print(f"\n{kind}s: " + " ".join(sorted(checked[kind])))
+
+    def show(title, items):
+        print(f"\n{title} ({len(items)}):")
+        for (kind, name), places, note in sorted(items):
+            more = f" (+{len(places) - 3} more)" if len(places) > 3 else ""
+            print(f"  {kind:9} {name}{note}  — {', '.join(places[:3])}{more}")
+
+    keys = set().union(*(missing for _, missing in results))
+    if not keys:
         print("Nothing missing.")
         return 0
-    print(f"\nMissing in this build ({len(missing)}):")
-    for (kind, name), places in sorted(missing.items()):
-        more = f" (+{len(places) - 3} more)" if len(places) > 3 else ""
-        print(f"  {kind:9} {name}  — {', '.join(places[:3])}{more}")
+    if len(results) == 1:
+        show("Missing in this build", [(k, results[0][1][k], "") for k in keys])
+        return 1
+    # Gone from every build: nothing uses it any more, remove it. Gone from
+    # some: a rename between the versions, which both have to be served.
+    everywhere = [(k, next(iter(m[k] for _, m in results)), "") for k in keys
+                  if all(k in m for _, m in results)]
+    somewhere = [(k, next(m[k] for _, m in results if k in m),
+                  " (not in " + ", ".join(v for v, m in results if k in m) + ")") for k in keys
+                 if not all(k in m for _, m in results)]
+    if everywhere:
+        show("Missing in every build, dead code to remove", everywhere)
+    if somewhere:
+        show("Missing in some builds", somewhere)
     return 1
 
 
