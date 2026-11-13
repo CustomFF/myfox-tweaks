@@ -81,6 +81,8 @@ h3 {
 .links {
     display: flex;
     flex-direction: column;
+    /* Each link as wide as its text, not the whole row. */
+    align-items: flex-start;
     gap: 8px;
 }
 .date {
