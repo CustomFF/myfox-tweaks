@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Firefox no longer offers to translate every page in another language, once, unless you set it yourself; the address bar's translate button still does it
 - Firefox 160: the sidebar's title stays the open panel's, not the name of another extension that just updated its own panel
 
 ## 160.12 — 2026-11-06

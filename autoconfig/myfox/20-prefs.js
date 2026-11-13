@@ -157,4 +157,13 @@
     if (prefs.prefHasUserValue("browser.urlbar.suggest.quicksuggest.sponsored")) return;
     prefs.setBoolPref("browser.urlbar.suggest.quicksuggest.sponsored", false);
   });
+
+  // Firefox Translations offers a translation on every page in another
+  // language. No offer: translating stays a click on the address bar's
+  // button. Once, under a guard of its own (existing and imported profiles
+  // get it too), and not over a value the user set.
+  oncePerProfile("myfox.translationsPopupInitialized", () => {
+    if (prefs.prefHasUserValue("browser.translations.automaticallyPopup")) return;
+    prefs.setBoolPref("browser.translations.automaticallyPopup", false);
+  });
 })(globalThis.MyFox);
