@@ -29,6 +29,8 @@ MyFox tweaks — мои стили и настройки для интерфей
 3. Скопируйте папку `chrome` в профиль и создайте там пустой файл `.myfox`.
 4. Перезапустите Firefox.
 
+Номер релиза — это версия бета-Firefox, под которую он сделан (160.12 — для Firefox Beta 160); он работает и на стабильном Firefox версией ниже. Для более старого Firefox берите последний релиз с его номером из [списка релизов](https://github.com/CustomFF/myfox-tweaks/releases): старые релизы не удаляются.
+
 Значительная часть изменений интерфейса рассчитана на темы оформления MyFox, поэтому их тоже нужно установить. Темы скачиваются из релизов [Signed themes](https://github.com/CustomFF/myfox-tweaks/releases) и ставятся в about:addons: меню с шестерёнкой → «Установить дополнение из файла…».
 
 Значки букмарклетов на панели закладок берутся из [ddblm](https://github.com/CustomFF/ddblm), MyFox скачивает их сам. Вручную скопируйте оттуда [`docs/blm_panel.css`](https://github.com/CustomFF/ddblm/blob/master/docs/blm_panel.css) в папку `chrome` профиля, а папку [`icons`](https://github.com/CustomFF/ddblm/tree/master/icons) — туда же под именем `chrome/panel-icons`, и перезапустите Firefox. Без них у букмарклетов нет значков, а закладка «Добавить букмарклеты» — значок без подписи — превращается в пустую кнопку.

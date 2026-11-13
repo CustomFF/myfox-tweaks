@@ -29,6 +29,8 @@ What exactly is changed, with before/after screenshots of every part: the [wiki]
 3. Copy the `chrome` folder into the profile and create an empty file named `.myfox` there.
 4. Restart Firefox.
 
+A release is numbered after the Firefox beta it was made for (160.12 is for Firefox Beta 160) and works on the stable Firefox one version below it too. For an older Firefox, take the last release with its number from the [releases](https://github.com/CustomFF/myfox-tweaks/releases): old releases are not deleted.
+
 Many of the interface changes are made for the MyFox themes, so they need to be installed too. The themes are in the [Signed themes](https://github.com/CustomFF/myfox-tweaks/releases) releases and are installed in about:addons: the gear menu → "Install Add-on From File…".
 
 The bookmarklets' icons on the bookmarks toolbar come from [ddblm](https://github.com/CustomFF/ddblm), which MyFox fetches by itself. By hand, copy its [`docs/blm_panel.css`](https://github.com/CustomFF/ddblm/blob/master/docs/blm_panel.css) into the profile's `chrome` folder and its [`icons`](https://github.com/CustomFF/ddblm/tree/master/icons) folder there as `chrome/panel-icons`, then restart Firefox. Without them the bookmarklets have no icons, and the "Add bookmarklets" bookmark, an icon with no label, is an empty button.
