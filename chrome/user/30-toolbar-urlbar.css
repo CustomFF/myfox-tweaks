@@ -6,8 +6,11 @@
 /* The browser's buttons outside menus and panels: 1px apart, 2px padded,
    the spacing the toolbars were laid out with (ddblm's blm_panel.css used to
    give it to every button, menus' and panels' too). As weak as a bare
-   element rule, so the rules here for particular buttons win over it. */
-toolbarbutton:not(:where(panel, menupopup) *) {
+   element rule, so the rules here for particular buttons win over it. Not
+   the window buttons (minimize/maximize/close): on Windows Firefox draws
+   them with padding of its own, 8px 18px, and with this one they were
+   narrow glyphs. */
+toolbarbutton:not(:where(.titlebar-button), :where(panel, menupopup) *) {
     margin: 1px !important;
     padding: 2px !important;
 }
