@@ -29,6 +29,10 @@ function t(key, ...args) {
   return msg.replace(/\{(\d+)\}/g, (m, i) => (args[i] !== undefined ? args[i] : m));
 }
 
+const IS_WINDOWS = Services.appinfo.OS === "WINNT";
+// A message that reads differently on Windows: its "<key>.win" there.
+const onWindows = (key) => IS_WINDOWS ? key + ".win" : key;
+
 // Released versions, newest first: changelog.json, put next to this page
 // by scripts/build-tweaks-dist.sh. Not there (a copy from the repository):
 // null.
@@ -42,20 +46,56 @@ async function loadChangelog() {
   }
 }
 
+// MyFox's own "launch" on Windows and nothing else: <root>\python\pythonw.exe
+// and <root>\bin\myfoxw.pyw, both there. It doesn't stop a swapped file
+// (whoever can write there has the user's rights anyway), only a broken or
+// stray myfox.json.
+async function isWindowsLaunch(launch) {
+  try {
+    if (launch.length !== 2 || !launch.every(p => typeof p === "string" && PathUtils.isAbsolute(p))) return false;
+    let [python, script] = launch.map(p => PathUtils.normalize(p));
+    let root = PathUtils.parent(PathUtils.parent(script));
+    let same = (a, b) => a.toLowerCase() === b.toLowerCase();
+    if (!same(python, PathUtils.join(root, "python", "pythonw.exe"))) return false;
+    if (!same(script, PathUtils.join(root, "bin", "myfoxw.pyw"))) return false;
+    for (let p of [python, script]) {
+      if ((await IOUtils.stat(p)).type !== "regular") return false;
+    }
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+// What starts or changes something acts on the user's own click or key
+// only, not on a click a script made (event.isTrusted).
+const onUser = (fn) => (event, ...rest) => {
+  if (event?.isTrusted) return fn(event, ...rest);
+};
+
 // "The firefox command" (MyFox >= 1.1.18): `firefox` on the command line
 // runs this Firefox. MyFox does all of it; the page asks its launcher, named
 // in <install>/myfox.json, for the state and to switch it, and shows what it
 // answers. Tweaks put in by hand have no such file, and MyFox may since have
 // been removed: no file, no "command" among its features, or no runnable
 // launcher, and there is no setting at all.
+// On Windows the launcher is a console script (myfox.cmd), and the same
+// command without a console window comes as "launch": the program and its
+// first arguments. `run` is what the page starts: that, or the launcher.
+// Never the script on Windows: cmd.exe would parse the arguments, and a
+// profile named x"&calc&" would run a command. No "launch" there, no MyFox.
 async function loadMyfox() {
   try {
     let install = Services.dirsvc.get("GreD", Ci.nsIFile).path;
     let info = await IOUtils.readJSON(PathUtils.join(install, "myfox.json"));
     if (!info.launcher) return null;
     info.features ??= [];
-    let { type, permissions } = await IOUtils.stat(info.launcher);
-    return type === "regular" && (permissions & 0o111) ? info : null;
+    let launch = Array.isArray(info.launch) && info.launch.length ? info.launch : null;
+    if (IS_WINDOWS && !(launch && await isWindowsLaunch(launch))) return null;
+    info.run = launch || [info.launcher];
+    // Windows has no execute bit.
+    let { type, permissions } = await IOUtils.stat(info.run[0]);
+    return type === "regular" && (IS_WINDOWS || (permissions & 0o111)) ? info : null;
   } catch(e) {
     return null;
   }
@@ -63,13 +103,13 @@ async function loadMyfox() {
 
 // One `<launcher> ... --json` run: its JSON answer, or {error}. The child
 // gets Firefox's environment (HOME, PATH, LANG: the paths and the language
-// of its notes depend on it).
-async function runMyfox(launcher, args) {
+// of its notes depend on it). `run` is myfox.run (see loadMyfox).
+async function runMyfox(run, args) {
   try {
     const { Subprocess } = ChromeUtils.importESModule("resource://gre/modules/Subprocess.sys.mjs");
     let proc = await Subprocess.call({
-      command: launcher,
-      arguments: [...args, "--json"],
+      command: run[0],
+      arguments: [...run.slice(1), ...args, "--json"],
       environmentAppend: true,
       stderr: "pipe",
     });
@@ -87,14 +127,14 @@ async function runMyfox(launcher, args) {
     return { error: String(e.message || e) };
   }
 }
-const runCommand = (launcher, args) => runMyfox(launcher, ["command", ...args]);
+const runCommand = (run, args) => runMyfox(run, ["command", ...args]);
 
 // A `<launcher> ...` run that answers in plain text, waited for: its exit
 // code and what it said on stderr (MyFox's reason when it didn't do it).
-async function runMyfoxPlain(launcher, args) {
+async function runMyfoxPlain(run, args) {
   try {
     const { Subprocess } = ChromeUtils.importESModule("resource://gre/modules/Subprocess.sys.mjs");
-    let proc = await Subprocess.call({ command: launcher, arguments: args, environmentAppend: true, stderr: "pipe" });
+    let proc = await Subprocess.call({ command: run[0], arguments: [...run.slice(1), ...args], environmentAppend: true, stderr: "pipe" });
     let err = "", chunk;
     while ((chunk = await proc.stdout.readString())) {}
     while ((chunk = await proc.stderr.readString())) err += chunk;
@@ -107,12 +147,13 @@ async function runMyfoxPlain(launcher, args) {
 
 // A `<launcher> ...` run left to itself: MyFox closes this Firefox and shows
 // its own window for the rest, so no answer comes back to the page.
-function launchMyfox(launcher, args) {
+function launchMyfox(run, args) {
   let file = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsIFile);
-  file.initWithPath(launcher);
+  file.initWithPath(run[0]);
   let proc = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
   proc.init(file);
-  proc.runwAsync(args, args.length);
+  let all = [...run.slice(1), ...args];
+  proc.runwAsync(all, all.length);
 }
 
 async function initCommandSetting(myfox) {
@@ -122,7 +163,7 @@ async function initCommandSetting(myfox) {
   let status = document.getElementById("command-status");
   let title = t("aboutpage.command.label");
   toggle.ariaLabel = title;
-  let [before, after] = t("aboutpage.command.desc", "\0").split("\0");
+  let [before, after] = t(onWindows("aboutpage.command.desc"), "\0").split("\0");
   let code = document.createElement("code");
   code.textContent = "firefox";
   document.getElementById("command-desc").append(before, code, after ?? "");
@@ -144,7 +185,7 @@ async function initCommandSetting(myfox) {
     } else {
       toggle.pressed = !!state.on;
       if (blocked(state)) {
-        text = t("aboutpage.command.blocked", state.replaces, state.backup);
+        text = t(onWindows("aboutpage.command.blocked"), state.replaces, state.backup);
       } else if (state.on && state.path === "shadowed" && state.found_first) {
         text = t("aboutpage.command.shadowed", state.found_first);
       } else if (state.on && state.path === "not_in_path") {
@@ -165,7 +206,7 @@ async function initCommandSetting(myfox) {
 
   // Without a first state there is nothing to switch: the setting stays
   // off and greyed, with the reason under it.
-  let state = await runCommand(myfox.launcher, []);
+  let state = await runCommand(myfox.run, []);
   show(state);
   if (state.error) return;
 
@@ -173,12 +214,21 @@ async function initCommandSetting(myfox) {
   // MyFox keeps it aside as a backup, and the page says so afterwards.
   // Switching off, the user is asked whether to restore it (an older
   // MyFox always restores it).
+  // moz-toggle's own "toggle" event is never a trusted one: the click
+  // that caused it is what has to be the user's.
+  let userClick = false;
+  toggle.addEventListener("click", (e) => { userClick = e.isTrusted; }, true);
   toggle.addEventListener("toggle", async () => {
+    if (!userClick) {
+      toggle.pressed = !toggle.pressed;
+      return;
+    }
+    userClick = false;
     let on = toggle.pressed;
     let args = [on ? "on" : "off"];
     if (!on && canKeep && state.backup) {
       let ps = Services.prompt;
-      let choice = ps.confirmEx(window, title, t("aboutpage.command.restore", state.backup),
+      let choice = ps.confirmEx(window, title, t(onWindows("aboutpage.command.restore"), state.backup),
         ps.BUTTON_POS_0 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_1 * ps.BUTTON_TITLE_CANCEL +
           ps.BUTTON_POS_2 * ps.BUTTON_TITLE_IS_STRING,
         t("aboutpage.command.restoreButton"), null, t("aboutpage.command.keepButton"), null, {});
@@ -190,7 +240,7 @@ async function initCommandSetting(myfox) {
     }
     let replaced = on ? state.replaces : null;
     toggle.toggleAttribute("disabled", true);
-    let next = await runCommand(myfox.launcher, args);
+    let next = await runCommand(myfox.run, args);
     if (next.error) {
       toggle.pressed = !on;
       toggle.toggleAttribute("disabled", false);
@@ -201,7 +251,7 @@ async function initCommandSetting(myfox) {
     if (next.error) toggle.toggleAttribute("disabled", false);
     if (replaced && !next.error) {
       let backup = next.backup || replaced + ".myfox-backup";
-      Services.prompt.alert(window, title, t("aboutpage.command.savedBackup", replaced, backup));
+      Services.prompt.alert(window, title, t(onWindows("aboutpage.command.savedBackup"), replaced, backup));
     }
   });
 }
@@ -288,7 +338,9 @@ async function initAppearance() {
 // closed. Removing a profile isn't offered here at all.
 const PROFILE_OWNERS = ["myfox", "ours", "unused", "foreign"];
 
+// Windows: double quotes, which both cmd and PowerShell take.
 function shellQuote(word) {
+  if (IS_WINDOWS) return /^[A-Za-z0-9._@%+=:,\\\/-]+$/.test(word) ? word : '"' + word + '"';
   return /^[A-Za-z0-9._@%+=:,\/-]+$/.test(word) ? word : "'" + word.replace(/'/g, "'\\''") + "'";
 }
 
@@ -323,7 +375,7 @@ async function initProfiles(myfox) {
   const button = (label, onClick) => {
     let b = document.createElement("button");
     b.textContent = label;
-    b.addEventListener("click", onClick);
+    b.addEventListener("click", onUser(onClick));
     return b;
   };
   // The section's message: an error, a note, or something done ("ok"),
@@ -354,8 +406,11 @@ async function initProfiles(myfox) {
 
   const openProfile = (p) => {
     try {
+      // MyFox's wrapper on Linux (it names the app for the desktop), this
+      // very Firefox elsewhere (firefox.exe on Windows).
       let starter = Services.dirsvc.get("GreD", Ci.nsIFile);
       starter.append("firefox-myfox");
+      if (!starter.exists()) starter = Services.dirsvc.get("XREExeF", Ci.nsIFile);
       let proc = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
       proc.init(starter);
       // No --no-remote: Firefox keeps one instance per profile anyway, and
@@ -370,7 +425,7 @@ async function initProfiles(myfox) {
     if (busy) return;
     busy = true;
     showStatus(t("aboutpage.profiles.applying", p.name));
-    let res = await runMyfox(myfox.launcher, ["profile", "apply", p.id]);
+    let res = await runMyfox(myfox.run, ["profile", "apply", p.id]);
     busy = false;
     if (res.error) showStatus(res.error, true);
     else { showStatus(""); load(); }
@@ -384,7 +439,7 @@ async function initProfiles(myfox) {
       Services.prompt.BUTTON_POS_0 * Services.prompt.BUTTON_TITLE_IS_STRING +
       Services.prompt.BUTTON_POS_1 * Services.prompt.BUTTON_TITLE_CANCEL,
       t("aboutpage.profiles.use"), null, null, null, {}) === 0;
-    if (ok) launchMyfox(myfox.launcher, ["profile", "use", p.id, "--relaunch", "--gui"]);
+    if (ok) launchMyfox(myfox.run, ["profile", "use", p.id, "--relaunch", "--gui"]);
   };
 
   // Importing a profile of another Firefox: a panel under its row with the
@@ -485,22 +540,33 @@ async function initProfiles(myfox) {
     };
     panel.addEventListener("change", update);
     name.addEventListener("input", update);
-    start.addEventListener("click", async () => {
-      start.disabled = true;
+    start.addEventListener("click", onUser(async () => {
       let a = args();
+      // Moving the profile, or the Firefox account out of it, takes it
+      // from the other Firefox: asked first.
+      let movesAccount = a.includes("--sync") && a[a.indexOf("--sync") + 1] === "move";
+      if (a.includes("--move") || movesAccount) {
+        let ps = Services.prompt;
+        let ok = ps.confirmEx(window, t("aboutpage.profiles.importFrom"),
+          t(a.includes("--move") ? "aboutpage.profiles.import.moveConfirm" : "aboutpage.profiles.import.syncMoveConfirm", p.name),
+          ps.BUTTON_POS_0 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_1 * ps.BUTTON_TITLE_CANCEL + ps.BUTTON_POS_1_DEFAULT,
+          t("aboutpage.profiles.import.start"), null, null, null, {}) === 0;
+        if (!ok) return;
+      }
+      start.disabled = true;
       // MyFox 1.4.0 or newer imports with this Firefox open; only making
       // the copy the default still takes closing it (MyFox's window).
       if (canInPlace && !a.includes("--use")) {
         showStatus(t("aboutpage.profiles.import.running"));
-        let res = await runMyfoxPlain(myfox.launcher, [...a, "-y"]);
+        let res = await runMyfoxPlain(myfox.run, [...a, "-y"]);
         start.disabled = false;
         showStatus(res.ok ? t("aboutpage.profiles.import.done", name.value.trim() || p.name) : res.error, !res.ok, res.ok);
         if (res.ok) { panel.hidden = true; load(); loadForeign(); }
         return;
       }
-      launchMyfox(myfox.launcher, [...a, "--relaunch", "--gui"]);
+      launchMyfox(myfox.run, [...a, "--relaunch", "--gui"]);
       showStatus(t("aboutpage.profiles.import.started"));
-    });
+    }));
 
     panel.append(
       field("", copy, move, moveNote),
@@ -530,7 +596,7 @@ async function initProfiles(myfox) {
     let newName = value.value.trim();
     if (!newName || newName === p.name) return;
     busy = true;
-    let res = await runMyfox(myfox.launcher, ["profile", "rename", p.id, newName]);
+    let res = await runMyfox(myfox.run, ["profile", "rename", p.id, newName]);
     busy = false;
     if (res.error || !res.ok) showStatus(res.error || t("aboutpage.command.failed", ""), true);
     else showStatus(t("aboutpage.profiles.renamed", res.name || newName), false, true);
@@ -552,7 +618,7 @@ async function initProfiles(myfox) {
     showStatus(t("aboutpage.profiles.removing", p.name));
     let args = ["profile", "remove", p.id, "-y"];
     if (giveBack && !check.value) args.push("--no-restore-sync");
-    let res = await runMyfoxPlain(myfox.launcher, args);
+    let res = await runMyfoxPlain(myfox.run, args);
     busy = false;
     showStatus(res.ok ? t("aboutpage.profiles.removed", p.name) : res.error, !res.ok, res.ok);
     load();
@@ -634,10 +700,10 @@ async function initProfiles(myfox) {
 
   async function load() {
     if (canImport) {
-      let all = await runMyfox(myfox.launcher, ["profile", "list", "--all"]);
+      let all = await runMyfox(myfox.run, ["profile", "list", "--all"]);
       if (Array.isArray(all)) names = new Map(all.map(p => [p.path, p.name]));
     }
-    let res = await runMyfox(myfox.launcher, ["profile", "list"]);
+    let res = await runMyfox(myfox.run, ["profile", "list"]);
     list.textContent = "";
     if (res.error || !Array.isArray(res)) {
       showStatus(res.error || t("aboutpage.command.failed", ""), true);
@@ -646,7 +712,7 @@ async function initProfiles(myfox) {
     for (let p of res) list.appendChild(row(p, false));
   }
   async function loadForeign() {
-    let res = await runMyfox(myfox.launcher, ["profile", "list", "--all"]);
+    let res = await runMyfox(myfox.run, ["profile", "list", "--all"]);
     let rows = foreignBox.querySelector(".profiles-foreign-list");
     rows.textContent = "";
     if (res.error || !Array.isArray(res)) {
@@ -689,20 +755,20 @@ async function initProfiles(myfox) {
     start.textContent = t("aboutpage.profiles.newCreate");
     const update = () => { open.hidden = use.querySelector("input").checked; };
     newPanel.addEventListener("change", update);
-    start.addEventListener("click", async () => {
+    start.addEventListener("click", onUser(async () => {
       let a = ["profile", "new"];
       let n = name.value.trim();
       if (n) a.push("--name", n);
       // The default takes closing this Firefox: MyFox's window does it.
       if (use.querySelector("input").checked) {
-        launchMyfox(myfox.launcher, [...a, "--use", "--relaunch", "--gui"]);
+        launchMyfox(myfox.run, [...a, "--use", "--relaunch", "--gui"]);
         showStatus(t("aboutpage.profiles.newStarted"));
         return;
       }
       if (open.querySelector("input").checked) a.push("--open");
       start.disabled = true;
       showStatus(t("aboutpage.profiles.newRunning"));
-      let res = await runMyfoxPlain(myfox.launcher, [...a, "-y"]);
+      let res = await runMyfoxPlain(myfox.run, [...a, "-y"]);
       start.disabled = false;
       showStatus(res.ok ? t("aboutpage.profiles.newDone") : res.error, !res.ok, res.ok);
       if (res.ok) {
@@ -711,7 +777,7 @@ async function initProfiles(myfox) {
         newToggle.setAttribute("aria-pressed", "false");
         load();
       }
-    });
+    }));
     newPanel.append(field("", nameLabel), field("", use, open), field("import-start", start));
     update();
   }
@@ -853,10 +919,10 @@ async function initUpdates(myfox, tweaksInstalled, tweaksReleased) {
     installButton.hidden = !canInstall || !(newTweaks.length || newCore.length);
   }
 
-  installButton.addEventListener("click", async () => {
+  installButton.addEventListener("click", onUser(async () => {
     installButton.disabled = checkButton.disabled = true;
     showStatus(t("aboutpage.updates.installing"));
-    let res = await runMyfox(myfox.launcher, ["refresh"]);
+    let res = await runMyfox(myfox.run, ["refresh"]);
     installButton.disabled = checkButton.disabled = false;
     if (res.error || !res.ok) {
       showStatus(res.error || t("aboutpage.command.failed", ""), true);
@@ -866,7 +932,7 @@ async function initUpdates(myfox, tweaksInstalled, tweaksReleased) {
     showStatus(done ? t("aboutpage.updates.installed", done) : t("aboutpage.updates.nothing"));
     if (res.restart && offerRestart()) return;
     check();
-  });
+  }));
   checkButton.addEventListener("click", () => check());
   box.hidden = false;
   check(tweaksReleased);
@@ -964,10 +1030,10 @@ async function initCheckedUpdates(myfox, tweaksInstalled, onTweaksPending) {
     onTweaksPending(byTrack.tweaks || null);
   }
 
-  checkButton.addEventListener("click", async () => {
+  checkButton.addEventListener("click", onUser(async () => {
     installButton.disabled = checkButton.disabled = true;
     showStatus(t("aboutpage.updates.checking"));
-    let res = await runMyfox(myfox.launcher, ["refresh", "--check"]);
+    let res = await runMyfox(myfox.run, ["refresh", "--check"]);
     installButton.disabled = checkButton.disabled = false;
     if (res.error || !Array.isArray(res.updates)) {
       showStatus(res.error || t("aboutpage.command.failed", ""), true);
@@ -975,11 +1041,11 @@ async function initCheckedUpdates(myfox, tweaksInstalled, onTweaksPending) {
     }
     showStatus("");
     render(res);
-  });
-  installButton.addEventListener("click", async () => {
+  }));
+  installButton.addEventListener("click", onUser(async () => {
     installButton.disabled = checkButton.disabled = true;
     showStatus(t("aboutpage.updates.installing"));
-    let res = await runMyfox(myfox.launcher, ["refresh"]);
+    let res = await runMyfox(myfox.run, ["refresh"]);
     installButton.disabled = checkButton.disabled = false;
     if (res.error || !res.ok) {
       showStatus(res.error || t("aboutpage.command.failed", ""), true);
@@ -994,7 +1060,7 @@ async function initCheckedUpdates(myfox, tweaksInstalled, onTweaksPending) {
     if (installedNow.core) myfox.version = installedNow.core;
     render(await loadUpdateCheck());
     if (res.restart) offerRestart();
-  });
+  }));
   box.hidden = false;
   render(await loadUpdateCheck());
 }
@@ -1061,7 +1127,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.title = t("aboutpage.title");
   showSection();
   window.addEventListener("hashchange", showSection);
-  document.getElementById("restart-button").addEventListener("click", restartFirefox);
+  document.getElementById("restart-button").addEventListener("click", onUser(() => restartFirefox()));
   initAppearance();
   let myfox = await loadMyfox();
   initCommandSetting(myfox);
