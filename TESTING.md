@@ -27,6 +27,22 @@ build after Mozilla fixes the bug, which the check can't see: its comment names
 the version it is for ("Firefox 160 puts…"), and on a new beta grep the
 comments for versions older than the stable and see if they are still needed.
 
+What the CSS actually hits, in a running Firefox: `scripts/css-report.py`
+(through `scripts/firefox_rdp_proxy.py`, or `--port` for a debugger server
+of its own, a VM's through an ssh tunnel). Before saying a rule does or
+doesn't touch something, ask it:
+
+```bash
+scripts/css-report.py --element '.titlebar-button'   # every rule of ours on those elements
+scripts/css-report.py --open-views --save scan.json  # all pages and sidebar panels; per-file summary
+scripts/css-report.py --load scan.json --rule user/30-toolbar-urlbar.css:13   # what one rule hits
+scripts/css-report.py --load scan.json --broad 20    # rules hitting 20+ kinds of element
+```
+
+It is a snapshot: a rule for a state (hover, split view, tab groups,
+vertical tabs) counts only if that state is on during the scan, and pages in
+a content process (about:logins, about:newtab) aren't reached.
+
 ## Fresh profile, first start
 
 - [ ] bookmarks toolbar has exactly two bookmarks ("Advanced settings" → about:config,
