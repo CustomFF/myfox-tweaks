@@ -43,6 +43,27 @@ sidebar-panel-header,
 #sidebar-panel-header {
     padding-inline: 4px !important;
 }
+/* Without the launcher ("Open tools from the sidebar" off) the heading is
+   the first thing in the sidebar's card, and the -4px above, which tucks it
+   under the launcher, put its top outside the card, cut off. */
+@media -moz-pref("sidebar.visibility", "hide-launcher") {
+    #sidebar-panel-header {
+        margin-top: 4px !important;
+    }
+}
+/* That mode's panel dropdown in the heading: the one corner radius, not
+   Firefox's 8px pill. The button is in the switcher's shadow DOM, which a
+   selector from outside can't name: the browser window's address keeps the
+   rule off web pages. */
+@-moz-document url("chrome://browser/content/browser.xhtml") {
+    .switcher-button {
+        border-radius: var(--myfox-radius) !important;
+        /* As wide as its name and arrow, not the whole heading: the arrow
+           ends the button, and its menu opens from there. Still shrinks
+           (the name ellipsized) when the heading is narrow. */
+        flex: 0 1 auto !important;
+    }
+}
 sidebar-panel-header .options-container {
     height: auto !important;
     min-height: auto !important;

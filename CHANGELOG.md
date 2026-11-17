@@ -6,6 +6,7 @@
 - about:myfox on Windows: "Launch" opens a profile, MyFox runs without a console window, and the shell integration speaks of the Run box (Win+R)
 - about:myfox asks before an import that moves the profile or its Firefox account out of the other Firefox
 - The sidebar settings' "Tools bar above the sidebar" is now "Tool buttons above the sidebar": it says where the buttons go, not whether they show
+- Without the sidebar's tool buttons ("Open tools from the sidebar" off), the dropdown in the sidebar's heading opens the same menu as View > Sidebar, with every panel, their shortcuts and the open one checked
 
 ## 161.0 — 2026-11-13
 

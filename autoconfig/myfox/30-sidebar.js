@@ -258,6 +258,80 @@
       } catch(e) {}
     }
 
+    // Without the launcher ("Open tools from the sidebar" off) a dropdown in
+    // the heading switches panels. Firefox labels its items from the tools'
+    // l10n ids, which the extra panels don't have: they were empty rows.
+    if (sbCtrl && sbCtrl.getRevampSwitcherItems && !sbCtrl.mySwitcherItemsPatched) {
+      sbCtrl.mySwitcherItemsPatched = true;
+      const originalSwitcherItems = sbCtrl.getRevampSwitcherItems;
+      sbCtrl.getRevampSwitcherItems = async function(...args) {
+        let items = await originalSwitcherItems.apply(this, args);
+        for (let item of items || []) {
+          let panel = EXTRA_SIDEBARS.find(p => p.view === item.view);
+          if (panel && !item.label) item.label = t(panel.titleKey);
+        }
+        return items;
+      };
+    }
+
+    // That dropdown opens View > Sidebar's menu here, styled as the other
+    // menus, not Firefox's own list: the same items in the same order, built
+    // the same way (createMenuItem, patched above), the shortcuts, the open
+    // panel checked, and "Customize sidebar" after them, which without the
+    // launcher has no other way in. Opened from the dropdown's arrow, where
+    // Firefox's list opened.
+    function switcherMenu() {
+      let popup = doc.getElementById("myfox-sidebar-switcher-menu");
+      if (popup) return popup;
+      popup = doc.createXULElement("menupopup");
+      popup.id = "myfox-sidebar-switcher-menu";
+      popup.addEventListener("popupshowing", (e) => {
+        if (e.target !== popup) return;
+        popup.replaceChildren();
+        let byMenuId = new Map([...sbCtrl.sidebars].map(([id, s]) => [s.menuId, [id, s]]));
+        for (let src of doc.getElementById("viewSidebarMenu").children) {
+          if (src.localName !== "menuitem" || src.hidden) continue;
+          let entry = byMenuId.get(src.id);
+          if (!entry) continue;
+          let item = sbCtrl.createMenuItem(entry[0], entry[1]);
+          // Firefox finds View > Sidebar's items by these ids.
+          item.removeAttribute("id");
+          if (src.hasAttribute("label")) item.setAttribute("label", src.getAttribute("label"));
+          if (sbCtrl.isOpen && sbCtrl.currentID === entry[0]) item.setAttribute("checked", "true");
+          popup.appendChild(item);
+        }
+        let customize = sbCtrl.sidebars.get("viewCustomizeSidebar");
+        if (customize) {
+          popup.appendChild(doc.createXULElement("menuseparator"));
+          let item = doc.createXULElement("menuitem");
+          item.setAttribute("type", "radio");
+          item.setAttribute("name", "myfox-sidebar");
+          if (sbCtrl.isOpen && sbCtrl.currentID === "viewCustomizeSidebar") item.setAttribute("checked", "true");
+          doc.l10n.setAttributes(item, customize.revampL10nId);
+          item.addEventListener("command", () => sbCtrl.show("viewCustomizeSidebar"));
+          popup.appendChild(item);
+        }
+      });
+      doc.getElementById("mainPopupSet").appendChild(popup);
+      return popup;
+    }
+    let panelHeader = doc.querySelector("sidebar-panel-header");
+    if (sbCtrl && panelHeader && !panelHeader.mySwitcherMenu) {
+      panelHeader.mySwitcherMenu = true;
+      const onSwitcher = (e) => {
+        let button = e.composedPath().find(n => n.classList?.contains("switcher-button"));
+        if (!button) return;
+        if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        e.stopPropagation();
+        let menu = switcherMenu();
+        if (menu.state === "open" || menu.state === "showing") menu.hidePopup();
+        else menu.openPopup(button.querySelector(".switcher-arrow") || button, "after_start");
+      };
+      panelHeader.addEventListener("click", onSwitcher, true);
+      panelHeader.addEventListener("keydown", onSwitcher, true);
+    }
+
     // Firefox 160 puts an extension's name into the panel's title whenever
     // the extension updates its sidebar (its icon or title, on a tab switch,
     // say), even when another panel is open: Sidebery open, "Bitwarden" on
