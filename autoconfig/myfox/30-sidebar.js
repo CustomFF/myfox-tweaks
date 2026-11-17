@@ -230,6 +230,34 @@
       };
     }
 
+    // The button above only opens and closes the panel, counting on the
+    // launcher to be there. With horizontal tabs Firefox 160 and 161 are in
+    // sidebar.visibility "hide-on-close", where the launcher is the user's to
+    // show with that very button, and a new profile starts with it hidden: the
+    // panel opened without its launcher. It shows with any panel here, however
+    // the panel is opened (the button, View > Sidebar, a shortcut, a restored
+    // session).
+    if (sbCtrl && sbCtrl.show && !sbCtrl.myShowPatched) {
+      sbCtrl.myShowPatched = true;
+      const originalShow = sbCtrl.show;
+      sbCtrl.show = function(...args) {
+        try {
+          if (prefs.getStringPref("sidebar.visibility", "") === "hide-on-close" &&
+              this._state && !this._state.launcherVisible) {
+            this._state.userLauncherVisible = true;
+          }
+        } catch(e) {}
+        return originalShow.apply(this, args);
+      };
+      // A panel the session already opened before this ran.
+      try {
+        if (sbCtrl.isOpen && prefs.getStringPref("sidebar.visibility", "") === "hide-on-close" &&
+            sbCtrl._state && !sbCtrl._state.launcherVisible) {
+          sbCtrl._state.userLauncherVisible = true;
+        }
+      } catch(e) {}
+    }
+
     // Firefox 160 puts an extension's name into the panel's title whenever
     // the extension updates its sidebar (its icon or title, on a tab switch,
     // say), even when another panel is open: Sidebery open, "Bitwarden" on
