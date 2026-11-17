@@ -43,6 +43,28 @@ It is a snapshot: a rule for a state (hover, split view, tab groups,
 vertical tabs) counts only if that state is on during the scan, and pages in
 a content process (about:logins, about:newtab) aren't reached.
 
+## Before a release: a new profile, stable and beta, Linux and Windows
+
+What was checked on the beta has to keep working once that beta is the
+stable, and a change for the next beta must not break it. A profile in
+everyday use hides what a new one shows (Firefox keeps what was ever
+switched on: the sidebar launcher's visibility, for one), so the release is
+checked on a new profile MyFox makes (`myfox profile new`), not only on the
+working one:
+
+- [ ] on the current stable and the current beta, on Linux and on Windows
+      (the VM): the checklist below on a new profile, with no settings
+      touched first
+- [ ] `scripts/css-report.py --open-views --save <os>-<channel>.json` on each
+      (`linux-beta.json`, `windows-stable.json`, …), then
+      `--load <os>-<channel>.json --diff <the previous release's>`: a rule that
+      applied there and no longer does (or now hits something it didn't) is
+      explained before the release, not after. The scans aren't kept in the
+      repository: they go with the release
+      (`gh release upload <tag> *.json`), and the previous ones come from
+      there (`gh release download <previous tag> -p '*-*.json'`)
+- [ ] anything found here holds the release
+
 ## Fresh profile, first start
 
 - [ ] bookmarks toolbar has exactly two bookmarks ("Advanced settings" → about:config,

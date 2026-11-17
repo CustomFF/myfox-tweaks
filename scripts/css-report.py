@@ -22,6 +22,10 @@ about:myfox) and records, for every rule of ours, the elements it matches.
     css-report.py --element '.titlebar-button'
                                      every rule of ours on those elements
     --save FILE / --load FILE        keep a scan as JSON / report from one
+    css-report.py --load new.json --diff old.json
+                                     rules that stopped or started applying, and
+                                     the ones whose elements changed (by file and
+                                     selector: line numbers move between releases)
 
 It is a snapshot: a rule for :hover, an open menu or a selected tab counts
 only if that is so at the moment of the scan (--open-views adds the pages
@@ -171,6 +175,43 @@ def summary(report, top):
         print("  %4d kinds  %s  %s" % (kinds(r), where(r), r["selector"][:110]))
 
 
+def diff(old, new, limit):
+    """What changed between two scans, rule by rule."""
+    key = lambda r: (r["file"], r["selector"])
+    before = {key(r): r for r in old["rules"]}
+    after = {key(r): r for r in new["rules"]}
+    print("old: Firefox %s (%s) %s" % (old["firefox"], old["os"], old["time"]))
+    print("new: Firefox %s (%s) %s" % (new["firefox"], new["os"], new["time"]))
+    only_old = sorted(set(old["docs"]) - set(new["docs"]))
+    only_new = sorted(set(new["docs"]) - set(old["docs"]))
+    if only_old or only_new:
+        print("Not the same documents scanned (a rule there counts as stopped or started):")
+        if only_old:
+            print("  only old: %s" % ", ".join(only_old))
+        if only_new:
+            print("  only new: %s" % ", ".join(only_new))
+    stopped = [after.get(k) or before[k] for k in before
+               if before[k]["matches"] and not (after.get(k) or {}).get("matches")]
+    started = [after[k] for k in after if after[k]["matches"] and not (before.get(k) or {}).get("matches")]
+    changed = [after[k] for k in after if k in before and after[k]["matches"] and before[k]["matches"]
+               and set(after[k]["matches"]) != set(before[k]["matches"])]
+    gone = [before[k] for k in before if k not in after]
+    added = [after[k] for k in after if k not in before]
+    for title, items in (("Applied before, not now", stopped), ("Applies now, not before", started)):
+        print("\n%s: %d" % (title, len(items)))
+        for r in sorted(items, key=lambda r: (r["file"], r["line"])):
+            print("  %s  %s" % (where(r), r["selector"][:120]))
+    print("\nApplies to other elements than before: %d" % len(changed))
+    for r in sorted(changed, key=lambda r: (r["file"], r["line"])):
+        was, now = set(before[key(r)]["matches"]), set(r["matches"])
+        print("  %s  %s" % (where(r), r["selector"][:120]))
+        for d in sorted(now - was)[:limit]:
+            print("      + %s" % d)
+        for d in sorted(was - now)[:limit]:
+            print("      - %s" % d)
+    print("\nRules removed: %d, added: %d (by file and selector)" % (len(gone), len(added)))
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--port", type=int, default=34376)
@@ -181,6 +222,7 @@ def main():
     p.add_argument("--rule", metavar="FILE[:LINE]")
     p.add_argument("--broad", type=int, metavar="N")
     p.add_argument("--unmatched", action="store_true")
+    p.add_argument("--diff", metavar="OLD_FILE")
     p.add_argument("--top", type=int, default=25)
     p.add_argument("--limit", type=int, default=30, help="element kinds shown per rule")
     a = p.parse_args()
@@ -198,7 +240,10 @@ def main():
             json.dump(report, f, ensure_ascii=False, indent=1)
 
     rules = report["rules"]
-    if a.element:
+    if a.diff:
+        with open(a.diff) as f:
+            diff(json.load(f), report, a.limit)
+    elif a.element:
         hit = [r for r in rules if r["matches"]]
         print("%d element(s) match %s; %d rule(s) of ours apply:" % (report["elements"], a.element, len(hit)))
         for r in sorted(hit, key=lambda r: (r["file"], r["line"])):
