@@ -43,7 +43,7 @@
     "addons.empty.button": "Найдите свое первое расширение",
     "addons.amo": "Искать «{0}» на addons.mozilla.org",
 
-    "customize.launcherAbove": "Панель инструментов над сайдбаром",
+    "customize.launcherAbove": "Кнопки инструментов над боковой панелью",
 
     "bookmarks.advanced": "Расширенные настройки",
     "bookmarks.gallery": "Добавить букмарклеты",
