@@ -166,4 +166,28 @@
     if (prefs.prefHasUserValue("browser.translations.automaticallyPopup")) return;
     prefs.setBoolPref("browser.translations.automaticallyPopup", false);
   });
+
+  // Firefox 160 on Windows pins itself to the taskbar on a new profile's
+  // first start, with no window asking (the ASRouter message
+  // PIN_FIREFOX_TASKBAR_WIN_OS_PROMPT), and with it puts "Firefox" and
+  // "Firefox Private Browsing" into the Start menu; on Windows without
+  // one-click default it opens the system's default apps settings
+  // (SET_DEFAULT_MAC_AND_WINDOWS_OS_PROMPT). MyFox makes the shortcuts in its
+  // own Start menu folder. bypassAutoTriggerActions turns both silent actions
+  // off; the offers with a button the user presses stay.
+  // And on every start Firefox on Windows makes a "Firefox Private Browsing"
+  // shortcut in the Start menu unless one with its taskbar id is there
+  // (StartupOSIntegration's ensurePrivateBrowsingShortcutExists);
+  // privacySegmentation.createdShortcut is what tells it it already has.
+  // Locked on every start, not set once: a value put back by hand would bring
+  // Firefox's own shortcuts back next to MyFox's.
+  for (let name of ["browser.bypassAutoTriggerActions", "browser.privacySegmentation.createdShortcut"]) {
+    // No unlockPref first: it throws for a pref that doesn't exist yet
+    // (createdShortcut on a new profile), and a locked pref's default can
+    // be set anyway.
+    try {
+      Services.prefs.getDefaultBranch("").setBoolPref(name, true);
+      Services.prefs.lockPref(name);
+    } catch(e) {}
+  }
 })(globalThis.MyFox);

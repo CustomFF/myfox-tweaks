@@ -7,6 +7,7 @@
 - about:myfox asks before an import that moves the profile or its Firefox account out of the other Firefox
 - The sidebar settings' "Tools bar above the sidebar" is now "Tool buttons above the sidebar": it says where the buttons go, not whether they show
 - Without the sidebar's tool buttons ("Open tools from the sidebar" off), the dropdown in the sidebar's heading opens the same menu as View > Sidebar, with every panel, their shortcuts and the open one checked
+- Windows: Firefox no longer pins itself to the taskbar or makes its own Start menu shortcuts (MyFox has them in its folder), nor opens the default apps settings by itself
 
 ## 161.0 — 2026-11-13
 
