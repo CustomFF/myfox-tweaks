@@ -18,8 +18,7 @@
   <nav id="nav">
     <h1 id="nav-title">MyFox tweaks</h1>
     <a class="nav-item" href="#about" data-section="about" data-l10n="aboutpage.nav.about"></a>
-    <a class="nav-item" href="#changelog" data-section="changelog" data-l10n="aboutpage.nav.changelog"></a>
-    <a class="nav-item" href="#updates" data-section="updates" data-l10n="aboutpage.nav.updates"></a>
+    <a class="nav-item" href="#maintenance" data-section="maintenance" data-l10n="aboutpage.nav.maintenance"></a>
     <a class="nav-item" href="#settings" data-section="settings" data-l10n="aboutpage.nav.settings"></a>
     <a class="nav-item" href="#profiles" data-section="profiles" data-l10n="aboutpage.nav.profiles" hidden></a>
   </nav>
@@ -42,12 +41,19 @@
         <a href="https://github.com/CustomFF/userscripts" data-l10n="aboutpage.links.userscripts"></a>
       </div>
     </section>
-    <section id="changelog" hidden>
-      <h2 data-l10n="aboutpage.nav.changelog"></h2>
-      <div id="changelog-list"></div>
-    </section>
-    <section id="updates" hidden>
-      <h2 data-l10n="aboutpage.nav.updates"></h2>
+    <!-- Restart, updates, changelog. #updates and #changelog were sections
+         of their own, and MyFox opens about:myfox#changelog: they still
+         lead here, to their part. -->
+    <section id="maintenance" hidden>
+      <h2 data-l10n="aboutpage.nav.maintenance"></h2>
+      <div class="box setting">
+        <div>
+          <div class="setting-label" data-l10n="aboutpage.restart.label"></div>
+          <div class="setting-desc" data-l10n="aboutpage.restart.desc"></div>
+        </div>
+        <button id="restart-button" data-l10n="aboutpage.restart.button"></button>
+      </div>
+      <h3 id="updates" data-l10n="aboutpage.nav.updates"></h3>
       <div class="box" id="updates-box" hidden>
         <div id="updates-versions"></div>
         <div id="updates-status" class="setting-status" hidden></div>
@@ -57,6 +63,12 @@
         </div>
       </div>
       <div id="updates-changes"></div>
+      <!-- Folded, and when open it scrolls on its own: all the versions are
+           a long read. -->
+      <details id="changelog">
+        <summary><h3 data-l10n="aboutpage.nav.changelog"></h3></summary>
+        <div id="changelog-list"></div>
+      </details>
     </section>
     <section id="settings" hidden>
       <h2 data-l10n="aboutpage.nav.settings"></h2>

@@ -250,6 +250,20 @@ h3 {
     margin: 0;
     padding-inline-start: 20px;
 }
+#changelog > summary {
+    cursor: pointer;
+}
+#changelog > summary h3 {
+    display: inline;
+}
+#changelog-list {
+    max-height: 480px;
+    overflow-y: auto;
+    margin-top: 8px;
+}
+#changelog-list > .box:last-child {
+    margin-bottom: 0;
+}
 #changelog-list li {
     margin-bottom: 4px;
 }
@@ -387,6 +401,15 @@ h3 {
 }
 #updates-changes h3 {
     margin-top: 16px;
+}
+/* Maintenance: a part's heading sets it off from the boxes above. */
+#maintenance > h3,
+#changelog {
+    margin-top: 24px;
+}
+#restart-button {
+    margin: 0;
+    flex-shrink: 0;
 }
 h3 .badge {
     vertical-align: middle;

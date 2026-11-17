@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- about:myfox: "Maintenance" holds the updates, the changelog (folded, and scrolling on its own when open) and a new "Restart" button for Firefox; windows and tabs come back after the restart
+
 ## 161.0 — 2026-11-13
 
 - Firefox's settings have a "MyFox settings" link at the end of their side menu, under "Firefox Support"

@@ -797,6 +797,7 @@ function renderChangelog(versions, installedVersion) {
   for (let v of versions) {
     list.appendChild(versionBox(v, installedVersion && compareVersions(v.version, installedVersion) > 0));
   }
+  scrollToPart();
 }
 
 // Updates: the tweaks and MyFox core, what is installed and what is out,
@@ -1005,15 +1006,29 @@ function offerRestart() {
     ps.BUTTON_POS_0 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_1 * ps.BUTTON_TITLE_IS_STRING + ps.BUTTON_POS_0_DEFAULT,
     t("aboutpage.updates.restartNow"), t("aboutpage.updates.restartLater"), null, null, {}) === 0;
   if (!restart) return false;
+  restartFirefox();
+  return true;
+}
+
+// Windows and tabs come back, as after any restart. Unsent forms, running
+// downloads and "close N tabs?" may still cancel it.
+function restartFirefox() {
   let cancel = Cc["@mozilla.org/supports-PRBool;1"].createInstance(Ci.nsISupportsPRBool);
   Services.obs.notifyObservers(cancel, "quit-application-requested", "restart");
   if (!cancel.data) Services.startup.quit(Ci.nsIAppStartup.eAttemptQuit | Ci.nsIAppStartup.eRestart);
-  return true;
 }
 
 function showSection() {
   // A section whose menu item is hidden (settings without MyFox) isn't one.
+  // A part of a section (#updates, #changelog) shows the section, scrolled
+  // to the part.
   let id = location.hash.slice(1);
+  let part = id && document.getElementById(id);
+  if (part && !part.matches("section") && part.closest("main > section")) {
+    id = part.closest("main > section").id;
+  } else {
+    part = null;
+  }
   let item = document.querySelector(`.nav-item[data-section="${CSS.escape(id)}"]`);
   if (!document.getElementById(id)?.matches("section") || !item || item.hidden) id = "about";
   for (let section of document.querySelectorAll("main > section")) {
@@ -1021,6 +1036,20 @@ function showSection() {
   }
   for (let item of document.querySelectorAll(".nav-item")) {
     item.classList.toggle("selected", item.dataset.section === id);
+  }
+  if (part) {
+    if (part.localName === "details") part.open = true;
+    part.scrollIntoView();
+  }
+}
+
+// Scroll to the part the address names again once what's above and in it
+// is there: at the first showSection() the changelog is still empty.
+function scrollToPart() {
+  let part = location.hash && document.getElementById(location.hash.slice(1));
+  if (part && !part.matches("section") && !part.closest("section")?.hidden) {
+    if (part.localName === "details") part.open = true;
+    part.scrollIntoView();
   }
 }
 
@@ -1032,6 +1061,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.title = t("aboutpage.title");
   showSection();
   window.addEventListener("hashchange", showSection);
+  document.getElementById("restart-button").addEventListener("click", restartFirefox);
   initAppearance();
   let myfox = await loadMyfox();
   initCommandSetting(myfox);
