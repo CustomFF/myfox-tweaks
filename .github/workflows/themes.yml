@@ -4,8 +4,11 @@ on:
   workflow_dispatch: {}
   push:
     branches: [master]
+    # Only what goes into a theme's .xpi (the files inside themes/<name>/);
+    # themes/README.md and other docs beside them don't rebuild the themes,
+    # or MyFox would offer an "update" with nothing changed.
     paths:
-      - "themes/**"
+      - "themes/*/**"
 
 jobs:
   sign-and-release:
