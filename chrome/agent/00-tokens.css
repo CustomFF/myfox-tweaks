@@ -25,6 +25,10 @@
        selected tab and on tabs in the background; the selected tab and the
        window around it carry a faint tint of it. */
     --myfox-container-line: 2px;
+    /* The same line along a vertical tab's side, with the gradient off: a
+       little thicker, or beside the tab's whole height it looks thinner than
+       the one along a horizontal tab's top. */
+    --myfox-container-vline: calc(var(--myfox-container-line) + 1px);
     --myfox-container-edge: 80%;
     --myfox-container-inactive: 60%;
     --myfox-container-join: 5%;

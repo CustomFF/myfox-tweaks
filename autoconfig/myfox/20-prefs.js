@@ -14,6 +14,10 @@
     // Hidden by default; a user-pref can bring it back. Removing the widget
     // doesn't help: it returns from the saved placements.
     defaultPref("identity.fxaccounts.toolbar.enabled", false);
+    // Container tabs in the tab column: the horizontal tab's line, on the
+    // column's outer side (false, the default), or the gradient (true). The
+    // CSS reads it (-moz-pref); about:myfox's settings switch it.
+    defaultPref("myfox.tabs.containerGradient", false);
   } catch(e) {}
 
   // Launcher row above the sidebar: on by default, once.

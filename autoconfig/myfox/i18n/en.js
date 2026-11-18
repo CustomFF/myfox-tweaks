@@ -168,6 +168,8 @@
     "aboutpage.appearance.desc": "The browser's theme and the websites' appearance",
     "aboutpage.appearance.light": "Light",
     "aboutpage.appearance.dark": "Dark",
+    "aboutpage.containerGradient.label": "Container tabs in vertical tabs as a gradient",
+    "aboutpage.containerGradient.desc": "The container's color fills the tab from its edge and fades out. Off, a line along the side, like the one along the top of a horizontal tab",
     "aboutpage.command.label": "Shell integration",
     "aboutpage.command.desc": "The {0} command in a terminal and in scripts opens the Firefox MyFox installed",
     "aboutpage.command.desc.win": "The {0} command in a terminal, in scripts and in the Run box (Win+R) opens the Firefox MyFox installed",

@@ -156,6 +156,29 @@ function launchMyfox(run, args) {
   proc.runwAsync(all, all.length);
 }
 
+// Container tabs in the tab column: the gradient or a line on the side
+// (myfox.tabs.containerGradient, read by 20-tabs.css and 75-split-view.css),
+// switched here and kept in step with about:config.
+const CONTAINER_GRADIENT_PREF = "myfox.tabs.containerGradient";
+
+function initContainerSetting() {
+  let toggle = document.getElementById("container-toggle");
+  toggle.ariaLabel = t("aboutpage.containerGradient.label");
+  let sync = () => { toggle.pressed = Services.prefs.getBoolPref(CONTAINER_GRADIENT_PREF, false); };
+  sync();
+  // The "toggle" event is never a trusted one (initCommandSetting): the
+  // click before it is what has to be the user's.
+  let userClick = false;
+  toggle.addEventListener("click", (e) => { userClick = e.isTrusted; }, true);
+  toggle.addEventListener("toggle", () => {
+    if (userClick) Services.prefs.setBoolPref(CONTAINER_GRADIENT_PREF, toggle.pressed);
+    else sync();
+    userClick = false;
+  });
+  Services.prefs.addObserver(CONTAINER_GRADIENT_PREF, sync);
+  window.addEventListener("unload", () => Services.prefs.removeObserver(CONTAINER_GRADIENT_PREF, sync));
+}
+
 async function initCommandSetting(myfox) {
   if (!myfox?.features.includes("command")) return;
   document.getElementById("command-box").hidden = false;
@@ -1129,6 +1152,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("hashchange", showSection);
   document.getElementById("restart-button").addEventListener("click", onUser(() => restartFirefox()));
   initAppearance();
+  initContainerSetting();
   let myfox = await loadMyfox();
   initCommandSetting(myfox);
   initProfiles(myfox);

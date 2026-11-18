@@ -165,6 +165,8 @@
     "aboutpage.appearance.desc": "Тема браузера и оформление сайтов",
     "aboutpage.appearance.light": "Светлое",
     "aboutpage.appearance.dark": "Тёмное",
+    "aboutpage.containerGradient.label": "Контейнеры в вертикальных вкладках – градиентом",
+    "aboutpage.containerGradient.desc": "Цвет контейнера заливает вкладку от края и сходит на нет. Если выключить – полоса сбоку, как сверху у горизонтальных вкладок",
     "aboutpage.command.label": "Интеграция с оболочкой",
     "aboutpage.command.desc": "Команда {0} в терминале и в скриптах открывает Firefox, установленный MyFox",
     "aboutpage.command.desc.win": "Команда {0} в терминале, в скриптах и в окне «Выполнить» (Win+R) открывает Firefox, установленный MyFox",

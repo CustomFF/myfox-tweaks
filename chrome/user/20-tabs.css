@@ -60,18 +60,41 @@
         border-color: var(--myfox-container-line-color) !important;
         outline: none !important;
     }
-    /* Vertical: the gradient, laid out over the border box it is painted on
-       (sized to the padding box it repeated into the border as a thin line). */
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid]>.tab-stack>.tab-background {
         --myfox-container-direction: to right;
-        /* A layer of its own: a background tab's fade toward the selected one
-           (../user/70-vertical-tabs-close.css) is drawn under it. */
-        --myfox-container-layer: linear-gradient(var(--myfox-container-direction), var(--myfox-container-line-color), transparent 67%);
-        background-image: var(--myfox-container-layer) !important;
-        background-origin: border-box !important;
     }
     &:has(#sidebar-container[sidebar-positionend]) #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid]>.tab-stack>.tab-background {
         --myfox-container-direction: to left;
+    }
+    /* Vertical, the gradient (myfox.tabs.containerGradient, the setting in
+       about:myfox, off by default): laid out over the border box it is
+       painted on (sized to the padding box it repeated into the border as a
+       thin line). */
+    @media -moz-pref("myfox.tabs.containerGradient") {
+        #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid]>.tab-stack>.tab-background {
+            /* A layer of its own: a background tab's fade toward the selected
+               one (../user/70-vertical-tabs-close.css) is drawn under it. */
+            --myfox-container-layer: linear-gradient(var(--myfox-container-direction), var(--myfox-container-line-color), transparent 67%);
+            background-image: var(--myfox-container-layer) !important;
+            background-origin: border-box !important;
+        }
+    }
+    /* With the setting off (the default), the horizontal tab's line instead, along the
+       column's outer side: the tab's border there, curving round its corners
+       as the top one does. The ids outweigh 70-vertical-tabs-close.css's
+       border-width: 0 for tabs in the background. */
+    @media not -moz-pref("myfox.tabs.containerGradient") {
+        #vertical-tabs #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid]>.tab-stack>.tab-background {
+            border-style: solid !important;
+            border-width: 0 !important;
+            border-inline-start-width: var(--myfox-container-vline) !important;
+            border-color: var(--myfox-container-line-color) !important;
+            outline: none !important;
+        }
+        &:has(#sidebar-container[sidebar-positionend]) #vertical-tabs #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid]>.tab-stack>.tab-background {
+            border-inline-start-width: 0 !important;
+            border-inline-end-width: var(--myfox-container-vline) !important;
+        }
     }
 
     /* A selected container tab tints the whole window: the tab itself and the
@@ -116,8 +139,10 @@
        right up to the edge left it brighter than the ears beside it). The ears
        inherit the whole background and would repeat the gradient over their own
        width, so they take only the tint. */
-    #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid][selected]>.tab-stack>.tab-background {
-        background-image: linear-gradient(var(--myfox-container-direction), var(--myfox-window-tint-edge), var(--myfox-window-tint-join) calc(100% - var(--user-tab-ear-rounding) - 2px)) !important;
+    @media -moz-pref("myfox.tabs.containerGradient") {
+        #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid][selected]>.tab-stack>.tab-background {
+            background-image: linear-gradient(var(--myfox-container-direction), var(--myfox-window-tint-edge), var(--myfox-window-tint-join) calc(100% - var(--user-tab-ear-rounding) - 2px)) !important;
+        }
     }
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid][selected]>.tab-stack>.tab-background::before,
     #tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[usercontextid][selected]>.tab-stack>.tab-background::after {

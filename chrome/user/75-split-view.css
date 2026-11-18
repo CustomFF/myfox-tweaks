@@ -390,6 +390,11 @@
    meet the page the ears are the halves' color, not the pair's. */
 :root#main-window[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper > .tabbrowser-tab {
     --myfox-split-half-gradient: linear-gradient(var(--myfox-split-half-direction), var(--myfox-split-half-line), transparent 67%);
+    /* With myfox.tabs.containerGradient off (20-tabs.css), a line on the
+       outer side instead, as wide as a tab's (--myfox-container-vline). */
+    @media not -moz-pref("myfox.tabs.containerGradient") {
+        --myfox-split-half-gradient: linear-gradient(var(--myfox-split-half-direction), var(--myfox-split-half-line) var(--myfox-container-vline), transparent var(--myfox-container-vline));
+    }
 
     & .tab-content {
         margin-inline-start: var(--myfox-split-vinset) !important;
@@ -477,6 +482,9 @@
 }
 :root#main-window[theme-effective-id^="myfox-"] #vertical-tabs #tabbrowser-tabs[orient="vertical"] tab-split-view-wrapper[hasactivetab] > .tabbrowser-tab[usercontextid] {
     --myfox-split-half-gradient: linear-gradient(var(--myfox-split-half-direction), var(--myfox-split-half-line), var(--myfox-split-half-bg) calc(100% - var(--user-tab-ear-rounding) - 2px));
+    @media not -moz-pref("myfox.tabs.containerGradient") {
+        --myfox-split-half-gradient: linear-gradient(var(--myfox-split-half-direction), var(--myfox-split-half-line) var(--myfox-container-vline), var(--myfox-split-half-bg) var(--myfox-container-vline));
+    }
 }
 
 /* Around the two pages the window is split as well: the area round each page
