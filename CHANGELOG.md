@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 161.1 – 2026-11-18
 
 - about:myfox: "Maintenance" holds the updates, the changelog (folded, and scrolling on its own when open) and a new "Restart" button for Firefox; windows and tabs come back after the restart
 - about:myfox on Windows: "Launch" opens a profile, MyFox runs without a console window, and the shell integration speaks of the Run box (Win+R)
