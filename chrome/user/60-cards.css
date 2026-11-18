@@ -16,6 +16,11 @@
 #sidebar-box {
     margin: 4px 0 5px 4px !important;
     padding-block-end: 0 !important;
+    /* Firefox (SidebarState) pads the box's start with --space-small while
+       a panel is open without the launcher, to keep the panel off the
+       window's edge: the card's margin does that here, and the pad only
+       shifted the panel sideways whenever the launcher was turned off. */
+    padding-inline-start: 0 !important;
     border-radius: var(--myfox-card-radius) !important;
     overflow: clip !important;
     /* A light theme gives the sidebar the same white as the window, so the
