@@ -9,6 +9,7 @@
 - Without the sidebar's tool buttons ("Open tools from the sidebar" off), the dropdown in the sidebar's heading opens the same menu as View > Sidebar, with every panel, their shortcuts and the open one checked
 - Turning the sidebar's tool buttons off no longer shifts the open panel sideways
 - Container tabs in vertical tabs: a line in the container's color along the column's outer side, like the one along a horizontal tab's top; the gradient is still there, as a setting in about:myfox
+- With vertical tabs, the sidebar's heading is no longer cut off at the top
 - Windows: Firefox no longer pins itself to the taskbar or makes its own Start menu shortcuts (MyFox has them in its folder), nor opens the default apps settings by itself
 
 ## 161.0 – 2026-11-13

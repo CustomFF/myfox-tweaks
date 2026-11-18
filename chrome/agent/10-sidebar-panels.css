@@ -51,6 +51,12 @@ sidebar-panel-header,
         margin-top: 4px !important;
     }
 }
+/* The same wherever the launcher isn't in the card above the panel at all
+   (../../autoconfig/myfox/50-layout.js puts it there and marks the box
+   custom-launcher): with vertical tabs it is the tab column's, beside it. */
+#sidebar-box:not([custom-launcher="true"]) #sidebar-panel-header {
+    margin-top: 4px !important;
+}
 /* That mode's panel dropdown in the heading: the one corner radius, not
    Firefox's 8px pill. The button is in the switcher's shadow DOM, which a
    selector from outside can't name: the browser window's address keeps the
