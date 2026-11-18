@@ -1,5 +1,5 @@
 #!/bin/bash
-# build-tweaks-dist.sh [out-dir] — builds the tweaks release assets
+# build-tweaks-dist.sh [out-dir] – builds the tweaks release assets
 # (default out-dir: build/dist):
 #   myfox-tweaks.tar.gz  autoconfig/ and chrome/ at the archive root
 #   changelog.json       CHANGELOG.md, all released versions (validated)

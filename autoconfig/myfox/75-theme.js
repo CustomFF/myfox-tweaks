@@ -3,10 +3,10 @@
 (function (MyFox) {
   const { prefs, wm, whenPlacesReady, profileDir } = MyFox;
 
-  // Theme add-on IDs — our own fork (themes/, signed through AMO's unlisted
+  // Theme add-on IDs – our own fork (themes/, signed through AMO's unlisted
   // channel; see themes/README.md), not a third-party AMO listing anymore.
   // The installer puts both .xpi files into <profile>/extensions/ (see
-  // lib/addons.sh's addons_install_themes) — must match MYFOX_THEME_DARK_ID/
+  // lib/addons.sh's addons_install_themes) – must match MYFOX_THEME_DARK_ID/
   // MYFOX_THEME_LIGHT_ID there.
   const THEME_IDS = {
     dark: "myfox-dark-theme@daydve.github.io",
@@ -32,11 +32,11 @@
     if (!win) { return; }
 
     // Both theme add-ons are installed into the profile regardless of
-    // choice (<profile>/extensions/*.xpi — instant switching later);
+    // choice (<profile>/extensions/*.xpi – instant switching later);
     // myfox.theme (from user.js, see apply_theme_pref) picks which one
     // gets enabled here. Firefox stores a sideloaded theme in
     // extensions.json with userDisabled=true until addon.enable() is
-    // called explicitly — so we enable AND activate. Only ONCE
+    // called explicitly – so we enable AND activate. Only ONCE
     // (myfox.themeApplied) and only if the user hasn't since picked a
     // different theme themselves: theme choice is a setting, never
     // overwritten on later startups.

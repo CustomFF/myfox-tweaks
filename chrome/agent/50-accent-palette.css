@@ -5,7 +5,7 @@
 /* ── Rein in Nova's violet/purple accent palette ────────────────────────
    Nova's dark-mode accent (buttons, links, focus outline, selected settings
    nav item, address bar text, etc.) resolves to --color-violet-* /
-   --color-violet-desaturated-* — visually a light-purple (#b89cff-family),
+   --color-violet-desaturated-* – visually a light-purple (#b89cff-family),
    which for years has meant "private browsing" in Firefox. We swap the
    whole violet scale for a blue scale at matching lightness/saturation
    (same hue as our own accent below) so every consumer of these tokens

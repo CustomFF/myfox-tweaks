@@ -4,7 +4,7 @@
   const { t, wrapSearchWithClear, createPanelTitleRow } = MyFox;
 
   // Builds the downloads sidebar's own header (title, close button,
-  // search box) and footer ("Clear downloads") — about:downloads has none
+  // search box) and footer ("Clear downloads") – about:downloads has none
   // in a sidebar. Styled by chrome/agent/20-downloads-sidebar.css.
   function injectSearch(sidebarDoc, sbCtrl, doc) {
     if (!sidebarDoc || sidebarDoc.location.href !== "about:downloads") return;

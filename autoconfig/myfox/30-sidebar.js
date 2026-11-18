@@ -26,7 +26,7 @@
   MyFox.EXTRA_SIDEBARS = EXTRA_SIDEBARS;
 
   // The extra panels need to be in the sidebar tools list once, to start
-  // enabled like Firefox's own tools — sidebar.main.tools is Firefox's own
+  // enabled like Firefox's own tools – sidebar.main.tools is Firefox's own
   // enabled-tools list, so it IS the on/off state the customize panel's
   // checkbox writes to. Restoring a name on every change (as this used to
   // do) silently undid that checkbox: it looked unchecked but the panel

@@ -291,7 +291,7 @@ def main() -> int:
         print(f"\n{title} ({len(items)}):")
         for (kind, name), places, note in sorted(items):
             more = f" (+{len(places) - 3} more)" if len(places) > 3 else ""
-            print(f"  {kind:9} {name}{note}  — {', '.join(places[:3])}{more}")
+            print(f"  {kind:9} {name}{note}  – {', '.join(places[:3])}{more}")
 
     keys = set().union(*(missing for _, missing in results))
     if not keys:

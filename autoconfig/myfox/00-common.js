@@ -4,9 +4,9 @@
   const { Cc, Ci, prefs, os, wm } = MyFox;
 
   // Registries filled by the modules and run by 90-windows.js:
-  //   windowInits    fn(win) — once per browser window, after DOMContentLoaded
-  //   sidebarHooks   fn(ctx) — whenever a sidebar panel document loads
-  //   documentHooks  fn(win) — every new chrome document global
+  //   windowInits    fn(win) – once per browser window, after DOMContentLoaded
+  //   sidebarHooks   fn(ctx) – whenever a sidebar panel document loads
+  //   documentHooks  fn(win) – every new chrome document global
   MyFox.windowInits = [];
   MyFox.sidebarHooks = [];
   MyFox.documentHooks = [];
@@ -59,7 +59,7 @@
 
   // Runs fn once per profile: the guard pref is set before fn runs, so a
   // failure halfway never retries on the next startup. Anything the user can
-  // change in Firefox's own settings belongs behind one of these — it must
+  // change in Firefox's own settings belongs behind one of these – it must
   // never be re-applied over their choice.
   function oncePerProfile(guardPref, fn) {
     try {
@@ -118,7 +118,7 @@
 
   // Calls fn when Places has finished initializing: on the init-complete
   // notification or, if that already fired before we subscribed, on delayed
-  // startup. fn must be idempotent — it can run twice.
+  // startup. fn must be idempotent – it can run twice.
   function whenPlacesReady(fn) {
     try {
       let placesObserver = {
@@ -226,7 +226,7 @@
     themeCss.rel = "stylesheet";
     themeCss.href = "chrome://global/skin/global.css";
     sidebarDoc.head.appendChild(themeCss);
-    // A blank page doesn't inherit the sidebar's colors; copy them — and copy
+    // A blank page doesn't inherit the sidebar's colors; copy them – and copy
     // them again when the theme is switched while the panel is open.
     let root = sidebarDoc.documentElement;
     let themeListeners = [];

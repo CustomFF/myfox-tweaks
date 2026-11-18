@@ -36,7 +36,7 @@
     font-size: var(--myfox-font-size) !important;
 }
 
-/* Identity/permissions popup ("Firefox на страже", trustpanel-popup) — the
+/* Identity/permissions popup ("Firefox на страже", trustpanel-popup) – the
    panel itself already follows --myfox-radius via panel[type="arrow"], but
    the graphic info card inside it has its own hardcoded radius. */
 #trustpanel-graphic-section {

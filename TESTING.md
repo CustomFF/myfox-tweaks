@@ -1,6 +1,6 @@
 # Testing these tweaks
 
-No automated tests — static checks plus a manual checklist, run after
+No automated tests – static checks plus a manual checklist, run after
 applying the tweaks (by hand per `README.md`, or via
 [myfox](https://github.com/CustomFF/myfox)) and restarting Firefox.
 Test on beta first, stable only once beta looks right (Firefox's Nova
@@ -87,10 +87,10 @@ working one:
       sidebar has its own close button
 - [ ] about:preferences / about:logins / about:addons / about:processes use
       12px text, no pill-shaped rows
-- [ ] light theme: the selected tab is set off with a shadow — check this on
+- [ ] light theme: the selected tab is set off with a shadow – check this on
       both stable and beta
 - [ ] `userChrome.css`'s `@import user/*.css` picks up all files, and every
-      `chrome/agent/*.css`, `chrome/themed/*.css` and `chrome/author/*.css` sheet registers — check
+      `chrome/agent/*.css`, `chrome/themed/*.css` and `chrome/author/*.css` sheet registers – check
       **after a restart**:
       content-process pages (about:newtab, about:preferences) don't pick up
       a live agent-sheet re-registration, only a fresh start
@@ -118,7 +118,7 @@ Create a second profile in the same Firefox install, without applying any
 tweaks to it, and launch `firefox -P <name>`:
 
 - [ ] no files under `<profile>/chrome/`, no `.myfox` marker, no `myfox.*`
-      prefs set, no bookmarks added — plain stock Firefox
+      prefs set, no bookmarks added – plain stock Firefox
 
 ## Bookmarklets (ddblm)
 
@@ -133,20 +133,20 @@ MYFOX_DDBLM_LOCAL=/path/to/ddblm-checkout <however you apply tweaks>   # to test
 
 ## Applying by hand (README.md's own instructions)
 
-- [ ] on a throwaway profile, follow `README.md`'s steps 1-4 exactly — the
+- [ ] on a throwaway profile, follow `README.md`'s steps 1-4 exactly – the
       tweaks work
-- [ ] skip the `.myfox` marker in step 3 — the tweaks do **not** apply; no
-      error, just silently inert (by design — see `autoconfig/myfox.cfg`'s
+- [ ] skip the `.myfox` marker in step 3 – the tweaks do **not** apply; no
+      error, just silently inert (by design – see `autoconfig/myfox.cfg`'s
       guard)
 
 ## After editing styles/scripts
 
 - [ ] `myfox.cfg`: `node --check` passes; a real Firefox start (not
-      `--headless --screenshot` — it exits before the async setup runs)
+      `--headless --screenshot` – it exits before the async setup runs)
       applies the same `myfox.*` prefs and bookmarks as before, no errors in
       the Browser Console
 - [ ] after splitting/moving CSS, diff computed styles before/after on a
-      live Firefox (main window + sidebars) — should be identical
+      live Firefox (main window + sidebars) – should be identical
 - [ ] `scripts/reload_userchrome.py` (talks to `scripts/firefox_rdp_proxy.py`
       for hot-reload) still works: `userChrome.css` + `agent/*.css` reload
       without a restart

@@ -22,7 +22,7 @@ jobs:
       - name: Give each theme a version AMO has never seen
         # AMO rejects resubmitting a version number it already has, and
         # (confirmed live) even a run that errors out still registers the
-        # version it attempted — so a fixed version in manifest.json would
+        # version it attempted – so a fixed version in manifest.json would
         # need a manual bump before every single run. github.run_number
         # only ever increases and is never reused for this workflow, so
         # appending it guarantees a fresh version every time. Only the
@@ -47,5 +47,5 @@ jobs:
           tag="themes-$(date -u +%Y%m%d%H%M%S)"
           gh release create "$tag" build/signed/*.xpi \
             --title "Signed themes ($tag)" \
-            --notes "Built from $(git rev-parse --short HEAD) by this workflow — see themes/*/manifest.json for version info." \
+            --notes "Built from $(git rev-parse --short HEAD) by this workflow – see themes/*/manifest.json for version info." \
             --latest=false

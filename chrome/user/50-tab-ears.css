@@ -60,7 +60,7 @@
     }
 
     /* The ear cutout used to be a `mask: radial-gradient(circle at corner,
-       transparent R, black R+0.5px)` — a distance-based approximation of a
+       transparent R, black R+0.5px)` – a distance-based approximation of a
        circle, not a real arc. At the exact tangent point where that circle
        meets the box's flat edge, the gradient's anti-aliasing left a visible
        stray notch (worse at smaller radii / fractional display scaling). An

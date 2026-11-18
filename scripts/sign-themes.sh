@@ -1,12 +1,12 @@
 #!/bin/bash
-# sign-themes.sh — builds themes/*/ and submits each to AMO's unlisted
+# sign-themes.sh – builds themes/*/ and submits each to AMO's unlisted
 # (self-distribution) channel for signing via web-ext; writes the signed
 # XPIs to build/signed/<name>.xpi. Needs an AMO API key/secret (Manage API
-# Keys on addons.mozilla.org) — not for publishing anywhere, only for the
+# Keys on addons.mozilla.org) – not for publishing anywhere, only for the
 # automated signature Firefox requires to sideload an add-on at all.
 #
 # Credentials: AMO_JWT_ISSUER / AMO_JWT_SECRET in the environment, or a
-# local .amo-api-key file (never committed — see .gitignore) with:
+# local .amo-api-key file (never committed – see .gitignore) with:
 #   AMO_JWT_ISSUER=user:1234:56
 #   AMO_JWT_SECRET=...
 set -eo pipefail

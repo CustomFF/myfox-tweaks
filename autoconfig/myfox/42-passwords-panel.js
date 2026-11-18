@@ -16,7 +16,7 @@
   // measure cards, it sizes the not-yet-rendered chunks from constants
   // hardcoded in its script (215+13px per card). Our CSS makes the card
   // more compact (chrome/agent/60-password-manager.css), so keep the
-  // constants in sync — otherwise scrolling jumps on long lists. Done once,
+  // constants in sync – otherwise scrolling jumps on long lists. Done once,
   // when the first card is made ours (Firefox's cards keep Firefox's).
   function patchMegalistHeights(PC) {
     if (PC.myfoxHeights) return;

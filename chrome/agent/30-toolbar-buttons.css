@@ -45,7 +45,7 @@
 /* The downloads button has no .toolbarbutton-icon: its glyph is
    #downloads-indicator-icon, which stretches to fill the (now 24px) badge
    stack and so drew at 24px instead of the 16px the other buttons' glyphs get
-   from their 4px icon padding — the "giant" download icon that appears once a
+   from their 4px icon padding – the "giant" download icon that appears once a
    first download exists. Pin the anchor (and the glyph in it) to 16px,
    centered, like stock. */
 #nav-bar #downloads-indicator-anchor {

@@ -258,7 +258,7 @@
 
     /* Once the tabs get narrow, Firefox sets closebuttons="activetab" on the
        strip and display:none's the close button of every tab but the selected
-       one — so hover-to-close silently stopped working past a certain tab count
+       one – so hover-to-close silently stopped working past a certain tab count
        (which depends on window width). Keep it available on hover. */
     #tabbrowser-tabs[closebuttons="activetab"][orient="horizontal"] .tabbrowser-tab:not([selected]):hover .tab-close-button {
         display: flex !important;
@@ -480,7 +480,7 @@
 
     /* "New tab" row, vertical tabs expanded: a text label next to the icon reads
        oddly for a plain "add" action (unlike every other row, which is a real
-       tab). Icon only, centered — same idea as the collapsed strip. */
+       tab). Icon only, centered – same idea as the collapsed strip. */
     #tabbrowser-tabs[expanded] > #tabbrowser-arrowscrollbox[orient="vertical"] > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button .toolbarbutton-text {
         display: none !important;
     }

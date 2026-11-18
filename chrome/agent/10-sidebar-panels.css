@@ -213,7 +213,7 @@ moz-button.menu-button {
 }
 
 /* Cards ("plaques": the empty states of the panels) look the same everywhere:
-   no frame, and a tint of the text color over the panel — lighter than the
+   no frame, and a tint of the text color over the panel – lighter than the
    panel on a dark theme, darker on a light one, so it needs no per-theme
    colors. The Extensions panel's own card does the same (25-addons-sidebar.css). */
 @-moz-document url-prefix("chrome://") {
@@ -282,7 +282,7 @@ fxview-empty-state.synced-tabs {
    tree where children are indented under their folder. Nudge them right to
    read as nested under the header, matching the bookmarks sidebar. Also
    shrink the row itself (default 28px, padding-block 4px inside) and the
-   group header (default 36px) down to a denser, more uniform row height —
+   group header (default 36px) down to a denser, more uniform row height –
    the same density pass we've done everywhere else in this file. */
 sidebar-tab-row {
     height: 24px !important;
@@ -317,7 +317,7 @@ moz-card.date-card {
 }
 
 /* Firefox also gives the row a 9999px ("stadium") fill when hovered,
-   selected or focused — the same Nova pill treatment we square off
+   selected or focused – the same Nova pill treatment we square off
    everywhere else (see the close-button and moz-card rules below/above).
    Drop it entirely. */
 sidebar-tab-row {
@@ -340,7 +340,7 @@ sidebar-tab-row {
    would otherwise get the UA's `outline: auto` focus ring (painted by the
    native GTK theme) on top of our own custom focus border. An agent-sheet
    rule *does* reach inside the component's shadow tree (unlike author/user
-   sheets), so this kills the ring permanently from the first frame — no
+   sheets), so this kills the ring permanently from the first frame – no
    script needed. Wrapped in @-moz-document so it only ever applies to
    chrome:// documents (browser UI, sidebar panels), never to web pages'
    own search fields; note a longer url-prefix (e.g. .../sidebar/) is NOT

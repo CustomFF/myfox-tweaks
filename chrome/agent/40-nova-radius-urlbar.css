@@ -41,7 +41,7 @@
    is type="arrow" (hamburger menu, extensions panel, downloads panel, etc.);
    plain context menus already have a normal small radius and are untouched.
    --panel-menuitem-border-radius/--menuitem-border-radius (the hover
-   highlight on each row) is set to 0, not --myfox-radius — that one was
+   highlight on each row) is set to 0, not --myfox-radius – that one was
    asked to be removed entirely, not just shrunk. */
 panel[type="arrow"] {
     --panel-border-radius: var(--myfox-radius) !important;
@@ -137,7 +137,7 @@ panel[type="arrow"] {
     margin-block: 2px !important;
 }
 
-/* Search-engine mode switcher ("G ⌄" before the typed text) — a moz-button
+/* Search-engine mode switcher ("G ⌄" before the typed text) – a moz-button
    whose --button-border-radius gets locally redefined to 99px by the urlbar
    itself, so the global :root override above doesn't reach it. Drawn as the
    same chip as the "Firefox" identity badge above: its height, inset, radius

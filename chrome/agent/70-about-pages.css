@@ -2,7 +2,7 @@
    Agent sheet (registered by myfox.cfg): reaches into shadow DOM and beats
    the documents' own styles. Load order is by file name. */
 
-/* Icon-only buttons (pencil / trash / "+" in the settings lists — some are
+/* Icon-only buttons (pencil / trash / "+" in the settings lists – some are
    type="icon"; the pencil, trash and "+" are type="default" buttons in an
    actions slot that just have no label)
    draw an accent-blue outline around each glyph via the composed
@@ -317,7 +317,7 @@ recommended-addon-card .addon-description {
     margin-block-start: 3px !important;
 }
 /* Its text sizes are hard-coded px (16px names, 14px descriptions and
-   buttons) — bring them down to the density of the rest of the UI. */
+   buttons) – bring them down to the density of the rest of the UI. */
 :is(addon-card, recommended-addon-card) .addon-name {
     font-size: 13px !important;
     line-height: 18px !important;
@@ -383,7 +383,7 @@ moz-select {
 
 /* about:preferences left navigation. Its buttons/links draw the highlight
    pill and spacing from component tokens declared on the (light-DOM) host
-   elements, so plain host rules override them — no script needed. Square
+   elements, so plain host rules override them – no script needed. Square
    highlight, tighter rows and gaps, and a smaller font (matching the context
    menu's density) instead of Nova's 9999px pills and roomy 15px rows. */
 moz-page-nav {
@@ -499,7 +499,7 @@ button[selected]:not(.tab-button):focus-visible {
 
 /* about:preferences cards/boxes/promos/message bars/pickers. Their corner
    radii come from tokens declared on the (light-DOM) host elements, so host
-   rules override them — the same Nova pill treatment as everywhere else,
+   rules override them – the same Nova pill treatment as everywhere else,
    pulled onto --myfox-radius without any script. */
 moz-card,
 moz-box-group,
@@ -606,16 +606,16 @@ moz-visual-picker-item:not([checked]) {
         --content-search-handoff-ui-border-radius: var(--myfox-radius) !important;
     }
     /* The engine icon's stock left inset (16px) is wider than its top/bottom
-       gap, off-center in the 40px-tall button — match it. Reaches into the
+       gap, off-center in the 40px-tall button – match it. Reaches into the
        content-search-handoff-ui shadow root like the button-radius rule
        above (agent sheet, not scoped by the light-DOM host selector). A
        rounded-square backdrop behind the icon was tried and dropped: the
        icon is a plain background-image, so the backdrop can only be a flat
-       tint, not the icon's own colors/shape — wrong for engines whose icon
+       tint, not the icon's own colors/shape – wrong for engines whose icon
        already has its own background (Bing, DuckDuckGo, Yandex, …). Doing
        that properly needs sampling the icon's actual pixels, which means a
        content-process frame-script injection into about:newtab, re-run per
-       engine change — a real subsystem, not a CSS tweak. */
+       engine change – a real subsystem, not a CSS tweak. */
     button.search-handoff-button {
         background-position: 5px center !important;
     }

@@ -57,7 +57,7 @@
 
     // Profile-local replacement for the DisableProfileImport policy (we
     // never install policies): Firefox adds an "Import bookmarks"
-    // (import-button) widget to the toolbar — catch its addition and
+    // (import-button) widget to the toolbar – catch its addition and
     // remove it right away. The profile button is hidden by the
     // identity.fxaccounts.toolbar.enabled default above.
     let myfoxHiddenWidgets = ["import-button"];

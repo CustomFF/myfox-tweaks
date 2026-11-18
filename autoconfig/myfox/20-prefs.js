@@ -36,7 +36,7 @@
   oncePerProfile("myfox.firstRunPreferencesInitialized", () => {
     prefs.setBoolPref("browser.aboutwelcome.enabled", false);
     // myfox.theme comes from user.js, pre-seeded by the installer before
-    // this profile's first launch (see lib/apply.sh's apply_theme_pref) —
+    // this profile's first launch (see lib/apply.sh's apply_theme_pref) –
     // absent for profiles that never went through the installer's theme
     // step (browser-only, clean-profile, manually created), where dark
     // stays the default.
@@ -50,18 +50,18 @@
     // One-off starting settings for a fresh profile: AI off, Pocket
     // recommendations/sponsors off, telemetry and marketing banners off,
     // compact UI on. All ordinary user prefs (the same ones Settings and
-    // about:config expose) — written once and never overwritten; the user is
+    // about:config expose) – written once and never overwritten; the user is
     // free to flip any back.
     let freshProfilePrefs = {
       // Compact UI (+ show the density switch in Customize).
       "browser.compactmode.show": true,
       "browser.uidensity": 1,
 
-      // AI — what the "Block AI enhancements" button in "AI controls" does
+      // AI – what the "Block AI enhancements" button in "AI controls" does
       // (the global block, each feature, and the prefs underneath).
       "browser.ai.control.default": "blocked",
       "browser.ai.control.sidebarChatbot": "blocked",
-      // Translations run locally — keep them (an explicit "enabled": a
+      // Translations run locally – keep them (an explicit "enabled": a
       // feature left at "default" would follow the global block).
       "browser.ai.control.translations": "enabled",
       "browser.ai.control.pdfjsAltText": "blocked",

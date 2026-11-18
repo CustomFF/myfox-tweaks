@@ -1,5 +1,5 @@
 #!/bin/bash
-# build-themes.sh [out-dir] — zips themes/<name>/ into unsigned .xpi files
+# build-themes.sh [out-dir] – zips themes/<name>/ into unsigned .xpi files
 # (default out-dir: build/themes). Unsigned XPIs only install on a build
 # with xpinstall.signatures.required=false (dev/sandbox use); the
 # installer ships signed copies obtained separately through AMO.

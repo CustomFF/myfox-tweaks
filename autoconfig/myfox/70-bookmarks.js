@@ -2,7 +2,7 @@
 // bookmarklets" (the ddblm gallery). Runs AFTER "places-browser-init-complete":
 // by then the bookmarks DB is up and the async import of the default
 // bookmarks is done (on a first start it would wipe (replace:true) whatever we
-// inserted earlier). Idempotent — an existing bookmark is never duplicated;
+// inserted earlier). Idempotent – an existing bookmark is never duplicated;
 // the guard pref is set only once both are in place.
 (function (MyFox) {
   const { Cc, Ci, prefs, t, whenPlacesReady } = MyFox;
@@ -69,7 +69,7 @@
     let galleryUrl = (MyFox.lang === "ru" ? baseGalleryUrl + "?lang=ru" : baseGalleryUrl);
 
     // A bookmark from before the gallery was bilingual points at the base
-    // URL — move it to the localized one instead of adding a duplicate.
+    // URL – move it to the localized one instead of adding a duplicate.
     let saveGalleryBookmark = () => {
       if (galleryUrl !== baseGalleryUrl) {
         return pu.bookmarks.fetch({ url: baseGalleryUrl }).then(existing => {

@@ -10,7 +10,7 @@
 - Turning the sidebar's tool buttons off no longer shifts the open panel sideways
 - Windows: Firefox no longer pins itself to the taskbar or makes its own Start menu shortcuts (MyFox has them in its folder), nor opens the default apps settings by itself
 
-## 161.0 — 2026-11-13
+## 161.0 – 2026-11-13
 
 - Firefox's settings have a "MyFox settings" link at the end of their side menu, under "Firefox Support"
 - about:myfox: the site link reads "The MyFox website", and each link is clickable only on its text, not across the whole row
@@ -18,75 +18,75 @@
 - Firefox no longer offers to translate every page in another language, once, unless you set it yourself; the address bar's translate button still does it
 - Firefox 160: the sidebar's title stays the open panel's, not the name of another extension that just updated its own panel
 
-## 160.12 — 2026-11-06
+## 160.12 – 2026-11-06
 
 - A sidebar tool opened from the » menu shows its button in the row above the sidebar while its panel is open, in place of the last button, which moves to the top of the menu
 - A toolbar button moved onto the bookmarks toolbar is the size of a bookmark and no longer makes the toolbar taller
 
-## 160.11 — 2026-11-03
+## 160.11 – 2026-11-03
 
 - Firefox 160: the sidebar's Downloads, Extensions and Translations panels have one title row again, not two close buttons; in Translations a long text no longer runs over the translation, each box scrolls in its half
 - Translations: "Clear" is a broom and "Copy" an icon in the translation's corner the same way, shown only when there is a translation; both quiet until pointed at
 - The window buttons (minimize, maximize, close) are round again, as Firefox draws them
 
-## 160.10 — 2026-11-03
+## 160.10 – 2026-11-03
 
 - A private window's new tab has the search field of the regular new tab, not a pill, and its text at Firefox's size
 
-## 160.9 — 2026-10-30
+## 160.9 – 2026-10-30
 
 - Sponsored suggestions in the address bar (Firefox Suggest, where Mozilla shows them) are off, once, unless you set them yourself, like the new tab's sponsors
 
-## 160.8 — 2026-10-30
+## 160.8 – 2026-10-30
 
 - about:myfox's Profiles with MyFox 1.4.0 or newer: "New profile" makes one right from the page, with a name and opening it after creating, or making it the default; importing without making the copy the default goes with Firefox open; profiles MyFox made can be renamed
 
-## 160.7 — 2026-10-30
+## 160.7 – 2026-10-30
 
 - about:myfox's Profiles: a deleted profile's message has a check, not a warning, and goes after a few seconds (any message there goes on a click); "Import from another Firefox" stays pressed while the list is open; Firefox's empty stand-in profiles show as not profiles, with nothing to import (MyFox 1.3.4 or newer)
 
-## 160.6 — 2026-10-29
+## 160.6 – 2026-10-29
 
 - about:myfox's "Delete" deletes the profile right from the page with MyFox 1.3.1 or newer: the page asks first, and a profile an import moved the Firefox account into gives it back unless you untick that; Firefox stays open
 - about:myfox links to the MyFox website, myfox.in
 
-## 160.5 — 2026-10-29
+## 160.5 – 2026-10-29
 
 - about:myfox's Profiles has "Delete" for a profile MyFox made, unless it is the default or open: the command that deletes it with Firefox closed, to copy
 
-## 160.4 — 2026-10-29
+## 160.4 – 2026-10-29
 
 - The sidebar button opens and closes the sidebar again in Firefox 160
 
-## 160.3 — 2026-10-28
+## 160.3 – 2026-10-28
 
 - about:myfox's Updates with MyFox 1.2.4 or newer: "Check for updates" asks MyFox what's new for the tweaks, the themes, the bookmarklets and MyFox itself, and the page shows its last answer on every visit without going online
 
-## 160.2 — 2026-10-28
+## 160.2 – 2026-10-28
 
 - The built-in VPN and its toolbar button are off, once, unless you turned the VPN on yourself: Mozilla switches it on remotely in profiles imported from a regular Firefox
 - about:myfox imports profiles of other Firefox installs with a MyFox newer than 1.2.2: copy or move, what to do with the Firefox account, the new profile's name, making it the default or opening it; MyFox closes Firefox, imports and starts it again, and the copy gets the MyFox theme matching the old one's light or dark. Making a MyFox profile the default goes the same way
 - The settings' dialogs (the update history, exceptions, permissions and the rest) in the MyFox themes' grays like the settings page, with its rounded corners
 
-## 160.1 — 2026-10-27
+## 160.1 – 2026-10-27
 
 - An image's context menu has "View Image Info", which Firefox hides: Page Info on its Media tab, for that image
 - about:myfox has an Updates section: the installed and the released versions of the tweaks and of MyFox, the changes in between, and with MyFox 1.2.2 or newer a button that installs them and offers to restart Firefox; the changelog section shows the released versions not installed yet too
 
-## 160.0 — 2026-10-27
+## 160.0 – 2026-10-27
 
 - about:myfox has a Profiles section with MyFox 1.2.1 or newer: MyFox's profiles, when each was last used, launching one in a window of its own, putting the tweaks into one; making one the default, a new profile or an import from another Firefox as a command to run with Firefox closed
 - The "Advanced settings" and "Add bookmarklets" bookmarks go to the end of the bookmarks toolbar, after the bookmarks already there (an imported profile's)
 
-## 159.10 — 2026-10-23
+## 159.10 – 2026-10-23
 
 - DNS over HTTPS through Cloudflare is on from the first start, in the "Increased protection" mode (it falls back to the system's DNS); MyFox can leave it off, and it's an ordinary Firefox setting afterwards
 
-## 159.9 — 2026-10-22
+## 159.9 – 2026-10-22
 
 - about:addons lines up with the settings: in a narrow window its page starts as close to the navigation, its search field is level with the navigation's logo, its page heading at the settings' height; its first section starts where the settings' first card does
 
-## 159.8 — 2026-10-22
+## 159.8 – 2026-10-22
 
 - about:logins looks like the settings: the page and its cards in the settings' colors; the list of logins a card, its rows plates with the selected one filled quietly instead of a bar at the start
 - about:logins' login is a card laid out as a form, labels in a column before the values; the fields of its add and edit form are like the pages' other fields, the hint beside the address like a tooltip, its ... menu like the window's menus
@@ -96,7 +96,7 @@
 - The passwords sidebar's ... menu has "Select several": the cards get checkboxes, a bar above the list says how many are selected, with Select all, Clear selection and Remove (after a confirmation)
 - While something is searched for, the passwords sidebar says how many logins were found
 
-## 159.7 — 2026-10-22
+## 159.7 – 2026-10-22
 
 - Checkbox and radio items of menus have the small flat checkboxes and radio buttons of the browser's pages instead of the system's large framed ones
 - Menus cast a deeper shadow, all round, so one opened from a panel (the translation offer's settings) no longer merges into it
@@ -128,16 +128,16 @@
 - The password card's rows are no longer buttons: each row has its own buttons, shown while the pointer is on it (or the keyboard's focus in it): open and copy for the site (the full address), copy for the username, show and copy for the password; the card and the row under the pointer are lit
 - Editing a password is a pencil in the card's top-left corner, shown while the pointer is on the card, instead of a full-width Edit button under the password
 
-## 159.6 — 2026-10-19
+## 159.6 – 2026-10-19
 
 - System integration on about:myfox: switching on tells afterwards where another `firefox` was kept; with MyFox 1.1.20 or newer, switching off asks whether to restore it, and the switch can't be turned on while there is nowhere to keep it
 
-## 159.5 — 2026-10-19
+## 159.5 – 2026-10-19
 
 - about:myfox's Settings have "Appearance": light or dark, a small picture of each, switching both the MyFox theme and the websites' appearance; under another theme neither is chosen
 - about:myfox has Settings with "System integration": with MyFox 1.1.18 or newer, a switch for whether the `firefox` command in a terminal and in scripts opens the Firefox MyFox installed
 
-## 159.4 — 2026-10-19
+## 159.4 – 2026-10-19
 
 - about:myfox links to the bookmarklets' and the userscripts' repositories
 - The Help menus have "About MyFox tweaks" next to "About Firefox", opening about:myfox
@@ -148,11 +148,11 @@
 - The look of buttons, fields, switches, checkboxes and radio buttons comes with the MyFox themes only: under another theme they are Firefox's own
 - The form fields' autocomplete menu is shaped like the other menus: items edge to edge, square, the chosen one lit with a quiet fill instead of an accent frame; it keeps the page's light or dark colors
 
-## 159.3 — 2026-10-16
+## 159.3 – 2026-10-16
 
 - about:myfox: a page of the tweaks' own, with the installed version and the full changelog
 
-## 159.2 — 2026-10-16
+## 159.2 – 2026-10-16
 
 - The new tab page's weather widget has a square-cornered location field, not a pill
 - The extensions (puzzle) panel has a button next to "Manage extensions" that opens the extensions sidebar panel
@@ -168,7 +168,7 @@
 - On a dark theme the sidebar is a little darker, so menus opened over it stand out
 - The settings and "Add-ons and themes" pages have the MyFox themes' grays instead of Firefox's violet-tinged ones, light or dark as the website appearance setting says
 
-## 159.1 — 2026-10-15
+## 159.1 – 2026-10-15
 
 - With vertical tabs and the sidebar expanded, pinned tabs are tabs in a row, not tiles: the selected one (or the last) a full tab joined to the page, the others their icons before it
 - A pinned tab has a small pin at its icon's corner that unpins it on click; it shows under the pointer, and always in the collapsed vertical tab strip, and grows while the tab is under the pointer
@@ -185,7 +185,7 @@
 - The container line on background tabs is stronger, on dark and light themes alike
 - With vertical tabs collapsed to icons, the selected split view pair joins the page with no gap, its other half is a little darker than the selected one, and the halves cast a soft shadow on the column
 
-## 159.0 — 2026-10-13
+## 159.0 – 2026-10-13
 
 - On light themes the container colors show: a thicker, stronger line on container tabs and a stronger tint of the window
 - The selected tab's shadow on light themes is tighter
@@ -213,7 +213,7 @@
 - On dark themes background tabs are a touch lighter than the toolbar
 - Horizontal tabs show their titles in the middle of the tab
 
-## 158.2 — 2026-10-09
+## 158.2 – 2026-10-09
 
 - Keyboard focus is shown as the same thin accent border everywhere, the address bar included
 - The pills and circles left from Firefox's redesign are gone: the find bar, the new-tab page, about:config, about:translations, the window buttons, history rows and the badges in the address bar all use the same small corner radius
@@ -226,10 +226,10 @@
 - The "..." button of an extension in the Extensions panel has rounded corners and sits closer to the edge
 - In a new profile, back, forward and reload sit around the address bar
 
-## 158.1 — 2026-10-08
+## 158.1 – 2026-10-08
 
 - After a tweaks update MyFox can restart a running Firefox to apply it, with the open tabs restored
 
-## 158.0 — 2026-10-06
+## 158.0 – 2026-10-06
 
 - First release of the tweaks as a separate download, so they can be updated on their own

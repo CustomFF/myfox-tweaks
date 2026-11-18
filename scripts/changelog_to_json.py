@@ -14,7 +14,7 @@ Usage:
 Every mode validates the whole file first. --changelog PATH reads another
 file (for testing).
 
-CHANGELOG.md: sections '## <major>.<patch> — <YYYY-MM-DD>', newest first,
+CHANGELOG.md: sections '## <major>.<patch> – <YYYY-MM-DD>', newest first,
 each holding only '- ' items; an optional '## Unreleased' goes on top and is
 left out of the JSON. changelog.json is {"versions": [{"version", "date",
 "changes": [...]}]}, newest first. MyFox reads it, so change the format
@@ -32,7 +32,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VERSIONS_URL = "https://product-details.mozilla.org/1.0/firefox_versions.json"
 
 VERSION_RE = re.compile(r"^\d+\.\d+$")
-HEADER_RE = re.compile(r"^## (\S+) — (\S+)$")
+HEADER_RE = re.compile(r"^## (\S+) – (\S+)$")
 
 
 class ChangelogError(Exception):
@@ -73,7 +73,7 @@ def parse(path):
                 continue
             m = HEADER_RE.match(line)
             if not m:
-                errors.append(f"{where}: bad header {line!r}, expected '## <major>.<patch> — <YYYY-MM-DD>'")
+                errors.append(f"{where}: bad header {line!r}, expected '## <major>.<patch> – <YYYY-MM-DD>'")
                 current = {"changes": []}
                 continue
             version, date = m.groups()

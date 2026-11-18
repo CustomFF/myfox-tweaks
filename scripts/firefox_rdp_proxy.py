@@ -26,7 +26,7 @@ FIREFOX_DEFAULT_PORT = 34375
 PROXY_DEFAULT_PORT = 34376
 
 # Сколько ждём приветствие от порта-кандидата, прежде чем показать подсказку
-# про кнопку «Разрешить»; сам порт при этом не бросаем — ждём дальше.
+# про кнопку «Разрешить»; сам порт при этом не бросаем – ждём дальше.
 HINT_AFTER = 3.0
 PENDING_GIVE_UP = 120.0
 DISCOVERY_POLL = 0.5
@@ -35,7 +35,7 @@ DISCOVERY_POLL = 0.5
 def drain_pending(sock):
     """Дочитывает и отбрасывает кадры, оставленные предыдущим клиентом
     (например, недосмотренные ответы/события), не разрывая границу
-    length:json-кадра — иначе следующий кадр в общем соединении к Firefox
+    length:json-кадра – иначе следующий кадр в общем соединении к Firefox
     десинхронизируется навсегда."""
     while True:
         readable, _, _ = select.select([sock], [], [], 0)
@@ -70,7 +70,7 @@ def read_rdp_message(sock):
 
 
 def is_rdp_greeting(msg):
-    """Приветствие RDP — от актора root (отличает devtools-порт от, например,
+    """Приветствие RDP – от актора root (отличает devtools-порт от, например,
     marionette, у которого тоже length:json-приветствие)."""
     try:
         body = msg.split(b':', 1)[1]
@@ -83,7 +83,7 @@ def is_rdp_greeting(msg):
 
 def browser_exe_candidates(path):
     """Реальные пути бинарников, считающихся «этим» браузером: указанный
-    файл/каталог и firefox-bin рядом (firefox — обычно лаунчер, а процесс
+    файл/каталог и firefox-bin рядом (firefox – обычно лаунчер, а процесс
     работает как firefox-bin)."""
     real = os.path.realpath(path)
     base = real if os.path.isdir(real) else os.path.dirname(real)
@@ -173,7 +173,7 @@ class Discovery:
     """Ищет debugger-порт Firefox и возвращает (сокет, приветствие).
 
     Порт может стартовать позже самого браузера (например, сервер включают из
-    меню) и приветствие приходит только после «Разрешить» в Firefox — поэтому
+    меню) и приветствие приходит только после «Разрешить» в Firefox – поэтому
     кандидатов не бросаем по таймауту, а держим «в ожидании» и опрашиваем."""
 
     def __init__(self, browser, fixed_port):
@@ -213,7 +213,7 @@ class Discovery:
             self.announced = True
 
         alive = set(candidates)
-        # Кандидаты, которых уже нет (процесс/порт исчез) — выбрасываем.
+        # Кандидаты, которых уже нет (процесс/порт исчез) – выбрасываем.
         for key in list(self.pending):
             if key not in alive:
                 self.pending.pop(key)[0].close()
@@ -250,12 +250,12 @@ class Discovery:
                 sock.close()
                 self.bad.add(key)
                 if self.fixed_port is None:
-                    print(f"Порт {key[1]} — не debugger-сервер Firefox, пропускаю.")
+                    print(f"Порт {key[1]} – не debugger-сервер Firefox, пропускаю.")
                 continue
             waited = time.time() - since
             if not hinted and waited > HINT_AFTER:
                 entry[2] = True
-                print(f"Порт {key[1]} принял соединение, но молчит — "
+                print(f"Порт {key[1]} принял соединение, но молчит – "
                       "ПОЖАЛУЙСТА, НАЖМИ [РАЗРЕШИТЬ] (ALLOW) В ДИАЛОГЕ FIREFOX...")
             if waited > PENDING_GIVE_UP:
                 self.pending.pop(key)
@@ -268,7 +268,7 @@ class Discovery:
 # ─── Прокси ──────────────────────────────────────────────────────────────
 
 def reject_waiting_clients(proxy_server):
-    """Пока Firefox недоступен, клиенты не должны висеть до таймаута —
+    """Пока Firefox недоступен, клиенты не должны висеть до таймаута –
     закрываем входящие сразу."""
     while True:
         readable, _, _ = select.select([proxy_server], [], [], 0)
@@ -291,9 +291,9 @@ def firefox_closed(ff_sock):
 
 
 def serve(proxy_server, ff_sock, greeting):
-    """Раздаёт соединение с Firefox клиентам. Возврат — Firefox закрылся."""
+    """Раздаёт соединение с Firefox клиентам. Возврат – Firefox закрылся."""
     while True:
-        # Очищаем буфер Firefox перед подключением нового клиента —
+        # Очищаем буфер Firefox перед подключением нового клиента –
         # только целыми кадрами, чтобы не разорвать length:json-границу.
         drain_pending(ff_sock)
         if firefox_closed(ff_sock):

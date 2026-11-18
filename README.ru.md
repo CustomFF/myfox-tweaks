@@ -5,7 +5,7 @@
 
 # MyFox tweaks
 
-MyFox tweaks — мои стили и настройки для интерфейса Firefox.
+MyFox tweaks – мои стили и настройки для интерфейса Firefox.
 
 Начинал я с нескольких правок в userChrome.css: что-то находил в сети, что-то писал сам. С каждой новой версией Firefox внутри что-то переименовывали, стили ломались, я их чинил и дописывал, и со временем правки выросли в целый набор.
 
@@ -18,35 +18,35 @@ MyFox tweaks — мои стили и настройки для интерфей
   <a href="screenshots/ru-dark.png"><img src="screenshots/ru-dark.png" alt="Firefox без твиков и с MyFox tweaks, тёмная тема"></a>
 </p>
 
-Что именно изменено, со скриншотами «было / стало» по каждой части, — в [вики](https://github.com/CustomFF/myfox-tweaks/wiki/Главная).
+Что именно изменено, со скриншотами «было / стало» по каждой части, – в [вики](https://github.com/CustomFF/myfox-tweaks/wiki/Главная).
 
 ## Установка
 
 ### Ручная
 
 1. Скачайте `myfox-tweaks.tar.gz` из [последнего релиза](https://github.com/CustomFF/myfox-tweaks/releases/latest) и распакуйте.
-2. Скопируйте `myfox.cfg` и папку `myfox` из `autoconfig` в папку установки Firefox, а `autoconfig.js` — в `defaults/pref` внутри неё.
+2. Скопируйте `myfox.cfg` и папку `myfox` из `autoconfig` в папку установки Firefox, а `autoconfig.js` – в `defaults/pref` внутри неё.
 3. Скопируйте папку `chrome` в профиль и создайте там пустой файл `.myfox`.
 4. Перезапустите Firefox.
 
-Номер релиза — это версия бета-Firefox, под которую он сделан (160.12 — для Firefox Beta 160); он работает и на стабильном Firefox версией ниже. Для более старого Firefox берите последний релиз с его номером из [списка релизов](https://github.com/CustomFF/myfox-tweaks/releases): старые релизы не удаляются.
+Номер релиза – это версия бета-Firefox, под которую он сделан (160.12 – для Firefox Beta 160); он работает и на стабильном Firefox версией ниже. Для более старого Firefox берите последний релиз с его номером из [списка релизов](https://github.com/CustomFF/myfox-tweaks/releases): старые релизы не удаляются.
 
 Значительная часть изменений интерфейса рассчитана на темы оформления MyFox, поэтому их тоже нужно установить. Темы скачиваются из релизов [Signed themes](https://github.com/CustomFF/myfox-tweaks/releases) и ставятся в about:addons: меню с шестерёнкой → «Установить дополнение из файла…».
 
-Значки букмарклетов на панели закладок берутся из [ddblm](https://github.com/CustomFF/ddblm), MyFox скачивает их сам. Вручную скопируйте оттуда [`docs/blm_panel.css`](https://github.com/CustomFF/ddblm/blob/master/docs/blm_panel.css) в папку `chrome` профиля, а папку [`icons`](https://github.com/CustomFF/ddblm/tree/master/icons) — туда же под именем `chrome/panel-icons`, и перезапустите Firefox. Без них у букмарклетов нет значков, а закладка «Добавить букмарклеты» — значок без подписи — превращается в пустую кнопку.
+Значки букмарклетов на панели закладок берутся из [ddblm](https://github.com/CustomFF/ddblm), MyFox скачивает их сам. Вручную скопируйте оттуда [`docs/blm_panel.css`](https://github.com/CustomFF/ddblm/blob/master/docs/blm_panel.css) в папку `chrome` профиля, а папку [`icons`](https://github.com/CustomFF/ddblm/tree/master/icons) – туда же под именем `chrome/panel-icons`, и перезапустите Firefox. Без них у букмарклетов нет значков, а закладка «Добавить букмарклеты» – значок без подписи – превращается в пустую кнопку.
 
 #### Как найти папку установки
 
 1. Откройте about:support.
 2. В строке «Бинарный файл приложения» указан путь к файлу Firefox.
-3. Папка установки — та, в которой лежит этот файл.
+3. Папка установки – та, в которой лежит этот файл.
 
 Если путь начинается с `/snap/`, Firefox установлен из snap. Поставить в него твики не получится: папка установки snap доступна только для чтения.
 
 Если путь начинается с `/app/`, Firefox установлен из flatpak, и путь показан изнутри песочницы. Настоящая папка установки:
 
-- `/var/lib/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox` — при установке для всех пользователей, копировать туда нужно через sudo;
-- `~/.local/share/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox` — при установке только для себя.
+- `/var/lib/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox` – при установке для всех пользователей, копировать туда нужно через sudo;
+- `~/.local/share/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox` – при установке только для себя.
 
 После каждого обновления Firefox из flatpak файлы из `autoconfig` нужно копировать заново.
 

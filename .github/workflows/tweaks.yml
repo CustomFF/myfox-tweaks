@@ -41,7 +41,7 @@ jobs:
           fi
           python3 scripts/changelog_to_json.py --check "$TAG"
           # Tweaks are tested on beta, so another major is most likely a typo
-          # — but releasing off-beta is sometimes needed, so only warn.
+          # – but releasing off-beta is sometimes needed, so only warn.
           if beta=$(python3 scripts/changelog_to_json.py --beta-major); then
             if [[ "${TAG%%.*}" != "$beta" ]]; then
               echo "::warning::tag $TAG doesn't match the current Firefox beta major ($beta)"
