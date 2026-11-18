@@ -11,6 +11,7 @@
 - Container tabs in vertical tabs: a line in the container's color along the column's outer side, like the one along a horizontal tab's top; the gradient is still there, as a setting in about:myfox
 - With vertical tabs, the sidebar's heading is no longer cut off at the top
 - Windows: Firefox no longer pins itself to the taskbar or makes its own Start menu shortcuts (MyFox has them in its folder), nor opens the default apps settings by itself
+- Windows: Firefox no longer asks at startup to be the default browser: answered yes, it pinned itself to the taskbar and put its own shortcut into the Start menu (Settings' "Make Default" still works)
 
 ## 161.0 – 2026-11-13
 

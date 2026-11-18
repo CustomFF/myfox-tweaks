@@ -194,4 +194,16 @@
       Services.prefs.lockPref(name);
     } catch(e) {}
   }
+  // The startup question "Make Firefox your default browser?" on Windows,
+  // answered yes, pins Firefox to the taskbar and puts a "Firefox" shortcut
+  // into the Start menu itself (on Windows 10 it is "set as default and
+  // pin"), which neither pref above stops. Off and locked, for the same
+  // reason as them; Settings' "Make Default" button only sets the default
+  // browser, and stays.
+  if (Services.appinfo.OS === "WINNT") {
+    try {
+      Services.prefs.getDefaultBranch("").setBoolPref("browser.shell.checkDefaultBrowser", false);
+      Services.prefs.lockPref("browser.shell.checkDefaultBrowser");
+    } catch(e) {}
+  }
 })(globalThis.MyFox);
