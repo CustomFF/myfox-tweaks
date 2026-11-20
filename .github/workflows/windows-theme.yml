@@ -1,0 +1,71 @@
+name: Windows theme switch
+
+# Switches the MyFox themes on a Windows desktop and checks the screen: the
+# toolbar and an open menu in the colors of the theme that is on
+# (scripts/ci/windows_theme.py). windows-2025 is Windows 11's build (26100),
+# where Firefox draws menus over the system's Mica backdrop. By hand, or on a
+# push to a ci/ branch; the screenshots are the run's artifact.
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["ci/**"]
+
+jobs:
+  theme-switch:
+    runs-on: windows-2025
+    strategy:
+      fail-fast: false
+      matrix:
+        channel: [stable, beta]
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Firefox
+        shell: pwsh
+        run: |
+          $product = if ("${{ matrix.channel }}" -eq "beta") { "firefox-beta-latest-ssl" } else { "firefox-latest-ssl" }
+          curl.exe -sSL -o setup.exe "https://download.mozilla.org/?product=$product&os=win64&lang=en-US"
+          Start-Process -Wait -FilePath .\setup.exe -ArgumentList "/ExtractDir=C:\ffx"
+          Move-Item C:\ffx\core C:\ff
+
+      - name: Tweaks and themes
+        shell: pwsh
+        run: |
+          Copy-Item autoconfig\myfox.cfg C:\ff\
+          Copy-Item -Recurse autoconfig\myfox C:\ff\myfox
+          Copy-Item autoconfig\autoconfig.js C:\ff\defaults\pref\
+          New-Item -ItemType Directory C:\prof\extensions | Out-Null
+          Copy-Item -Recurse chrome C:\prof\chrome
+          New-Item -ItemType File C:\prof\.myfox | Out-Null
+          $tag = gh release list --limit 50 --json tagName -q '[.[] | select(.tagName | startswith("themes-"))][0].tagName'
+          gh release download $tag -D themes-dl
+          Copy-Item themes-dl\myfox-dark.xpi C:\prof\extensions\myfox-dark-theme@daydve.github.io.xpi
+          Copy-Item themes-dl\myfox-light.xpi C:\prof\extensions\myfox-light-theme@daydve.github.io.xpi
+          @(
+            'user_pref("myfox.theme", "dark");'
+            'user_pref("devtools.chrome.enabled", true);'
+            'user_pref("devtools.debugger.remote-enabled", true);'
+            'user_pref("devtools.debugger.prompt-connection", false);'
+            'user_pref("browser.startup.homepage_override.mstone", "ignore");'
+            'user_pref("termsofuse.bypassNotification", true);'
+            'user_pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);'
+            'user_pref("app.update.disabledForTesting", true);'
+          ) | Set-Content C:\prof\user.js
+
+      - name: Switch themes and check the screen
+        shell: pwsh
+        run: |
+          python -m pip install --quiet pillow
+          Start-Process -FilePath C:\ff\firefox.exe -ArgumentList "-no-remote","-profile","C:\prof","--start-debugger-server","6000","about:blank"
+          python scripts\ci\windows_theme.py C:\ff C:\prof out
+          $code = $LASTEXITCODE
+          Stop-Process -Name firefox -Force -ErrorAction SilentlyContinue
+          exit $code
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: windows-theme-${{ matrix.channel }}
+          path: out
