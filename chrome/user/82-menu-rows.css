@@ -20,8 +20,23 @@ menupopup {
        4px shadow. The tab previews' deeper one, with a thin one all round
        for the left and top, which the offset one hardly reaches, and room
        for it: the popup window is only as big as the menu plus this margin. */
-    --panel-box-shadow: var(--myfox-shadow-small), 0 0 3px rgba(0, 0, 0, 0.3) !important;
-    --panel-box-shadow-margin: 10px !important;
+    @media not (-moz-windows-mica-popups) {
+        --panel-box-shadow: var(--myfox-shadow-small), 0 0 3px rgba(0, 0, 0, 0.3) !important;
+        --panel-box-shadow-margin: 10px !important;
+    }
+    /* Windows 11 draws a menu's window as the system's own, over the Mica
+       backdrop, with its shadow, border and rounded corners. Whatever of
+       the window the menu doesn't cover showed that backdrop: a gray frame
+       round every menu, in the system's light or dark rather than the
+       theme's. The menu fills the whole window there, square: the system
+       rounds it. */
+    @media (-moz-windows-mica-popups) {
+        --panel-box-shadow: none !important;
+        --panel-box-shadow-margin: 0px !important;
+        --panel-border-color: transparent !important;
+        --panel-border-radius: 0px !important;
+        padding: 0 !important;
+    }
 }
 
 /* An item under the pointer: a fill of the text color, as a panel's item
