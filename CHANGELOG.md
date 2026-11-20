@@ -1,5 +1,9 @@
 # Changelog
 
+## 161.2 – 2026-11-20
+
+- Windows 11: menus no longer sit in a gray frame (the system's backdrop showing round them)
+
 ## 161.1 – 2026-11-18
 
 - Windows is now supported: the tweaks, the themes and about:myfox work in Firefox on Windows 10 and 11, installed by MyFox, as on Linux
