@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- about:myfox, "Updates": the bookmarklets have buttons of their own: one checks ddblm for a new version, the other installs it with no restart, so a new bookmarklet on the bookmarks toolbar gets its icon at once; the ones on the toolbar with no icon are named
+
 ## 161.2 – 2026-11-20
 
 - Windows 11: menus no longer sit in a gray frame (the system's backdrop showing round them)

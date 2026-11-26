@@ -399,6 +399,45 @@ h3 {
 .update-line .setting-label {
     min-width: 120px;
 }
+/* The bookmarklets' row: small round icon buttons after the version. One
+   checks ddblm for a newer one: Firefox's "Sync now" arrows, comparing with
+   the server (not "reload", which reads as "try again", nor a magnifier,
+   which is a search). The other, in the accent, when there is one, puts it
+   in: a download. The icons are inline SVG (about.js): drawn as an image
+   (a background, a mask), Firefox left a stray dot at the icon's top left
+   at a fractional scale. */
+.update-line-check {
+    align-self: center;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: -2px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    background-color: transparent !important;
+    color: inherit;
+}
+.update-line-check > svg {
+    width: 12px;
+    height: 12px;
+    opacity: 0.7;
+}
+.update-line-check.install > svg {
+    color: var(--color-accent-primary, AccentColor);
+    opacity: 1;
+}
+.update-line-check:hover {
+    background-color: color-mix(in srgb, currentColor 15%, transparent) !important;
+}
+.update-line-check:hover > svg {
+    opacity: 1;
+}
 #updates-changes h3 {
     margin-top: 16px;
 }
